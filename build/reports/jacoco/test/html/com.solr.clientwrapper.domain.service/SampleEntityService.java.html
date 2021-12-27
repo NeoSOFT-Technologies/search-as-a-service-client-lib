@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SampleEntityService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">search-as-a-service</a> &gt; <a href="index.source.html" class="el_package">com.solr.clientwrapper.domain.service</a> &gt; <span class="el_source">SampleEntityService.java</span></div><h1>SampleEntityService.java</h1><pre class="source lang-java linenums">package com.solr.clientwrapper.domain.service;
+
+import com.solr.clientwrapper.domain.dto.SampleEntityDTO;
+import com.solr.clientwrapper.domain.port.api.SampleEntityServicePort;
+import com.solr.clientwrapper.mapper.SampleEntityMapper;
+import com.solr.clientwrapper.rest.errors.BadRequestAlertException;
+import com.solr.clientwrapper.domain.port.spi.SampleEntityPersistencePort;
+import com.solr.clientwrapper.infrastructure.entity.SampleEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
+@Service
+@Transactional
+public class SampleEntityService implements SampleEntityServicePort {
+
+    private static final String ENTITY_NAME = &quot;a&quot;;
+
+    private final SampleEntityPersistencePort sampleEntityPersistencePort;
+    private final SampleEntityMapper sampleEntityMapper;
+
+<span class="fc" id="L25">    public SampleEntityService(SampleEntityPersistencePort sampleEntityPersistencePort, SampleEntityMapper sampleEntityMapper) {</span>
+<span class="fc" id="L26">        this.sampleEntityPersistencePort = sampleEntityPersistencePort;</span>
+<span class="fc" id="L27">        this.sampleEntityMapper = sampleEntityMapper;</span>
+<span class="fc" id="L28">    }</span>
+
+    @Override
+    public SampleEntity save(SampleEntityDTO sampleEntityDTO) {
+<span class="nc" id="L32">        return sampleEntityPersistencePort.save(sampleEntityDTO);</span>
+    }
+
+    @Override
+    public SampleEntity update(Long id, SampleEntityDTO sampleEntityDTO) {
+
+<span class="nc bnc" id="L38" title="All 2 branches missed.">        if (sampleEntityDTO.getId() == null) {</span>
+<span class="nc" id="L39">            throw new BadRequestAlertException(&quot;Invalid id&quot;, ENTITY_NAME, &quot;idnull&quot;);</span>
+        }
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if (!Objects.equals(id, sampleEntityDTO.getId())) {</span>
+<span class="nc" id="L42">            throw new BadRequestAlertException(&quot;Invalid ID&quot;, ENTITY_NAME, &quot;idinvalid&quot;);</span>
+        }
+
+<span class="nc bnc" id="L45" title="All 2 branches missed.">        if (!sampleEntityPersistencePort.existsById(id)) {</span>
+<span class="nc" id="L46">            throw new BadRequestAlertException(&quot;Entity not found&quot;, ENTITY_NAME, &quot;idnotfound&quot;);</span>
+        }
+
+<span class="nc" id="L49">        return sampleEntityPersistencePort.save(sampleEntityDTO);</span>
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+<span class="nc" id="L54">        return sampleEntityPersistencePort.existsById(id);</span>
+    }
+
+    @Override
+    public List&lt;SampleEntity&gt; findAll() {
+<span class="nc" id="L59">        return sampleEntityPersistencePort.findAll();</span>
+    }
+
+    @Override
+    public Optional&lt;SampleEntity&gt; findById(Long id) {
+<span class="nc" id="L64">        return sampleEntityPersistencePort.findById(id);</span>
+    }
+
+    @Override
+    public void deleteById(Long id) {
+<span class="nc" id="L69">        sampleEntityPersistencePort.deleteById(id);</span>
+<span class="nc" id="L70">    }</span>
+
+    @Override
+    public Optional&lt;SampleEntity&gt; patch(Long id, SampleEntityDTO sampleEntityDTO) {
+
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        if (sampleEntityDTO.getId() == null) {</span>
+<span class="nc" id="L76">            throw new BadRequestAlertException(&quot;Invalid id&quot;, ENTITY_NAME, &quot;idnull&quot;);</span>
+        }
+<span class="nc bnc" id="L78" title="All 2 branches missed.">        if (!Objects.equals(id, sampleEntityDTO.getId())) {</span>
+<span class="nc" id="L79">            throw new BadRequestAlertException(&quot;Invalid ID&quot;, ENTITY_NAME, &quot;idinvalid&quot;);</span>
+        }
+
+<span class="nc bnc" id="L82" title="All 2 branches missed.">        if (!sampleEntityPersistencePort.existsById(id)) {</span>
+<span class="nc" id="L83">            throw new BadRequestAlertException(&quot;Entity not found&quot;, ENTITY_NAME, &quot;idnotfound&quot;);</span>
+        }
+
+<span class="nc" id="L86">        return sampleEntityPersistencePort</span>
+<span class="nc" id="L87">                .findById(sampleEntityDTO.getId())</span>
+<span class="nc" id="L88">                .map(</span>
+                        existingA -&gt; {
+<span class="nc bnc" id="L90" title="All 2 branches missed.">                            if (sampleEntityDTO.getName() != null) {</span>
+<span class="nc" id="L91">                                existingA.setName(sampleEntityDTO.getName());</span>
+                            }
+<span class="nc bnc" id="L93" title="All 2 branches missed.">                            if (sampleEntityDTO.getPassword() != null) {</span>
+<span class="nc" id="L94">                                existingA.setPassword(sampleEntityDTO.getPassword());</span>
+                            }
+<span class="nc bnc" id="L96" title="All 2 branches missed.">                            if (sampleEntityDTO.getAge() != null) {</span>
+<span class="nc" id="L97">                                existingA.setAge(sampleEntityDTO.getAge());</span>
+                            }
+<span class="nc bnc" id="L99" title="All 2 branches missed.">                            if (sampleEntityDTO.getPhone() != null) {</span>
+<span class="nc" id="L100">                                existingA.setPhone(sampleEntityDTO.getPhone());</span>
+                            }
+<span class="nc" id="L102">                            return existingA;</span>
+                        }
+                )
+<span class="nc" id="L105">                .map(updatedA -&gt; {</span>
+<span class="nc" id="L106">                	SampleEntityDTO updatedSampleEntityDTO = sampleEntityMapper.entityToDto(updatedA);</span>
+<span class="nc" id="L107">                    sampleEntityPersistencePort.save(updatedSampleEntityDTO);</span>
+<span class="nc" id="L108">                    return updatedA;</span>
+                });
+    
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

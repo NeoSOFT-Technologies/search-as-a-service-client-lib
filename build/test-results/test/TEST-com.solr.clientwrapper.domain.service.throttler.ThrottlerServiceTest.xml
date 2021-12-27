@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.solr.clientwrapper.domain.service.throttler.ThrottlerServiceTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2021-12-27T08:11:14" hostname="DESKTOP-VAOA8DC" time="0.123">
+  <properties/>
+  <testcase name="Testing Rate Limiter Throttler Service" classname="com.solr.clientwrapper.domain.service.throttler.ThrottlerServiceTest" time="0.081"/>
+  <testcase name="Testing Max Request Size Limiter Throttler Service" classname="com.solr.clientwrapper.domain.service.throttler.ThrottlerServiceTest" time="0.035"/>
+  <system-out><![CDATA[2021-12-27 13:41:14.649  INFO   --- [    Test worker] c.s.c.d.s.t.ThrottlerServiceTest         : Solr data injection rate limiter test case getting executed..
+2021-12-27 13:41:14.650 DEBUG   --- [    Test worker] c.s.c.d.s.t.ThrottlerServiceTest         : Expecting status code: 429
+2021-12-27 13:41:14.657  INFO   --- [    Test worker] c.s.c.d.s.throttler.ThrottlerService     : Max request limit is applied, no further calls are accepted
+2021-12-27 13:41:14.697  INFO   --- [    Test worker] c.s.c.d.s.t.ThrottlerServiceTest         : Solr data injection max request size limiter test case getting executed..
+2021-12-27 13:41:14.699 DEBUG   --- [    Test worker] c.s.c.d.s.t.ThrottlerServiceTest         : Expecting status code: 202
+2021-12-27 13:41:14.705  INFO   --- [    Test worker] c.s.c.d.s.throttler.ThrottlerService     : Max request size limiter is under process...
+2021-12-27 13:41:14.706  INFO   --- [    Test worker] c.s.c.d.s.throttler.ThrottlerService     : Max request size limiting has been applied
+2021-12-27 13:41:14.707 DEBUG   --- [    Test worker] c.s.c.d.s.t.ThrottlerServiceTest         : 
+Rec response: ThrottlerMaxRequestSizeResponseDTO(statusCode=202, responseMessage=Incoming request size is under the limit, can be processed, maxAllowedRequestSize=10kB, incomingRequestSize=0.0kB, apiResponseData=null)
+2021-12-27 13:41:14.708 DEBUG   --- [    Test worker] c.s.c.d.s.t.ThrottlerServiceTest         : Expecting status code: 405
+2021-12-27 13:41:14.718  INFO   --- [    Test worker] c.s.c.d.s.throttler.ThrottlerService     : Max request size limiter is under process...
+2021-12-27 13:41:14.719  INFO   --- [    Test worker] c.s.c.d.s.throttler.ThrottlerService     : Max request size limiting has been applied
+2021-12-27 13:41:14.720 DEBUG   --- [    Test worker] c.s.c.d.s.t.ThrottlerServiceTest         : 
+Rec response: ThrottlerMaxRequestSizeResponseDTO(statusCode=405, responseMessage=Incoming request size exceeded the limit! This request can't be processed, maxAllowedRequestSize=-1kB, incomingRequestSize=0.0kB, apiResponseData=null)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

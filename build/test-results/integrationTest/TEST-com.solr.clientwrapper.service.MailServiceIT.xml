@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.solr.clientwrapper.service.MailServiceIT" tests="10" skipped="0" failures="0" errors="0" timestamp="2021-12-27T08:14:27" hostname="DESKTOP-VAOA8DC" time="1.514">
+  <properties/>
+  <testcase name="testSendPasswordResetMail()" classname="com.solr.clientwrapper.service.MailServiceIT" time="1.13"/>
+  <testcase name="testCreationEmail()" classname="com.solr.clientwrapper.service.MailServiceIT" time="0.036"/>
+  <testcase name="testSendEmailWithException()" classname="com.solr.clientwrapper.service.MailServiceIT" time="0.022"/>
+  <testcase name="testSendHtmlEmail()" classname="com.solr.clientwrapper.service.MailServiceIT" time="0.025"/>
+  <testcase name="testSendMultipartHtmlEmail()" classname="com.solr.clientwrapper.service.MailServiceIT" time="0.088"/>
+  <testcase name="testSendEmail()" classname="com.solr.clientwrapper.service.MailServiceIT" time="0.035"/>
+  <testcase name="testSendMultipartEmail()" classname="com.solr.clientwrapper.service.MailServiceIT" time="0.025"/>
+  <testcase name="testSendLocalizedEmailForAllSupportedLanguages()" classname="com.solr.clientwrapper.service.MailServiceIT" time="0.014"/>
+  <testcase name="testSendActivationEmail()" classname="com.solr.clientwrapper.service.MailServiceIT" time="0.038"/>
+  <testcase name="testSendEmailFromTemplate()" classname="com.solr.clientwrapper.service.MailServiceIT" time="0.031"/>
+  <system-out><![CDATA[2021-12-27 13:44:27.938 DEBUG 12572 --- [    Test worker] c.s.c.domain.service.MailService         : Sending password reset email to 'john.doe@example.com'
+2021-12-27 13:44:28.353  WARN 12572 --- [ntainer#0-0-C-1] org.apache.kafka.clients.NetworkClient   : [Consumer clientId=consumer-group_id-1, groupId=group_id] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Broker may not be available.
+2021-12-27 13:44:28.354  WARN 12572 --- [ntainer#0-0-C-1] org.apache.kafka.clients.NetworkClient   : [Consumer clientId=consumer-group_id-1, groupId=group_id] Bootstrap broker localhost:9092 (id: -1 rack: null) disconnected
+2021-12-27 13:44:28.886  WARN 12572 --- [ntainer#0-0-C-1] org.apache.kafka.clients.NetworkClient   : [Consumer clientId=consumer-group_id-2, groupId=group_id] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Broker may not be available.
+2021-12-27 13:44:28.886  WARN 12572 --- [ntainer#0-0-C-1] org.apache.kafka.clients.NetworkClient   : [Consumer clientId=consumer-group_id-2, groupId=group_id] Bootstrap broker localhost:9092 (id: -1 rack: null) disconnected
+2021-12-27 13:44:28.925 DEBUG 12572 --- [    Test worker] c.s.c.domain.service.MailService         : Send email[multipart 'false' and html 'true'] to 'john.doe@example.com' with subject 'basicSample password reset' and content=<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>basicSample password reset</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="icon" href="http://127.0.0.1:8080/favicon.ico" />
+  </head>
+  <body>
+    <p>Dear john</p>
+    <p>For your basicSample account a password reset was requested, please click on the URL below to reset it:</p>
+    <p>
+      <a href="http://127.0.0.1:8080/account/reset/finish?key=null">http://127.0.0.1:8080/account/reset/finish?key=null</a>
+    </p>
+    <p>
+      <span>Regards,</span>
+      <br />
+      <em>basicSample Team.</em>
+    </p>
+  </body>
+</html>
+
+2021-12-27 13:44:29.035 DEBUG 12572 --- [    Test worker] c.s.c.domain.service.MailService         : Sent email to User 'john.doe@example.com'
+2021-12-27 13:44:29.068 DEBUG 12572 --- [    Test worker] c.s.c.domain.service.MailService         : Sending creation email to 'john.doe@example.com'
+2021-12-27 13:44:29.081 DEBUG 12572 --- [    Test worker] c.s.c.domain.service.MailService         : Send email[multipart 'false' and html 'true'] to 'john.doe@example.com' with subject 'basicSample account activation is required' and content=<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>basicSample account activation is required</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="icon" href="http://127.0.0.1:8080/favicon.ico" />
+  </head>
+  <body>
+    <p>Dear john</p>
+    <p>Your basicSample account has been created, please click on the URL below to access it:</p>
+    <p>
+      <a href="http://127.0.0.1:8080/account/reset/finish?key=null">http://127.0.0.1:8080/account/reset/finish?key=null</a>
+    </p>
+    <p>
+      <span>Regards,</span>
+      <br />
+      <em>basicSample Team.</em>
+    </p>
+  </body>
+</html>
+
+2021-12-27 13:44:29.090 DEBUG 12572 --- [    Test worker] c.s.c.domain.service.MailService         : Sent email to User 'john.doe@example.com'
+2021-12-27 13:44:29.112 DEBUG 12572 --- [    Test worker] c.s.c.domain.service.MailService         : Send email[multipart 'false' and html 'false'] to 'john.doe@example.com' with subject 'testSubject' and content=testContent
+2021-12-27 13:44:29.120  WARN 12572 --- [    Test worker] c.s.c.domain.service.MailService         : Email could not be sent to user 'john.doe@example.com'
+
+org.springframework.mail.MailSendException: null
+
+2021-12-27 13:44:29.138 DEBUG 12572 --- [    Test worker] c.s.c.domain.service.MailService         : Send email[multipart 'false' and html 'true'] to 'john.doe@example.com' with subject 'testSubject' and content=testContent
+2021-12-27 13:44:29.145 DEBUG 12572 --- [    Test worker] c.s.c.domain.service.MailService         : Sent email to User 'john.doe@example.com'
+2021-12-27 13:44:29.169 DEBUG 12572 --- [    Test worker] c.s.c.domain.service.MailService         : Send email[multipart 'true' and html 'true'] to 'john.doe@example.com' with subject 'testSubject' and content=testContent
+2021-12-27 13:44:29.197 DEBUG 12572 --- [    Test worker] c.s.c.domain.service.MailService         : Sent email to User 'john.doe@example.com'
+2021-12-27 13:44:29.264 DEBUG 12572 --- [    Test worker] c.s.c.domain.service.MailService         : Send email[multipart 'false' and html 'false'] to 'john.doe@example.com' with subject 'testSubject' and content=testContent
+2021-12-27 13:44:29.272 DEBUG 12572 --- [    Test worker] c.s.c.domain.service.MailService         : Sent email to User 'john.doe@example.com'
+2021-12-27 13:44:29.316 DEBUG 12572 --- [    Test worker] c.s.c.domain.service.MailService         : Send email[multipart 'true' and html 'false'] to 'john.doe@example.com' with subject 'testSubject' and content=testContent
+2021-12-27 13:44:29.324 DEBUG 12572 --- [    Test worker] c.s.c.domain.service.MailService         : Sent email to User 'john.doe@example.com'
+2021-12-27 13:44:29.367 DEBUG 12572 --- [    Test worker] c.s.c.domain.service.MailService         : Sending activation email to 'john.doe@example.com'
+2021-12-27 13:44:29.376 DEBUG 12572 --- [    Test worker] c.s.c.domain.service.MailService         : Send email[multipart 'false' and html 'true'] to 'john.doe@example.com' with subject 'basicSample account activation is required' and content=<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>basicSample account activation is required</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="icon" href="http://127.0.0.1:8080/favicon.ico" />
+  </head>
+  <body>
+    <p>Dear john</p>
+    <p>Your basicSample account has been created, please click on the URL below to activate it:</p>
+    <p>
+      <a href="http://127.0.0.1:8080/account/activate?key=null">http://127.0.0.1:8080/account/activate?key=null</a>
+    </p>
+    <p>
+      <span>Regards,</span>
+      <br />
+      <em>basicSample Team.</em>
+    </p>
+  </body>
+</html>
+
+2021-12-27 13:44:29.391 DEBUG 12572 --- [    Test worker] c.s.c.domain.service.MailService         : Sent email to User 'john.doe@example.com'
+2021-12-27 13:44:29.423 DEBUG 12572 --- [    Test worker] c.s.c.domain.service.MailService         : Send email[multipart 'false' and html 'true'] to 'john.doe@example.com' with subject 'test title' and content=<html>test title, http://127.0.0.1:8080, john</html>
+
+2021-12-27 13:44:29.434 DEBUG 12572 --- [    Test worker] c.s.c.domain.service.MailService         : Sent email to User 'john.doe@example.com'
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

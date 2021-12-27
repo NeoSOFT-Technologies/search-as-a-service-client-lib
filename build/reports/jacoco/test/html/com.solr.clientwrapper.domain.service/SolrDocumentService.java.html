@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SolrDocumentService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">search-as-a-service</a> &gt; <a href="index.source.html" class="el_package">com.solr.clientwrapper.domain.service</a> &gt; <span class="el_source">SolrDocumentService.java</span></div><h1>SolrDocumentService.java</h1><pre class="source lang-java linenums">package com.solr.clientwrapper.domain.service;
+
+import com.solr.clientwrapper.domain.dto.solr.SolrResponseDTO;
+import com.solr.clientwrapper.domain.port.api.SolrDocumentServicePort;
+import com.solr.clientwrapper.domain.utils.DocumentParserUtil;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.common.SolrInputDocument;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+@Service
+@Transactional
+<span class="fc" id="L25">public class SolrDocumentService implements SolrDocumentServicePort {</span>
+
+
+	
+   @Value(&quot;${base-solr-url}&quot;)
+    private String baseSolrUrl;
+
+<span class="fc" id="L32">    private final Logger log = LoggerFactory.getLogger(SolrDocumentService.class);</span>
+
+    @Override
+    public SolrResponseDTO addDocument(String collectionName, String payload) {
+
+<span class="nc" id="L37">        SolrClient solrClient=new HttpSolrClient.Builder(baseSolrUrl+&quot;/&quot;+collectionName).build();</span>
+
+<span class="nc" id="L39">        SolrResponseDTO solrResponseDTO=new SolrResponseDTO(collectionName);</span>
+
+<span class="nc" id="L41">        Map&lt;String,Map&lt;String, Object&gt;&gt; schemaKeyValuePair= DocumentParserUtil.getSchemaOfCollection(baseSolrUrl,collectionName);</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        if(schemaKeyValuePair == null){</span>
+<span class="nc" id="L43">            String message=&quot;Unable to get the Schema. Please check the collection name again!&quot;;</span>
+<span class="nc" id="L44">            log.debug(message);</span>
+<span class="nc" id="L45">            solrResponseDTO.setMessage(message);</span>
+<span class="nc" id="L46">            solrResponseDTO.setStatusCode(400);</span>
+<span class="nc" id="L47">            return solrResponseDTO;</span>
+        }
+
+
+//        log.debug(payload);
+
+<span class="nc" id="L53">        JSONObject payloadJSON=null;</span>
+        try {
+<span class="nc" id="L55">            payloadJSON = new JSONObject(payload);</span>
+<span class="nc" id="L56">        }catch (Exception e){</span>
+<span class="nc" id="L57">            log.debug(e.toString());</span>
+<span class="nc" id="L58">            String message=&quot;Invalid input JSON document.&quot;;</span>
+<span class="nc" id="L59">            log.debug(message);</span>
+<span class="nc" id="L60">            solrResponseDTO.setMessage(message);</span>
+<span class="nc" id="L61">            solrResponseDTO.setStatusCode(400);</span>
+<span class="nc" id="L62">            return solrResponseDTO;</span>
+<span class="nc" id="L63">        }</span>
+
+        //CODE COMES HERE ONLY AFTER IT'S VERIFIED THAT THE PAYLOAD AND THE SCHEMA ARE STRUCTURALLY CORRECT
+
+//        Set&lt;String&gt; res=payloadJSON.keySet();
+//        log.debug(&quot;Key sets : &quot; + res);
+//        log.debug(&quot;Solr Schema : &quot;+schemaKeyValuePair);
+
+
+<span class="nc" id="L72">        DocumentParserUtil.DocumentSatisfiesSchemaResponse documentSatisfiesSchemaResponse = DocumentParserUtil.isDocumentSatisfySchema(schemaKeyValuePair,payloadJSON);</span>
+
+<span class="nc" id="L74">        solrResponseDTO.setMessage(documentSatisfiesSchemaResponse.getMessage());</span>
+
+<span class="nc bnc" id="L76" title="All 2 branches missed.">        if(documentSatisfiesSchemaResponse.isObjectSatisfiesSchema()){</span>
+<span class="nc" id="L77">            solrResponseDTO.setStatusCode(200);</span>
+
+<span class="nc" id="L79">            SolrInputDocument document = new SolrInputDocument();</span>
+            //ITERATE THROUGH EACH KEY IN THE INPUT JSON OBJECT PAYLOAD
+<span class="nc" id="L81">            Iterator&lt;String&gt; itr = payloadJSON.keySet().iterator();</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">            while (itr.hasNext())</span>
+            {
+<span class="nc" id="L84">                String payloadJsonObjectKey = itr.next();</span>
+<span class="nc" id="L85">                Object payloadJsonObjectValue = payloadJSON.get(payloadJsonObjectKey);</span>
+
+<span class="nc" id="L87">                document.addField(payloadJsonObjectKey,payloadJsonObjectValue);</span>
+<span class="nc" id="L88">            }</span>
+
+            try {
+<span class="nc" id="L91">                solrClient.add(document);</span>
+<span class="nc" id="L92">                solrClient.commit();</span>
+<span class="nc" id="L93">            } catch (Exception e) {</span>
+<span class="nc" id="L94">                log.error(e.toString());</span>
+<span class="nc" id="L95">                String message=&quot;Error while adding document to Solr.&quot;;</span>
+<span class="nc" id="L96">                log.debug(message);</span>
+<span class="nc" id="L97">                solrResponseDTO.setMessage(message);</span>
+<span class="nc" id="L98">                solrResponseDTO.setStatusCode(400);</span>
+<span class="nc" id="L99">                return solrResponseDTO;</span>
+<span class="nc" id="L100">            }</span>
+
+<span class="nc" id="L102">            solrResponseDTO.setMessage(&quot;Successfully Added!&quot;);</span>
+<span class="nc" id="L103">            solrResponseDTO.setStatusCode(200);</span>
+<span class="nc" id="L104">            return solrResponseDTO;</span>
+
+        }else{
+<span class="nc" id="L107">            solrResponseDTO.setMessage(&quot;The JSON input document doesn't satisfy the Schema. Error: &quot;+ documentSatisfiesSchemaResponse.getMessage());</span>
+<span class="nc" id="L108">            solrResponseDTO.setStatusCode(400);</span>
+<span class="nc" id="L109">            return solrResponseDTO;</span>
+        }
+
+    }
+
+    @Override
+    public SolrResponseDTO addDocuments(String collectionName, String payload) {
+
+<span class="nc" id="L117">        SolrClient solrClient=new HttpSolrClient.Builder(baseSolrUrl+&quot;/&quot;+collectionName).build();</span>
+
+<span class="nc" id="L119">        SolrResponseDTO solrResponseDTO=new SolrResponseDTO(collectionName);</span>
+
+<span class="nc" id="L121">        Map&lt;String,Map&lt;String, Object&gt;&gt; schemaKeyValuePair= DocumentParserUtil.getSchemaOfCollection(baseSolrUrl,collectionName);</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">        if(schemaKeyValuePair == null){</span>
+<span class="nc" id="L123">            String message=&quot;Unable to get the Schema. Please check the collection name again!&quot;;</span>
+<span class="nc" id="L124">            log.debug(message);</span>
+<span class="nc" id="L125">            solrResponseDTO.setMessage(message);</span>
+<span class="nc" id="L126">            solrResponseDTO.setStatusCode(400);</span>
+<span class="nc" id="L127">            return solrResponseDTO;</span>
+        }
+
+       //log.debug(payload);
+
+<span class="nc" id="L132">        JSONArray payloadJSONArray=null;</span>
+        try {
+<span class="nc" id="L134">            payloadJSONArray = new JSONArray(payload);</span>
+<span class="nc" id="L135">        }catch (Exception e){</span>
+<span class="nc" id="L136">            log.debug(e.toString());</span>
+<span class="nc" id="L137">            String message=&quot;Invalid input JSON array of document.&quot;;</span>
+<span class="nc" id="L138">            log.debug(message);</span>
+<span class="nc" id="L139">            solrResponseDTO.setMessage(message);</span>
+<span class="nc" id="L140">            solrResponseDTO.setStatusCode(400);</span>
+<span class="nc" id="L141">            return solrResponseDTO;</span>
+<span class="nc" id="L142">        }</span>
+
+
+        //CODE COMES HERE ONLY AFTER IT'S VERIFIED THAT THE PAYLOAD AND THE SCHEMA ARE STRUCTURALLY CORRECT
+
+//        Set&lt;String&gt; res=payloadJSON.keySet();
+//        log.debug(&quot;Key sets : &quot; + res);
+//        log.debug(&quot;Solr Schema : &quot;+schemaKeyValuePair);
+
+<span class="nc" id="L151">        SolrInputDocument inputDocumentMaster=new SolrInputDocument();</span>
+<span class="nc" id="L152">        List&lt;SolrInputDocument&gt; solrInputDocumentList = new ArrayList&lt;&gt;();</span>
+
+<span class="nc bnc" id="L154" title="All 2 branches missed.">        for(int i=0;i&lt;payloadJSONArray.length();i++){</span>
+
+<span class="nc" id="L156">            JSONObject jsonSingleObject= (JSONObject) payloadJSONArray.get(i);</span>
+
+<span class="nc" id="L158">            DocumentParserUtil.DocumentSatisfiesSchemaResponse documentSatisfiesSchemaResponse =</span>
+<span class="nc" id="L159">                    DocumentParserUtil.isDocumentSatisfySchema(schemaKeyValuePair,jsonSingleObject);</span>
+
+<span class="nc bnc" id="L161" title="All 2 branches missed.">            if(documentSatisfiesSchemaResponse.isObjectSatisfiesSchema()){</span>
+
+<span class="nc" id="L163">                SolrInputDocument solrInputSingleDocument=new SolrInputDocument();</span>
+
+<span class="nc" id="L165">                Iterator&lt;String&gt; itr = jsonSingleObject.keySet().iterator();</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">                while (itr.hasNext())</span>
+                {
+<span class="nc" id="L168">                    String payloadJsonObjectKey = itr.next();</span>
+<span class="nc" id="L169">                    Object payloadJsonObjectValue = jsonSingleObject.get(payloadJsonObjectKey);</span>
+
+<span class="nc" id="L171">                    solrInputSingleDocument.addField(payloadJsonObjectKey,payloadJsonObjectValue);</span>
+<span class="nc" id="L172">                }</span>
+
+<span class="nc" id="L174">                solrInputDocumentList.add(solrInputSingleDocument);</span>
+
+<span class="nc" id="L176">            }else{</span>
+                //ERROR IN A DOCUMENT STRUCTURE
+<span class="nc" id="L178">                solrResponseDTO.setMessage(documentSatisfiesSchemaResponse.getMessage());</span>
+<span class="nc" id="L179">                solrResponseDTO.setMessage(&quot;The JSON input document in the array doesn't satisfy the Schema. Error: &quot;+ documentSatisfiesSchemaResponse.getMessage());</span>
+<span class="nc" id="L180">                solrResponseDTO.setStatusCode(400);</span>
+<span class="nc" id="L181">                return solrResponseDTO;</span>
+            }
+
+        }
+
+<span class="nc" id="L186">        inputDocumentMaster.addChildDocuments(solrInputDocumentList);</span>
+
+
+        try {
+<span class="nc" id="L190">            solrClient.add(inputDocumentMaster);</span>
+<span class="nc" id="L191">            solrClient.commit();</span>
+<span class="nc" id="L192">        } catch (Exception e) {</span>
+<span class="nc" id="L193">            log.error(e.toString());</span>
+<span class="nc" id="L194">            String message=&quot;Error while adding document to Solr.&quot;;</span>
+<span class="nc" id="L195">            log.debug(message);</span>
+<span class="nc" id="L196">            solrResponseDTO.setMessage(message);</span>
+<span class="nc" id="L197">            solrResponseDTO.setStatusCode(400);</span>
+<span class="nc" id="L198">            return solrResponseDTO;</span>
+<span class="nc" id="L199">        }</span>
+
+<span class="nc" id="L201">        solrResponseDTO.setMessage(&quot;Successfully Added!&quot;);</span>
+<span class="nc" id="L202">        solrResponseDTO.setStatusCode(200);</span>
+<span class="nc" id="L203">        return solrResponseDTO;</span>
+
+
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

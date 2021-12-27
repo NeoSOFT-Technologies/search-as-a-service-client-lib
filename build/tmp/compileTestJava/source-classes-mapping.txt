@@ -1,0 +1,66 @@
+com/solr/clientwrapper/rest/errors/ExceptionTranslatorIT.java
+ com.solr.clientwrapper.rest.errors.ExceptionTranslatorIT
+com/solr/clientwrapper/config/WebConfigurerTestController.java
+ com.solr.clientwrapper.config.WebConfigurerTestController
+com/solr/clientwrapper/rest/SolrSchemaResourceTest.java
+ com.solr.clientwrapper.rest.SolrSchemaResourceTest
+com/solr/clientwrapper/service/MailServiceIT.java
+ com.solr.clientwrapper.service.MailServiceIT
+com/solr/clientwrapper/rest/DataIngectionResourceTest.java
+ com.solr.clientwrapper.rest.DataIngectionResourceTest
+com/solr/clientwrapper/kafka/KafkaTest.java
+ com.solr.clientwrapper.kafka.KafkaTest
+com/solr/clientwrapper/security/jwt/TokenProviderTest.java
+ com.solr.clientwrapper.security.jwt.TokenProviderTest
+com/solr/clientwrapper/security/jwt/JWTFilterTest.java
+ com.solr.clientwrapper.security.jwt.JWTFilterTest
+com/solr/clientwrapper/security/DomainUserDetailsServiceIT.java
+ com.solr.clientwrapper.security.DomainUserDetailsServiceIT
+com/solr/clientwrapper/solrwrapper/TestUtil.java
+ com.solr.clientwrapper.solrwrapper.TestUtil
+ com.solr.clientwrapper.solrwrapper.TestUtil$NumberMatcher
+ com.solr.clientwrapper.solrwrapper.TestUtil$ZonedDateTimeMatcher
+com/solr/clientwrapper/solrwrapper/SolrCollectionTest.java
+ com.solr.clientwrapper.solrwrapper.SolrCollectionTest
+com/solr/clientwrapper/repository/timezone/DateTimeWrapper.java
+ com.solr.clientwrapper.repository.timezone.DateTimeWrapper
+com/solr/clientwrapper/mapper/UserMapperTest.java
+ com.solr.clientwrapper.mapper.UserMapperTest
+com/solr/clientwrapper/ArchTest.java
+ com.solr.clientwrapper.ArchTest
+com/solr/clientwrapper/SolrParseDoc/SolrDocParserResourceTest.java
+ com.solr.clientwrapper.SolrParseDoc.SolrDocParserResourceTest
+com/solr/clientwrapper/domain/service/throttler/ThrottlerServiceTest.java
+ com.solr.clientwrapper.domain.service.throttler.ThrottlerServiceTest
+com/solr/clientwrapper/usecase/authority/ReadAuthorityTest.java
+ com.solr.clientwrapper.usecase.authority.ReadAuthorityTest
+com/solr/clientwrapper/rest/errors/ExceptionTranslatorTestController.java
+ com.solr.clientwrapper.rest.errors.ExceptionTranslatorTestController
+ com.solr.clientwrapper.rest.errors.ExceptionTranslatorTestController$TestDTO
+ com.solr.clientwrapper.rest.errors.ExceptionTranslatorTestController$TestResponseStatusException
+com/solr/clientwrapper/IntegrationTest.java
+ com.solr.clientwrapper.IntegrationTest
+com/solr/clientwrapper/security/SecurityUtilsUnitTest.java
+ com.solr.clientwrapper.security.SecurityUtilsUnitTest
+com/solr/clientwrapper/config/WebConfigurerTest.java
+ com.solr.clientwrapper.config.WebConfigurerTest
+com/solr/clientwrapper/service/UserServiceIT.java
+ com.solr.clientwrapper.service.UserServiceIT
+com/solr/clientwrapper/solrwrapper/SolrCoreTest.java
+ com.solr.clientwrapper.solrwrapper.SolrCoreTest
+com/solr/clientwrapper/repository/timezone/DateTimeWrapperRepository.java
+ com.solr.clientwrapper.repository.timezone.DateTimeWrapperRepository
+com/solr/clientwrapper/config/NoOpMailConfiguration.java
+ com.solr.clientwrapper.config.NoOpMailConfiguration
+com/solr/clientwrapper/solrwrapper/SolrDocumentParserUtilTest.java
+ com.solr.clientwrapper.solrwrapper.SolrDocumentParserUtilTest
+ com.solr.clientwrapper.solrwrapper.SolrDocumentParserUtilTest$1
+ com.solr.clientwrapper.solrwrapper.SolrDocumentParserUtilTest$2
+ com.solr.clientwrapper.solrwrapper.SolrDocumentParserUtilTest$3
+ com.solr.clientwrapper.solrwrapper.SolrDocumentParserUtilTest$4
+ com.solr.clientwrapper.solrwrapper.SolrDocumentParserUtilTest$5
+ com.solr.clientwrapper.solrwrapper.SolrDocumentParserUtilTest$6
+ com.solr.clientwrapper.solrwrapper.SolrDocumentParserUtilTest$7
+ com.solr.clientwrapper.solrwrapper.SolrDocumentParserUtilTest$8
+com/solr/clientwrapper/config/timezone/HibernateTimeZoneIT.java
+ com.solr.clientwrapper.config.timezone.HibernateTimeZoneIT

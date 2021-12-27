@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AdminUserDTO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">search-as-a-service</a> &gt; <a href="index.source.html" class="el_package">com.solr.clientwrapper.domain.dto</a> &gt; <span class="el_source">AdminUserDTO.java</span></div><h1>AdminUserDTO.java</h1><pre class="source lang-java linenums">package com.solr.clientwrapper.domain.dto;
+
+import com.solr.clientwrapper.config.Constants;
+import com.solr.clientwrapper.infrastructure.entity.Authority;
+import com.solr.clientwrapper.infrastructure.entity.User;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+import java.time.Instant;
+import java.util.Set;
+import java.util.stream.Collectors;
+import javax.validation.constraints.*;
+
+/**
+ * A DTO representing a user, with his authorities.
+ * changed
+ */
+<span class="pc" id="L20">@Data</span>
+<span class="nc" id="L21">@NoArgsConstructor</span>
+<span class="nc bnc" id="L22" title="All 106 branches missed.">@EqualsAndHashCode</span>
+public class AdminUserDTO {
+
+<span class="fc" id="L25">    private Long id;</span>
+
+    @NotBlank
+    @Pattern(regexp = Constants.LOGIN_REGEX)
+    @Size(min = 1, max = 50)
+<span class="fc" id="L30">    private String login;</span>
+
+    @Size(max = 50)
+<span class="fc" id="L33">    private String firstName;</span>
+
+    @Size(max = 50)
+<span class="fc" id="L36">    private String lastName;</span>
+
+    @Email
+    @Size(min = 5, max = 254)
+<span class="fc" id="L40">    private String email;</span>
+
+    @Size(max = 256)
+<span class="fc" id="L43">    private String imageUrl;</span>
+//
+<span class="pc" id="L45">    private boolean activated = false;</span>
+
+    @Size(min = 2, max = 10)
+<span class="fc" id="L48">    private String langKey;</span>
+
+<span class="fc" id="L50">    private String createdBy;</span>
+
+<span class="fc" id="L52">    private Instant createdDate;</span>
+
+<span class="fc" id="L54">    private String lastModifiedBy;</span>
+
+<span class="fc" id="L56">    private Instant lastModifiedDate;</span>
+
+<span class="fc" id="L58">    private Set&lt;String&gt; authorities;</span>
+
+  
+
+<span class="fc" id="L62">    public AdminUserDTO(User user) {</span>
+<span class="fc" id="L63">        this.id = user.getId();</span>
+<span class="fc" id="L64">        this.login = user.getLogin();</span>
+<span class="fc" id="L65">        this.firstName = user.getFirstName();</span>
+<span class="fc" id="L66">        this.lastName = user.getLastName();</span>
+<span class="fc" id="L67">        this.email = user.getEmail();</span>
+<span class="fc" id="L68">        this.activated = user.isActivated();</span>
+<span class="fc" id="L69">        this.imageUrl = user.getImageUrl();</span>
+<span class="fc" id="L70">        this.langKey = user.getLangKey();</span>
+<span class="fc" id="L71">        this.createdBy = user.getCreatedBy();</span>
+<span class="fc" id="L72">        this.createdDate = user.getCreatedDate();</span>
+<span class="fc" id="L73">        this.lastModifiedBy = user.getLastModifiedBy();</span>
+<span class="fc" id="L74">        this.lastModifiedDate = user.getLastModifiedDate();</span>
+<span class="fc" id="L75">        this.authorities = user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet());</span>
+<span class="fc" id="L76">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

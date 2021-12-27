@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DataInjectionResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">search-as-a-service</a> &gt; <a href="index.source.html" class="el_package">com.solr.clientwrapper.rest</a> &gt; <span class="el_source">DataInjectionResource.java</span></div><h1>DataInjectionResource.java</h1><pre class="source lang-java linenums">package com.solr.clientwrapper.rest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import org.springframework.web.bind.annotation.RestController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.solr.clientwrapper.domain.dto.throttler.ThrottlerMaxRequestSizeResponseDTO;
+import com.solr.clientwrapper.domain.dto.throttler.ThrottlerRateLimitResponseDTO;
+import com.solr.clientwrapper.domain.service.DataInjectionService;
+import com.solr.clientwrapper.usecase.throttler.LimitRateThrottler;
+import com.solr.clientwrapper.usecase.throttler.LimitRequestSizeThrottler;
+
+import io.github.resilience4j.ratelimiter.RequestNotPermitted;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+
+@RestController
+@RequestMapping(&quot;/injection&quot;)
+<span class="fc" id="L27">public class DataInjectionResource {</span>
+<span class="fc" id="L28">	private final Logger logger = LoggerFactory.getLogger(DataInjectionResource.class);</span>
+    @Value(&quot;${base-solr-url}&quot;)
+	String baseSolrUrl;
+    
+    private static final String DEFAULT_THROTTLE_SERVICE = &quot;defaultRateLimitThrottler&quot;;
+    private static final String SOLR_DATA_INJECTION_THROTTLE_SERVICE = &quot;solrDataInjectionRateLimitThrottler&quot;;
+	
+	@Autowired
+	DataInjectionService dataIngectionService;
+	@Autowired
+	LimitRateThrottler limitRateThrottler;
+	@Autowired
+	LimitRequestSizeThrottler limitRequestSizeThrottler;
+
+	@RateLimiter(name = SOLR_DATA_INJECTION_THROTTLE_SERVICE, fallbackMethod = &quot;dataInjectionRateLimiter&quot;)
+	@PostMapping(path = &quot;/data&quot;)
+	public ResponseEntity&lt;String&gt; parseArray(@RequestBody String data) {
+<span class="nc" id="L45">		logger.info(&quot;json array ingection &quot;);</span>
+<span class="nc" id="L46">		String objectdata = dataIngectionService.parseSolrSchemaArray(data);</span>
+<span class="nc" id="L47">		logger.debug(&quot;controller :-{}&quot;, objectdata.length());</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">		if (!objectdata.isEmpty()) {</span>
+			// File is EXISTS
+<span class="nc" id="L50">			return ResponseEntity.status(HttpStatus.OK).body(objectdata);</span>
+		} else {
+<span class="nc" id="L52">			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(&quot;Something is Wrong&quot;);</span>
+		}
+
+	}
+
+	@RateLimiter(name = SOLR_DATA_INJECTION_THROTTLE_SERVICE, fallbackMethod = &quot;dataInjectionRateLimiter&quot;)
+	@PostMapping(path = &quot;/batch&quot;)
+	public ResponseEntity&lt;?&gt; parseBatch(@RequestBody String data) {
+<span class="nc" id="L60">		logger.debug(&quot;json array injection : {}; Class: {}&quot;, data, data.getClass());</span>
+		
+		// Apply MRS Limiter onto the incoming data
+<span class="nc" id="L63">		ThrottlerMaxRequestSizeResponseDTO throttlerMaxRequestSizeResponseDTO = </span>
+<span class="nc" id="L64">				limitRequestSizeThrottler.dataInjectionRequestSizeLimiter(data);</span>
+		
+<span class="nc bnc" id="L66" title="All 2 branches missed.">		if(data.equals(&quot;data=just-testing&quot;)) {</span>
+<span class="nc" id="L67">			logger.info(&quot;Unexpected data detected in the request body!!&quot;);</span>
+<span class="nc" id="L68">			return ResponseEntity.status(HttpStatus.BAD_REQUEST)</span>
+<span class="nc" id="L69">					.body(&quot;Unexpected data detected in the request body&quot;);</span>
+		}
+<span class="nc" id="L71">		logger.info(&quot;Valid data found. Injection starts..&quot;);</span>
+<span class="nc" id="L72">		String objectBatch = dataIngectionService.parseSolrSchemaBtch(data);</span>
+<span class="nc" id="L73">		logger.debug(&quot;controller :- {}&quot;, objectBatch);</span>
+		
+<span class="nc bnc" id="L75" title="All 2 branches missed.">		if(throttlerMaxRequestSizeResponseDTO.getStatusCode() == 405) {</span>
+<span class="nc" id="L76">			return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(throttlerMaxRequestSizeResponseDTO);</span>
+		}
+<span class="nc bnc" id="L78" title="All 2 branches missed.">		else if (!objectBatch.isEmpty()) {</span>
+			// File EXISTS
+			// Set API response data in throttlerResponseDTO
+<span class="nc" id="L81">			throttlerMaxRequestSizeResponseDTO.setApiResponseData(objectBatch);</span>
+<span class="nc" id="L82">			return ResponseEntity.status(HttpStatus.OK).body(throttlerMaxRequestSizeResponseDTO);</span>
+		} else {
+<span class="nc" id="L84">			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(&quot;Something is wrong&quot;);</span>
+		}
+
+	}
+
+    public ResponseEntity&lt;ThrottlerRateLimitResponseDTO&gt; dataInjectionRateLimiter(
+    		String data, 
+    		RequestNotPermitted exception) {
+<span class="nc" id="L92">        logger.info(&quot;Max request limit is applied, no further calls are accepted&quot;);</span>
+        
+        // prepare Rate Limiting Response DTO
+<span class="nc" id="L95">        ThrottlerRateLimitResponseDTO rateLimitResponseDTO = limitRateThrottler.dataInjectionRateLimiter();</span>
+<span class="nc" id="L96">        HttpHeaders responseHeaders = new HttpHeaders();</span>
+<span class="nc" id="L97">        responseHeaders.set(&quot;Retry-after:&quot;, rateLimitResponseDTO.getRequestTimeoutDuration()); // retry the request after given timeoutDuration</span>
+<span class="nc" id="L98">        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)</span>
+<span class="nc" id="L99">                .headers(responseHeaders) // attach retry-info header</span>
+<span class="nc" id="L100">                .body(rateLimitResponseDTO);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

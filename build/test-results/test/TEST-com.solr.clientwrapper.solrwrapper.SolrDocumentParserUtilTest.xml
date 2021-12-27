@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.solr.clientwrapper.solrwrapper.SolrDocumentParserUtilTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2021-12-27T08:12:55" hostname="DESKTOP-VAOA8DC" time="0.196">
+  <properties/>
+  <testcase name="missingRequiredFieldInInputJSONObject()" classname="com.solr.clientwrapper.solrwrapper.SolrDocumentParserUtilTest" time="0.035"/>
+  <testcase name="correctInputJSONObject()" classname="com.solr.clientwrapper.solrwrapper.SolrDocumentParserUtilTest" time="0.04"/>
+  <testcase name="incorrectBooleanInputJSONObject()" classname="com.solr.clientwrapper.solrwrapper.SolrDocumentParserUtilTest" time="0.023"/>
+  <testcase name="incorrectPlongInputJSONObject()" classname="com.solr.clientwrapper.solrwrapper.SolrDocumentParserUtilTest" time="0.022"/>
+  <testcase name="incorrectStringArrayInputJSONObject()" classname="com.solr.clientwrapper.solrwrapper.SolrDocumentParserUtilTest" time="0.009"/>
+  <testcase name="incorrectPlongArrayInputJSONObject()" classname="com.solr.clientwrapper.solrwrapper.SolrDocumentParserUtilTest" time="0.012"/>
+  <testcase name="incorrectBooleanArrayInputJSONObject()" classname="com.solr.clientwrapper.solrwrapper.SolrDocumentParserUtilTest" time="0.013"/>
+  <testcase name="incorrectStringInputJSONObject()" classname="com.solr.clientwrapper.solrwrapper.SolrDocumentParserUtilTest" time="0.012"/>
+  <testcase name="invalidNewFieldInInputJSONObject()" classname="com.solr.clientwrapper.solrwrapper.SolrDocumentParserUtilTest" time="0.015"/>
+  <system-out><![CDATA[2021-12-27 13:42:55.854 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_required_field_boolean=true
+2021-12-27 13:42:55.854 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : isBoolean Check: true , Object as String: true 
+2021-12-27 13:42:55.854 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_string=karthik
+2021-12-27 13:42:55.854 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_strings=["kar","mani","sara"]
+2021-12-27 13:42:55.856 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_boolean=1
+2021-12-27 13:42:55.857 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : isBoolean Check: 1 , Object as String: 1 
+2021-12-27 13:42:55.857 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Parsing string: "1"
+2021-12-27 13:42:55.858 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_booleans=[1,0,"1"]
+2021-12-27 13:42:55.859 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : JSONArray of Booleans/Strings
+2021-12-27 13:42:55.859 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : isBoolean Check: 1 , Object as String: 1 
+2021-12-27 13:42:55.860 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Parsing string: "1"
+2021-12-27 13:42:55.861 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : isBoolean Check: 0 , Object as String: 0 
+2021-12-27 13:42:55.862 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Parsing string: "0"
+2021-12-27 13:42:55.862 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : isBoolean Check: 1 , Object as String: 1 
+2021-12-27 13:42:55.863 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Parsing string: "1"
+2021-12-27 13:42:55.863 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_plongs=[22,56,59]
+2021-12-27 13:42:55.863 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : JSONArray of Long Numbers/Strings
+2021-12-27 13:42:55.864 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Parsing string: "22"
+2021-12-27 13:42:55.864 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Parsing string: "56"
+2021-12-27 13:42:55.864 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Parsing string: "59"
+2021-12-27 13:42:55.864 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : id=1
+2021-12-27 13:42:55.865 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Object key IS "id" and hence it can be string or long but ultimately converted into long
+2021-12-27 13:42:55.865 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_plong=60
+2021-12-27 13:42:55.866 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Parsing string: "60"
+2021-12-27 13:42:55.891 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_required_field_boolean=true
+2021-12-27 13:42:55.892 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : isBoolean Check: true , Object as String: true 
+2021-12-27 13:42:55.892 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_string=karthik
+2021-12-27 13:42:55.893 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_strings=["kar","mani","sara"]
+2021-12-27 13:42:55.893 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_boolean=not-a-bool
+2021-12-27 13:42:55.893 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : isBoolean Check: not-a-bool , Object as String: not-a-bool 
+2021-12-27 13:42:55.894 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Parsing string: "not-a-bool"
+2021-12-27 13:42:55.894 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Input String cannot be parsed to Integer.
+2021-12-27 13:42:55.895 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Boolean field cannot accept non-boolean values or array of booleans.
+2021-12-27 13:42:55.912 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_required_field_boolean=true
+2021-12-27 13:42:55.913 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : isBoolean Check: true , Object as String: true 
+2021-12-27 13:42:55.913 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_string=karthik
+2021-12-27 13:42:55.914 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_strings=["kar","mani","sara"]
+2021-12-27 13:42:55.914 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_boolean=1
+2021-12-27 13:42:55.916 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : isBoolean Check: 1 , Object as String: 1 
+2021-12-27 13:42:55.916 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Parsing string: "1"
+2021-12-27 13:42:55.917 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_booleans=[1,0,"1"]
+2021-12-27 13:42:55.917 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : JSONArray of Booleans/Strings
+2021-12-27 13:42:55.917 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : isBoolean Check: 1 , Object as String: 1 
+2021-12-27 13:42:55.918 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Parsing string: "1"
+2021-12-27 13:42:55.918 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : isBoolean Check: 0 , Object as String: 0 
+2021-12-27 13:42:55.918 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Parsing string: "0"
+2021-12-27 13:42:55.919 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : isBoolean Check: 1 , Object as String: 1 
+2021-12-27 13:42:55.919 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Parsing string: "1"
+2021-12-27 13:42:55.920 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_plongs=[22,56,59]
+2021-12-27 13:42:55.920 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : JSONArray of Long Numbers/Strings
+2021-12-27 13:42:55.920 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Parsing string: "22"
+2021-12-27 13:42:55.920 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Parsing string: "56"
+2021-12-27 13:42:55.921 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Parsing string: "59"
+2021-12-27 13:42:55.921 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : id=1
+2021-12-27 13:42:55.921 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Object key IS "id" and hence it can be string or long but ultimately converted into long
+2021-12-27 13:42:55.921 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_plong=abc60
+2021-12-27 13:42:55.921 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Parsing string: "abc60"
+2021-12-27 13:42:55.921 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Input String cannot be parsed to Integer.
+2021-12-27 13:42:55.922 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Long field cannot accept non-long values or array of longs.
+2021-12-27 13:42:55.933 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_required_field_boolean=true
+2021-12-27 13:42:55.933 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : isBoolean Check: true , Object as String: true 
+2021-12-27 13:42:55.933 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_string=karthik
+2021-12-27 13:42:55.933 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_strings=karthik
+2021-12-27 13:42:55.933 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Multivalued string field should be a JSONArray of strings.
+2021-12-27 13:42:55.942 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_required_field_boolean=true
+2021-12-27 13:42:55.942 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : isBoolean Check: true , Object as String: true 
+2021-12-27 13:42:55.943 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_string=karthik
+2021-12-27 13:42:55.943 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_strings=["kar","mani","sara"]
+2021-12-27 13:42:55.943 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_boolean=1
+2021-12-27 13:42:55.943 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : isBoolean Check: 1 , Object as String: 1 
+2021-12-27 13:42:55.943 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Parsing string: "1"
+2021-12-27 13:42:55.943 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_booleans=[1,0,"1"]
+2021-12-27 13:42:55.943 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : JSONArray of Booleans/Strings
+2021-12-27 13:42:55.943 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : isBoolean Check: 1 , Object as String: 1 
+2021-12-27 13:42:55.943 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Parsing string: "1"
+2021-12-27 13:42:55.944 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : isBoolean Check: 0 , Object as String: 0 
+2021-12-27 13:42:55.944 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Parsing string: "0"
+2021-12-27 13:42:55.944 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : isBoolean Check: 1 , Object as String: 1 
+2021-12-27 13:42:55.944 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Parsing string: "1"
+2021-12-27 13:42:55.944 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_plongs=[22,56,"abc"]
+2021-12-27 13:42:55.944 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : JSONArray of Long Numbers/Strings
+2021-12-27 13:42:55.944 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Parsing string: "22"
+2021-12-27 13:42:55.944 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Parsing string: "56"
+2021-12-27 13:42:55.944 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Parsing string: "abc"
+2021-12-27 13:42:55.945 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Input String cannot be parsed to Integer.
+2021-12-27 13:42:55.945 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Multivalued long field's JSONArray contains non-long value.
+2021-12-27 13:42:55.956 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_required_field_boolean=true
+2021-12-27 13:42:55.956 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : isBoolean Check: true , Object as String: true 
+2021-12-27 13:42:55.956 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_string=karthik
+2021-12-27 13:42:55.957 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_strings=["kar","mani","sara"]
+2021-12-27 13:42:55.957 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_boolean=true
+2021-12-27 13:42:55.957 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : isBoolean Check: true , Object as String: true 
+2021-12-27 13:42:55.957 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_booleans=["incorrect-bool","false","1"]
+2021-12-27 13:42:55.957 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : JSONArray of Booleans/Strings
+2021-12-27 13:42:55.958 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : isBoolean Check: incorrect-bool , Object as String: incorrect-bool 
+2021-12-27 13:42:55.958 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Parsing string: "incorrect-bool"
+2021-12-27 13:42:55.958 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Input String cannot be parsed to Integer.
+2021-12-27 13:42:55.958 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Multivalued boolean field's JSONArray contains non-boolean value.
+2021-12-27 13:42:55.971 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_required_field_boolean=true
+2021-12-27 13:42:55.971 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : isBoolean Check: true , Object as String: true 
+2021-12-27 13:42:55.972 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_string=["karthik"]
+2021-12-27 13:42:55.972 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : String field cannot accept non-string values or array of strings.
+2021-12-27 13:42:55.988 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_required_field_boolean=true
+2021-12-27 13:42:55.988 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : isBoolean Check: true , Object as String: true 
+2021-12-27 13:42:55.988 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_string=karthik
+2021-12-27 13:42:55.989 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : custom_field_strings=karthik
+2021-12-27 13:42:55.989 DEBUG 14824 --- [    Test worker] c.s.c.domain.utils.DocumentParserUtil    : Multivalued string field should be a JSONArray of strings.
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

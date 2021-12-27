@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.solr.clientwrapper.ArchTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-12-27T08:11:06" hostname="DESKTOP-VAOA8DC" time="2.27">
+  <properties/>
+  <testcase name="servicesAndRepositoriesShouldNotDependOnWebLayer()" classname="com.solr.clientwrapper.ArchTest" time="2.27"/>
+  <system-out><![CDATA[2021-12-27 13:41:06.394  INFO   --- [    Test worker] com.tngtech.archunit.core.PluginLoader   : Detected Java version 11.0.12
+2021-12-27 13:41:06.408 DEBUG   --- [    Test worker] com.tngtech.archunit.core.PluginLoader   : Current Java version is compatible to JAVA_9 => Loading Plugin com.tngtech.archunit.core.importer.ModuleImportPlugin
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

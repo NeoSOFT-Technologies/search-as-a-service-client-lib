@@ -1,0 +1,22 @@
+{
+  "groups": [
+    {
+      "name": "application",
+      "type": "com.solr.clientwrapper.config.ApplicationProperties",
+      "sourceType": "com.solr.clientwrapper.config.ApplicationProperties"
+    },
+    {
+      "name": "capacity-plan",
+      "type": "com.solr.clientwrapper.config.CapacityPlanProperties",
+      "sourceType": "com.solr.clientwrapper.config.CapacityPlanProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "capacity-plan.plans",
+      "type": "java.util.List<com.solr.clientwrapper.config.CapacityPlanProperties$Plan>",
+      "sourceType": "com.solr.clientwrapper.config.CapacityPlanProperties"
+    }
+  ],
+  "hints": []
+}

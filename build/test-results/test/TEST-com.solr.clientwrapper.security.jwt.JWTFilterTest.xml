@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.solr.clientwrapper.security.jwt.JWTFilterTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2021-12-27T08:12:27" hostname="DESKTOP-VAOA8DC" time="0.117">
+  <properties/>
+  <testcase name="testJWTFilterInvalidToken()" classname="com.solr.clientwrapper.security.jwt.JWTFilterTest" time="0.017"/>
+  <testcase name="testJWTFilter()" classname="com.solr.clientwrapper.security.jwt.JWTFilterTest" time="0.076"/>
+  <testcase name="testJWTFilterMissingAuthorization()" classname="com.solr.clientwrapper.security.jwt.JWTFilterTest" time="0.005"/>
+  <testcase name="testJWTFilterMissingToken()" classname="com.solr.clientwrapper.security.jwt.JWTFilterTest" time="0.007"/>
+  <testcase name="testJWTFilterWrongScheme()" classname="com.solr.clientwrapper.security.jwt.JWTFilterTest" time="0.008"/>
+  <system-out><![CDATA[2021-12-27 13:42:27.726 DEBUG 14824 --- [    Test worker] c.s.c.security.jwt.TokenProvider         : Using a Base64-encoded JWT secret key
+2021-12-27 13:42:27.741  INFO 14824 --- [    Test worker] c.s.c.security.jwt.TokenProvider         : Invalid JWT token.
+2021-12-27 13:42:27.743 DEBUG 14824 --- [    Test worker] c.s.c.security.jwt.TokenProvider         : Using a Base64-encoded JWT secret key
+2021-12-27 13:42:27.820 DEBUG 14824 --- [    Test worker] c.s.c.security.jwt.TokenProvider         : Using a Base64-encoded JWT secret key
+2021-12-27 13:42:27.830 DEBUG 14824 --- [    Test worker] c.s.c.security.jwt.TokenProvider         : Using a Base64-encoded JWT secret key
+2021-12-27 13:42:27.835 DEBUG 14824 --- [    Test worker] c.s.c.security.jwt.TokenProvider         : Using a Base64-encoded JWT secret key
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

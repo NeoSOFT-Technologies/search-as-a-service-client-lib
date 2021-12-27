@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TestingController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">search-as-a-service</a> &gt; <a href="index.source.html" class="el_package">com.solr.clientwrapper.rest</a> &gt; <span class="el_source">TestingController.java</span></div><h1>TestingController.java</h1><pre class="source lang-java linenums">package com.solr.clientwrapper.rest;
+
+
+import com.solr.clientwrapper.domain.dto.solr.collection.SolrGetCapacityPlanDTO;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.common.SolrInputDocument;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import java.io.IOException;
+import java.net.URISyntaxException;
+
+@RestController
+<span class="fc" id="L19">public class TestingController {</span>
+
+    @Autowired
+    private SolrClient solrClient;
+    private final static String solrDataName = &quot;employee&quot;;
+
+    @GetMapping(&quot;/addDocument&quot;)
+    public SolrGetCapacityPlanDTO addDocument() throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
+
+<span class="nc" id="L28">        String SOLR_URL=&quot;http://localhost:8983/solr/S3Collection&quot;;</span>
+<span class="nc" id="L29">        SolrClient solrClient = new HttpSolrClient.Builder(SOLR_URL).build();</span>
+
+<span class="nc" id="L31">        SolrInputDocument document = new SolrInputDocument();</span>
+<span class="nc" id="L32">        document.addField(&quot;item_id&quot;,102);</span>
+<span class="nc" id="L33">        document.addField(&quot;item_name&quot;,&quot;Spring not in action&quot;);</span>
+<span class="nc" id="L34">        document.addField(&quot;item_category&quot;,&quot;Weird Books&quot;);</span>
+
+<span class="nc" id="L36">        solrClient.add(document);</span>
+<span class="nc" id="L37">        solrClient.commit();</span>
+
+<span class="nc" id="L39">        return null;</span>
+
+    }
+
+//    @GetMapping(&quot;/testCollection/{name}&quot;)
+//    public String testCollection(@PathVariable String name) throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
+//
+////        CollectionAdminRequest.Reload request=CollectionAdminRequest.reloadCollection(name);
+////        CollectionAdminResponse response = request.process(solrClient);
+//
+//        CollectionAdminRequest.SplitShard request=CollectionAdminRequest.splitShard(name);
+//        CollectionAdminResponse response = request.process(solrClient);
+//
+//        SolrDocumentList
+//
+//        System.out.println(response);
+//
+//        return response.toString();
+//    }
+//
+//    @Autowired
+//    CapacityPlanProperties capacityPlanProperties;
+//
+//    @GetMapping(&quot;/getCapacityPlans&quot;)
+//    public SolrGetCapacityPlanDTO getCapacityPlans() throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
+//
+//        List&lt;CapacityPlanProperties.Plan&gt; capacityPlans = capacityPlanProperties.getPlans();
+//
+//        SolrGetCapacityPlanDTO solrGetCapacityPlanDTO=new SolrGetCapacityPlanDTO(capacityPlans);
+//        return solrGetCapacityPlanDTO;
+//
+//    }
+//
+//    @GetMapping(&quot;/createCollection/{name}&quot;)
+//    public String createCollection(@PathVariable String name) throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
+//
+//        CollectionAdminRequest.Create request = CollectionAdminRequest.createCollection(name, 1, 1);
+//        CollectionAdminResponse response = request.process(solrClient);
+//
+//        System.out.println(response);
+//
+//        return response.toString();
+//    }
+//
+//
+//    @GetMapping(&quot;/deleteCollection/{name}&quot;)
+//    public String deleteCollection(@PathVariable String name) throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
+//
+//        CollectionAdminRequest.Delete request = CollectionAdminRequest.deleteCollection(name);
+//        CollectionAdminResponse response = request.process(solrClient);
+//
+//        System.out.println(response);
+//
+//        return response.toString();
+//    }
+//
+//    @GetMapping(&quot;/renameCollection/{name}&quot;)
+//    public String renameCollection(@PathVariable String name) throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
+//
+//        CollectionAdminRequest.Rename request = CollectionAdminRequest.renameCollection(name,name+&quot;renamed&quot;);
+//        CollectionAdminResponse response = request.process(solrClient);
+//
+//        System.out.println(response);
+//
+//        return response.toString();
+//    }
+//
+//    @GetMapping(&quot;/listCollections&quot;)
+//    public String listCollections() throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
+//
+//        CollectionAdminRequest.List request = new CollectionAdminRequest.List();
+//        CollectionAdminResponse response = request.process(solrClient);
+//
+//        List&lt;String&gt; collection= (List&lt;String&gt;) response.getResponse().get(&quot;collections&quot;);
+//
+//        System.out.println(collection.get(0));
+//
+////        System.out.println(response.getResponse().get(&quot;collections&quot;));
+//
+//        return response.toString();
+//    }
+//
+//
+//    @GetMapping(&quot;/doesCollectionsExists/{name}&quot;)
+//    public Boolean doesCollectionsExists(@PathVariable String name) throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
+//
+//        CollectionAdminRequest.List request = new CollectionAdminRequest.List();
+//        CollectionAdminResponse response = request.process(solrClient);
+//        List&lt;String&gt; existingCollections = (List&lt;String&gt;) response.getResponse().get(&quot;collections&quot;);
+//
+//        return existingCollections != null &amp;&amp; existingCollections.contains(name);
+//
+//
+//    }
+//
+//
+//
+//    @GetMapping(&quot;/coreStatus/{name}&quot;)
+//    public String coreStatus(@PathVariable String name) throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
+//
+//        HttpSolrClient solrClient = new HttpSolrClient.Builder(&quot;http://localhost:8983/solr&quot;).build();
+//        CoreAdminResponse coreAdminResponse=CoreAdminRequest.getStatus(name,solrClient);
+//
+//        return coreAdminResponse.toString();
+//    }
+//
+//
+//    @GetMapping(&quot;/reloadCore/{name}&quot;)
+//    public boolean reloadCore(@PathVariable String name) throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
+//
+//        HttpSolrClient solrClient = new HttpSolrClient.Builder(&quot;http://localhost:8983/solr&quot;).build();
+//
+//        CoreAdminResponse coreAdminResponse=CoreAdminRequest.reloadCore(name,solrClient);
+//
+//        System.out.println(coreAdminResponse);
+//
+//        return true;
+//    }
+//
+//    @GetMapping(&quot;/mergeIndexes/{name}&quot;)
+//    public CoreAdminResponse mergeIndexes(@PathVariable String name) throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
+//
+//        HttpSolrClient solrClient = new HttpSolrClient.Builder(&quot;http://localhost:8983/solr&quot;).build();
+//        CoreAdminResponse coreAdminResponse=CoreAdminRequest.getStatus(name,solrClient);
+//
+//        CoreAdminRequest.getCoreStatus(name,solrClient).getDataDirectory();
+//
+////        CoreAdminRequest.mergeIndexes(name,)
+//
+//        return coreAdminResponse;
+//    }
+//
+//    @GetMapping(&quot;/deleteCore/{name}&quot;)
+//    public boolean createCore(@PathVariable String name) throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
+//
+//        HttpSolrClient solrClient = new HttpSolrClient.Builder(&quot;http://localhost:8983/solr&quot;).build();
+//        CoreAdminRequest.Unload request1=new CoreAdminRequest.Unload(true);
+//        request1.setCoreName(name);
+//        request1.isDeleteDataDir();
+//
+//        request1.process(solrClient);
+//
+//        return true;
+//    }
+//
+//    @GetMapping(&quot;/renameCore/{name}&quot;)
+//    public boolean renameCore(@PathVariable String name) throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
+//
+//        HttpSolrClient solrClient = new HttpSolrClient.Builder(&quot;http://localhost:8983/solr&quot;).build();
+//        //CoreAdminRequest.Create request = new CoreAdminRequest.Create();
+//
+//        CoreAdminResponse coreAdminResponse=CoreAdminRequest.renameCore(name,name+&quot;New&quot;,solrClient);
+//
+//        System.out.println(coreAdminResponse);
+//
+//        return true;
+//    }
+//
+//
+//
+//    @GetMapping(&quot;/getEmployeeByNameCustom/{name}&quot;)
+//    public SolrDocumentList getEmployeeByNameCustom(@PathVariable String name) {
+//
+//        SolrQuery query = new SolrQuery();
+//        query.set(&quot;q&quot;,&quot;name:&quot;+name);
+//        query.set(&quot;fl&quot;,&quot;id,address&quot;);
+//
+//        query.setFacet(true);
+//        query.addFacetField(&quot;id&quot;);
+//        query.setFacetMinCount(1);
+//        query.setFacetLimit(10);
+//
+//        //query.
+//
+//        try {
+//            QueryResponse response = solrClient.query(solrDataName, query);
+//            //System.out.print(response);
+//
+//
+//            SolrDocumentList solrDocumentList = response.getResults();
+//            //System.out.print(solrDocumentList);
+//
+//
+//            List&lt;FacetField&gt; facetFields =response.getFacetFields();
+//            for (int i = 0; i &lt; facetFields.size(); i++) {
+//                FacetField facetField = facetFields.get(i);
+//                List&lt;FacetField.Count&gt; facetInfo = facetField.getValues();
+//
+//                for (FacetField.Count facetInstance : facetInfo) {
+//                    System.out.println(facetInstance.getName() + &quot; : &quot; +
+//                            facetInstance.getCount() + &quot; [drilldown qry:&quot; +
+//                            facetInstance.getAsFilterQuery());
+//                }
+//            }
+//
+//            return solrDocumentList;
+//        } catch (SolrServerException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return null;
+//    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

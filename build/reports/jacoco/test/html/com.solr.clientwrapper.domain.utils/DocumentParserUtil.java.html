@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DocumentParserUtil.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">search-as-a-service</a> &gt; <a href="index.source.html" class="el_package">com.solr.clientwrapper.domain.utils</a> &gt; <span class="el_source">DocumentParserUtil.java</span></div><h1>DocumentParserUtil.java</h1><pre class="source lang-java linenums">package com.solr.clientwrapper.domain.utils;
+
+import com.solr.clientwrapper.domain.service.SolrDocumentService;
+import lombok.Data;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.request.schema.SchemaRequest;
+import org.apache.solr.client.solrj.response.schema.SchemaResponse;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+<span class="nc" id="L20">public class DocumentParserUtil {</span>
+
+    @Value(&quot;${base-solr-url}&quot;)
+    private String baseSolrUrl;
+
+<span class="nc" id="L25">    private final Logger log = LoggerFactory.getLogger(SolrDocumentService.class);</span>
+
+    private static boolean isNumeric(String string) {
+<span class="fc" id="L28">        Logger log = LoggerFactory.getLogger(DocumentParserUtil.class);</span>
+
+        long longValue;
+
+<span class="fc" id="L32">        log.debug(String.format(&quot;Parsing string: \&quot;%s\&quot;&quot;, string));</span>
+
+<span class="pc bpc" id="L34" title="2 of 4 branches missed.">        if(string == null || string.equals(&quot;&quot;)) {</span>
+<span class="nc" id="L35">            log.debug(&quot;String cannot be parsed, it is null or empty.&quot;);</span>
+<span class="nc" id="L36">            return false;</span>
+        }
+        try {
+<span class="fc" id="L39">            longValue = Long.parseLong(string);</span>
+<span class="fc" id="L40">            return true;</span>
+<span class="fc" id="L41">        } catch (NumberFormatException e) {</span>
+<span class="fc" id="L42">            log.debug(&quot;Input String cannot be parsed to Integer.&quot;);</span>
+        }
+<span class="fc" id="L44">        return false;</span>
+    }
+
+    private static boolean isBoolean(Object object) {
+<span class="fc" id="L48">        Logger log = LoggerFactory.getLogger(DocumentParserUtil.class);</span>
+
+<span class="fc" id="L50">        String objectAsString=object.toString();</span>
+
+<span class="fc" id="L52">        log.debug(String.format(&quot;isBoolean Check: %s , Object as String: %s &quot;, object, objectAsString));</span>
+
+<span class="pc bpc" id="L54" title="4 of 10 branches missed.">        if(object.getClass().equals(Boolean.class) || objectAsString.equals(&quot;true&quot;) || objectAsString.equals(&quot;True&quot;) || objectAsString.equals(&quot;false&quot;) || objectAsString.equals(&quot;False&quot;)){</span>
+<span class="fc" id="L55">            return true;</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        }else if (isNumeric(objectAsString)){</span>
+<span class="pc bpc" id="L57" title="1 of 4 branches missed.">            if(Integer.parseInt(objectAsString)==1 || Integer.parseInt(objectAsString)==0){</span>
+<span class="fc" id="L58">                return true;</span>
+            }
+        }
+
+<span class="fc" id="L62">        return false;</span>
+
+    }
+
+    private static DocumentSatisfiesSchemaResponse checkIfRequiredFieldsAreAvailable(Map&lt;String,Map&lt;String, Object&gt;&gt; schemaKeyValuePair, JSONObject payloadJSON){
+
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        for (Map.Entry&lt;String,Map&lt;String, Object&gt;&gt; entry : schemaKeyValuePair.entrySet()){</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">            if(entry.getValue().containsKey(&quot;required&quot;)){</span>
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">                if(entry.getValue().get(&quot;required&quot;).toString().equals(&quot;true&quot;)){</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">                    if(!payloadJSON.has(entry.getKey())){</span>
+<span class="fc" id="L72">                        return new DocumentSatisfiesSchemaResponse(false, &quot;Required field is missing in document. Field: &quot;+entry.getKey());</span>
+                    }
+                }
+            }
+<span class="fc" id="L76">        }</span>
+
+<span class="fc" id="L78">        return new DocumentSatisfiesSchemaResponse(true, &quot;All the required fields are available.&quot;);</span>
+
+    }
+
+    public static DocumentSatisfiesSchemaResponse isDocumentSatisfySchema(Map&lt;String, Map&lt;String, Object&gt;&gt; schemaKeyValuePair, JSONObject payloadJSON){
+<span class="fc" id="L83">        Logger log = LoggerFactory.getLogger(DocumentParserUtil.class);</span>
+
+<span class="fc" id="L85">        DocumentSatisfiesSchemaResponse checkIfRequireFieldsAreAvailableResponse= DocumentParserUtil.checkIfRequiredFieldsAreAvailable(schemaKeyValuePair,payloadJSON);</span>
+
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        if(!checkIfRequireFieldsAreAvailableResponse.isObjectSatisfiesSchema()){</span>
+            //A REQUIRED FIELD IS MISSING IN THE INPUT JSON DOCUMENT
+<span class="fc" id="L89">            return checkIfRequireFieldsAreAvailableResponse;</span>
+        }
+
+
+<span class="fc" id="L93">        Iterator&lt;String&gt; itr = payloadJSON.keySet().iterator();</span>
+
+        //ITERATE THROUGH EACH KEY IN THE INPUT JSON OBJECT PAYLOAD
+<span class="fc bfc" id="L96" title="All 2 branches covered.">        while (itr.hasNext())</span>
+        {
+<span class="fc" id="L98">            String payloadJsonObjectKey = itr.next();</span>
+<span class="fc" id="L99">            Object payloadJsonObjectValue = payloadJSON.get(payloadJsonObjectKey);</span>
+
+<span class="fc" id="L101">            log.debug(payloadJsonObjectKey + &quot;=&quot; + payloadJsonObjectValue);</span>
+            //log.debug(schemaKeyValuePair.get(payloadJsonObjectKey).toString());
+
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">            if(schemaKeyValuePair.containsKey(payloadJsonObjectKey)) {</span>
+
+<span class="fc bfc" id="L106" title="All 2 branches covered.">                if (!payloadJsonObjectKey.equals(&quot;id&quot;)) {</span>
+
+<span class="fc" id="L108">                    Map&lt;String, Object&gt; fieldValueForTheKey = schemaKeyValuePair.get(payloadJsonObjectKey);</span>
+<span class="fc" id="L109">                    String fieldTypeDefinedInSchema = fieldValueForTheKey.get(&quot;type&quot;).toString();</span>
+
+<span class="fc" id="L111">                    boolean isMultivaluedField = false;</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">                    if (fieldValueForTheKey.containsKey(&quot;multiValued&quot;)) {</span>
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">                        if (fieldValueForTheKey.get(&quot;multiValued&quot;).toString().equals(&quot;true&quot;)) {</span>
+<span class="fc" id="L114">                            isMultivaluedField = true;</span>
+                        }
+                    }
+
+                    //log.debug(fieldTypeDefinedInSchema);
+
+<span class="pc bpc" id="L120" title="1 of 4 branches missed.">                    switch (fieldTypeDefinedInSchema) {</span>
+                        case &quot;string&quot;:
+                        case &quot;strings&quot;:
+<span class="fc bfc" id="L123" title="All 2 branches covered.">                            if (isMultivaluedField) {</span>
+<span class="fc bfc" id="L124" title="All 2 branches covered.">                                if (!payloadJsonObjectValue.getClass().equals(JSONArray.class)) {</span>
+<span class="fc" id="L125">                                    String message=&quot;Multivalued string field should be a JSONArray of strings.&quot;;</span>
+<span class="fc" id="L126">                                    log.debug(message);</span>
+<span class="fc" id="L127">                                    return new DocumentSatisfiesSchemaResponse(false, message);</span>
+                                }
+                            } else {
+<span class="fc bfc" id="L130" title="All 2 branches covered.">                                if (!payloadJsonObjectValue.getClass().equals(String.class)) {</span>
+<span class="fc" id="L131">                                    String message=&quot;String field cannot accept non-string values or array of strings.&quot;;</span>
+<span class="fc" id="L132">                                    log.debug(message);</span>
+<span class="fc" id="L133">                                    return new DocumentSatisfiesSchemaResponse(false, message);</span>
+                                }
+                            }
+                            break;
+
+                        case &quot;plong&quot;:
+                        case &quot;plongs&quot;:
+<span class="fc bfc" id="L140" title="All 2 branches covered.">                            if (isMultivaluedField) {</span>
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">                                if (!payloadJsonObjectValue.getClass().equals(JSONArray.class)) {</span>
+<span class="nc" id="L142">                                    String message=&quot;Multivalued long field should be a JSONArray of longs.&quot;;</span>
+<span class="nc" id="L143">                                    log.debug(message);</span>
+<span class="nc" id="L144">                                    return new DocumentSatisfiesSchemaResponse(false, message);</span>
+                                } else {
+<span class="fc" id="L146">                                    log.debug(&quot;JSONArray of Long Numbers/Strings&quot;);</span>
+<span class="fc" id="L147">                                    JSONArray jsonArrayOfLongOrStrings = (JSONArray) payloadJsonObjectValue;</span>
+
+<span class="fc bfc" id="L149" title="All 2 branches covered.">                                    for (int i = 0; i &lt; jsonArrayOfLongOrStrings.length(); i++) {</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">                                        if (!isNumeric(jsonArrayOfLongOrStrings.get(i).toString())) {</span>
+<span class="fc" id="L151">                                            String message=&quot;Multivalued long field's JSONArray contains non-long value.&quot;;</span>
+<span class="fc" id="L152">                                            log.debug(message);</span>
+<span class="fc" id="L153">                                            return new DocumentSatisfiesSchemaResponse(false, message);</span>
+                                        }
+                                    }
+<span class="fc" id="L156">                                }</span>
+                            } else {
+<span class="fc bfc" id="L158" title="All 2 branches covered.">                                if (!isNumeric(payloadJsonObjectValue.toString())) {</span>
+<span class="fc" id="L159">                                    String message=&quot;Long field cannot accept non-long values or array of longs.&quot;;</span>
+<span class="fc" id="L160">                                    log.debug(message);</span>
+<span class="fc" id="L161">                                    return new DocumentSatisfiesSchemaResponse(false, message);</span>
+                                }
+                            }
+                            break;
+
+                        case &quot;boolean&quot;:
+                        case &quot;booleans&quot;:
+<span class="fc bfc" id="L168" title="All 2 branches covered.">                            if (isMultivaluedField) {</span>
+<span class="pc bpc" id="L169" title="1 of 2 branches missed.">                                if (!payloadJsonObjectValue.getClass().equals(JSONArray.class)) {</span>
+<span class="nc" id="L170">                                    String message=&quot;Multivalued boolean field should be a JSONArray of booleans.&quot;;</span>
+<span class="nc" id="L171">                                    log.debug(message);</span>
+<span class="nc" id="L172">                                    return new DocumentSatisfiesSchemaResponse(false, message);</span>
+                                } else {
+<span class="fc" id="L174">                                    log.debug(&quot;JSONArray of Booleans/Strings&quot;);</span>
+<span class="fc" id="L175">                                    JSONArray jsonArrayOfBooleanOrStrings = (JSONArray) payloadJsonObjectValue;</span>
+
+<span class="fc bfc" id="L177" title="All 2 branches covered.">                                    for (int i = 0; i &lt; jsonArrayOfBooleanOrStrings.length(); i++) {</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">                                        if (!isBoolean(jsonArrayOfBooleanOrStrings.get(i))) {</span>
+<span class="fc" id="L179">                                            String message=&quot;Multivalued boolean field's JSONArray contains non-boolean value.&quot;;</span>
+<span class="fc" id="L180">                                            log.debug(message);</span>
+<span class="fc" id="L181">                                            return new DocumentSatisfiesSchemaResponse(false, message);</span>
+                                        }
+                                    }
+<span class="fc" id="L184">                                }</span>
+                            } else {
+<span class="fc bfc" id="L186" title="All 2 branches covered.">                                if (!isBoolean(payloadJsonObjectValue)) {</span>
+<span class="fc" id="L187">                                    String message=&quot;Boolean field cannot accept non-boolean values or array of booleans.&quot;;</span>
+<span class="fc" id="L188">                                    log.debug(message);</span>
+<span class="fc" id="L189">                                    return new DocumentSatisfiesSchemaResponse(false, message);</span>
+                                }
+                            }
+                            break;
+
+                        default:
+<span class="nc" id="L195">                            return new DocumentSatisfiesSchemaResponse(false, &quot;Code unable to handle the schema data type. Contact the developer!&quot;);</span>
+                    }
+<span class="fc" id="L197">                }else{</span>
+                    //OBJECT KEY IS &quot;id&quot; and hence it can be string or long but ultimately converted into long
+<span class="fc" id="L199">                    log.debug(&quot;Object key IS \&quot;id\&quot; and hence it can be string or long but ultimately converted into long&quot;);</span>
+                }
+            }else{
+<span class="nc" id="L202">                String message=&quot;Input JSON Object's key doesn't exists in the Schema. Please check the input document or add new field to the schema.&quot;;</span>
+<span class="nc" id="L203">                log.debug(message);</span>
+<span class="nc" id="L204">                return new DocumentSatisfiesSchemaResponse(false,message);</span>
+            }
+<span class="fc" id="L206">        }</span>
+
+<span class="fc" id="L208">        return new DocumentSatisfiesSchemaResponse(true,&quot;Success!&quot;);</span>
+    }
+
+    public static Map&lt;String,Map&lt;String, Object&gt;&gt; getSchemaOfCollection(String baseSolrUrl, String collectionName){
+
+<span class="nc" id="L213">        Logger log = LoggerFactory.getLogger(DocumentParserUtil.class);</span>
+
+<span class="nc" id="L215">        SolrClient solrClient=new HttpSolrClient.Builder(baseSolrUrl+&quot;/&quot;+collectionName).build();</span>
+
+<span class="nc" id="L217">        SchemaRequest schemaRequest = new SchemaRequest();</span>
+<span class="nc" id="L218">        SchemaResponse schemaResponse = null;</span>
+        try {
+<span class="nc" id="L220">            schemaResponse = schemaRequest.process(solrClient);</span>
+<span class="nc" id="L221">        } catch (Exception e) {</span>
+<span class="nc" id="L222">            log.error(e.toString());</span>
+<span class="nc" id="L223">            return null;</span>
+<span class="nc" id="L224">        }</span>
+
+<span class="nc" id="L226">        List&lt;Map&lt;String, Object&gt;&gt; schemaResponseFields= schemaResponse.getSchemaRepresentation().getFields();</span>
+
+        // Converting response schema from Solr to HashMap for quick access
+        //Key contains the field name and value contains the object which has schema description of that key eg. multivalued etc
+<span class="nc" id="L230">        Map&lt;String,Map&lt;String, Object&gt;&gt; schemaKeyValuePair=new HashMap&lt;&gt;();</span>
+<span class="nc" id="L231">        schemaResponseFields.forEach((fieldObject)-&gt;schemaKeyValuePair.put(fieldObject.get(&quot;name&quot;).toString(),fieldObject));</span>
+
+<span class="nc" id="L233">        return schemaKeyValuePair;</span>
+    }
+
+
+<span class="nc bnc" id="L237" title="All 18 branches missed.">    @Data</span>
+    public static class DocumentSatisfiesSchemaResponse {
+<span class="fc" id="L239">        boolean isObjectSatisfiesSchema;</span>
+<span class="nc" id="L240">        String message;</span>
+<span class="fc" id="L241">        public DocumentSatisfiesSchemaResponse(boolean isObjectSatisfiesSchema, String message) {</span>
+<span class="fc" id="L242">            this.isObjectSatisfiesSchema = isObjectSatisfiesSchema;</span>
+<span class="fc" id="L243">            this.message = message;</span>
+<span class="fc" id="L244">        }</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

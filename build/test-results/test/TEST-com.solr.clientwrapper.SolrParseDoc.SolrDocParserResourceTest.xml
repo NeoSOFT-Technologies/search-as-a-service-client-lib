@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.solr.clientwrapper.SolrParseDoc.SolrDocParserResourceTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-12-27T08:12:36" hostname="DESKTOP-VAOA8DC" time="0.038">
+  <properties/>
+  <testcase name="whenFileUploaded_thenVerifyStatus()" classname="com.solr.clientwrapper.SolrParseDoc.SolrDocParserResourceTest" time="0.038"/>
+  <system-out><![CDATA[
+        ??? ???   ??? ????????? ????????   ??????? ????????? ????????? ????????
+        ??? ???   ??? ????????? ????????? ???????? ????????? ????????? ?????????
+        ??? ?????????    ???    ????????? ???????     ???    ???????   ?????????
+  ???   ??? ?????????    ???    ????????   ???????    ???    ???????   ????????
+  ????????? ???   ??? ????????? ???       ????????    ???    ????????? ???  ????
+   ???????  ???   ??? ????????? ???       ???????     ???    ????????? ???   ???
+
+:: JHipster ?  :: Running Spring Boot 2.5.4 ::
+:: https://www.jhipster.tech ::
+
+2021-12-27 13:42:28.027  INFO 14824 --- [    Test worker] c.s.c.S.SolrDocParserResourceTest        : Starting SolrDocParserResourceTest using Java 11.0.12 on DESKTOP-VAOA8DC with PID 14824 (started by user in D:\search-as-service)
+2021-12-27 13:42:28.027 DEBUG 14824 --- [    Test worker] c.s.c.S.SolrDocParserResourceTest        : Running with Spring Boot v2.5.4, Spring v5.3.13
+2021-12-27 13:42:28.029  INFO 14824 --- [    Test worker] c.s.c.S.SolrDocParserResourceTest        : No active profile set, falling back to default profiles: default
+2021-12-27 13:42:28.034  WARN 14824 --- [    Test worker] o.s.b.c.config.ConfigDataEnvironment     : Property 'spring.profiles' imported from location 'class path resource [config/application.yml]' is invalid and should be replaced with 'spring.config.activate.on-profile' [origin: class path resource [config/application.yml] - 17:12]
+2021-12-27 13:42:28.962 DEBUG 14824 --- [    Test worker] i.g.r.utils.RxJava2OnClasspathCondition  : RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2021-12-27 13:42:28.963 DEBUG 14824 --- [    Test worker] i.g.r.utils.ReactorOnClasspathCondition  : Reactor related Aspect extensions are not activated because Reactor is not on the classpath.
+2021-12-27 13:42:28.970 DEBUG 14824 --- [    Test worker] i.g.r.utils.RxJava2OnClasspathCondition  : RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2021-12-27 13:42:28.971 DEBUG 14824 --- [    Test worker] i.g.r.utils.ReactorOnClasspathCondition  : Reactor related Aspect extensions are not activated because Reactor is not on the classpath.
+2021-12-27 13:42:28.983 DEBUG 14824 --- [    Test worker] i.g.r.utils.RxJava2OnClasspathCondition  : RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2021-12-27 13:42:28.984 DEBUG 14824 --- [    Test worker] i.g.r.utils.ReactorOnClasspathCondition  : Reactor related Aspect extensions are not activated because Reactor is not on the classpath.
+2021-12-27 13:42:28.993 DEBUG 14824 --- [    Test worker] i.g.r.utils.RxJava2OnClasspathCondition  : RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2021-12-27 13:42:28.995 DEBUG 14824 --- [    Test worker] i.g.r.utils.ReactorOnClasspathCondition  : Reactor related Aspect extensions are not activated because Reactor is not on the classpath.
+2021-12-27 13:42:29.004 DEBUG 14824 --- [    Test worker] i.g.r.utils.RxJava2OnClasspathCondition  : RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2021-12-27 13:42:29.005 DEBUG 14824 --- [    Test worker] i.g.r.utils.ReactorOnClasspathCondition  : Reactor related Aspect extensions are not activated because Reactor is not on the classpath.
+2021-12-27 13:42:29.010 DEBUG 14824 --- [    Test worker] i.g.r.utils.RxJava2OnClasspathCondition  : RxJava2 related Aspect extensions are not activated, because RxJava2 is not on the classpath.
+2021-12-27 13:42:29.012 DEBUG 14824 --- [    Test worker] i.g.r.utils.ReactorOnClasspathCondition  : Reactor related Aspect extensions are not activated because Reactor is not on the classpath.
+2021-12-27 13:42:29.109  WARN 14824 --- [ntainer#0-0-C-1] org.apache.kafka.clients.NetworkClient   : [Consumer clientId=consumer-group_id-2, groupId=group_id] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Broker may not be available.
+2021-12-27 13:42:29.110  WARN 14824 --- [ntainer#0-0-C-1] org.apache.kafka.clients.NetworkClient   : [Consumer clientId=consumer-group_id-2, groupId=group_id] Bootstrap broker localhost:9092 (id: -1 rack: null) disconnected
+2021-12-27 13:42:29.474  WARN 14824 --- [ntainer#0-0-C-1] org.apache.kafka.clients.NetworkClient   : [Consumer clientId=consumer-group_id-1, groupId=group_id] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Broker may not be available.
+2021-12-27 13:42:29.475  WARN 14824 --- [ntainer#0-0-C-1] org.apache.kafka.clients.NetworkClient   : [Consumer clientId=consumer-group_id-1, groupId=group_id] Bootstrap broker localhost:9092 (id: -1 rack: null) disconnected
+2021-12-27 13:42:29.616 DEBUG 14824 --- [    Test worker] c.s.c.config.AsyncConfiguration          : Creating Async Task Executor
+2021-12-27 13:42:29.678 DEBUG 14824 --- [    Test worker] c.s.c.config.LiquibaseConfiguration      : Configuring Liquibase
+Skipping auto-registration
+2021-12-27 13:42:29.921  WARN 14824 --- [    Test worker] liquibase.hub                            : Skipping auto-registration
+2021-12-27 13:42:30.615 DEBUG 14824 --- [    Test worker] c.s.c.security.jwt.TokenProvider         : Using a Base64-encoded JWT secret key
+2021-12-27 13:42:31.270  WARN 14824 --- [ntainer#0-0-C-1] org.apache.kafka.clients.NetworkClient   : [Consumer clientId=consumer-group_id-2, groupId=group_id] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Broker may not be available.
+2021-12-27 13:42:31.271  WARN 14824 --- [ntainer#0-0-C-1] org.apache.kafka.clients.NetworkClient   : [Consumer clientId=consumer-group_id-2, groupId=group_id] Bootstrap broker localhost:9092 (id: -1 rack: null) disconnected
+2021-12-27 13:42:31.619 DEBUG 14824 --- [    Test worker] c.s.c.config.KafkaProducerConfig         : Kafka_Producer_Configuration
+2021-12-27 13:42:32.319  WARN 14824 --- [ntainer#0-0-C-1] org.apache.kafka.clients.NetworkClient   : [Consumer clientId=consumer-group_id-1, groupId=group_id] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Broker may not be available.
+2021-12-27 13:42:32.320  WARN 14824 --- [ntainer#0-0-C-1] org.apache.kafka.clients.NetworkClient   : [Consumer clientId=consumer-group_id-1, groupId=group_id] Bootstrap broker localhost:9092 (id: -1 rack: null) disconnected
+2021-12-27 13:42:32.576 DEBUG 14824 --- [    Test worker] c.s.c.config.KafkaConsumerConfig         : KafkaConsumerConfig
+2021-12-27 13:42:33.209 DEBUG 14824 --- [    Test worker] _.s.web.servlet.HandlerMapping.Mappings  : 
+	c.s.c.c.WebConfigurerTestController:
+	{GET [/api/test-cors]}: testCorsOnApiPath()
+	{GET [/test/test-cors]}: testCorsOnOtherPath()
+2021-12-27 13:42:33.210 DEBUG 14824 --- [    Test worker] _.s.web.servlet.HandlerMapping.Mappings  : 
+	c.s.c.r.e.ExceptionTranslatorTestController:
+	{GET [/api/exception-translator-test/unauthorized]}: unauthorized()
+	{GET [/api/exception-translator-test/concurrency-failure]}: concurrencyFailure()
+	{POST [/api/exception-translator-test/method-argument]}: methodArgument(TestDTO)
+	{GET [/api/exception-translator-test/access-denied]}: accessdenied()
+	{GET [/api/exception-translator-test/response-status]}: exceptionWithResponseStatus()
+	{GET [/api/exception-translator-test/missing-servlet-request-part]}: missingServletRequestPartException(String)
+	{GET [/api/exception-translator-test/internal-server-error]}: internalServerError()
+	{GET [/api/exception-translator-test/missing-servlet-request-parameter]}: missingServletRequestParameterException(String)
+2021-12-27 13:42:33.213 DEBUG 14824 --- [    Test worker] _.s.web.servlet.HandlerMapping.Mappings  : 
+	c.s.c.r.DataIngectionResource:
+	{POST [/ingection/batcharray/{collectionName}]}: batcharray(String,String)
+	{POST [/ingection/batchcollection/{collectionName}]}: batchcollection(String,String)
+2021-12-27 13:42:33.214 DEBUG 14824 --- [    Test worker] _.s.web.servlet.HandlerMapping.Mappings  : 
+	c.s.c.r.DataInjectionResource:
+	{POST [/injection/batch]}: parseBatch(String)
+	{POST [/injection/data]}: parseArray(String)
+2021-12-27 13:42:33.215 DEBUG 14824 --- [    Test worker] _.s.web.servlet.HandlerMapping.Mappings  : 
+	c.s.c.r.KafkaResource:
+	{POST [/kafka/add/{addtoQueue}]}: sendData(String)
+2021-12-27 13:42:33.216 DEBUG 14824 --- [    Test worker] _.s.web.servlet.HandlerMapping.Mappings  : 
+	c.s.c.r.SolrCollectionResource:
+	{GET [/searchservice/table/isCollectionExists/{collectionName}]}: isCollectionExits(String)
+	{GET [/searchservice/table/collections]}: collections()
+	{GET [/searchservice/table/capacity-plans]}: capacityPlans()
+	{PUT [/searchservice/table/rename]}: rename(SolrRenameCollectionDTO)
+	{DELETE [/searchservice/table/delete]}: delete(SolrDeleteCollectionDTO)
+	{POST [/searchservice/table/create]}: create(SolrCreateCollectionDTO)
+2021-12-27 13:42:33.217 DEBUG 14824 --- [    Test worker] _.s.web.servlet.HandlerMapping.Mappings  : 
+	c.s.c.r.SolrCoreResource:
+	{PUT [/solr-core/rename]}: rename(SolrDoubleCoreDTO)
+	{GET [/solr-core/status/{name}]}: status(String)
+	{DELETE [/solr-core/delete]}: delete(SolrSingleCoreDTO)
+	{POST [/solr-core/create]}: create(SolrSingleCoreDTO)
+	{PUT [/solr-core/swap]}: swap(SolrDoubleCoreDTO)
+	{POST [/solr-core/reload]}: reload(SolrSingleCoreDTO)
+2021-12-27 13:42:33.219 DEBUG 14824 --- [    Test worker] _.s.web.servlet.HandlerMapping.Mappings  : 
+	c.s.c.r.SolrDocParserResource:
+	{POST [/ingest/upload], consumes [multipart/form-data]}: fileUpload(MultipartFile)
+2021-12-27 13:42:33.220 DEBUG 14824 --- [    Test worker] _.s.web.servlet.HandlerMapping.Mappings  : 
+	c.s.c.r.SolrInputDocumentResource:
+	{POST [/documents/{collectionName}]}: documents(String,String)
+	{POST [/document/{collectionName}]}: document(String,String)
+2021-12-27 13:42:33.223 DEBUG 14824 --- [    Test worker] _.s.web.servlet.HandlerMapping.Mappings  : 
+	c.s.c.r.SolrSchemaResource:
+	{GET [/schema/get/{tableName}/{name}]}: get(String,String)
+	{PUT [/schema/update/{tableName}/{name}]}: update(String,String,SolrSchemaDTO)
+	{DELETE [/schema/delete/{tableName}/{name}]}: delete(String,String)
+	{POST [/schema/create]}: create(SolrSchemaDTO)
+2021-12-27 13:42:33.224 DEBUG 14824 --- [    Test worker] _.s.web.servlet.HandlerMapping.Mappings  : 
+	c.s.c.r.TestingController:
+	{GET [/addDocument]}: addDocument()
+2021-12-27 13:42:33.225 DEBUG 14824 --- [    Test worker] _.s.web.servlet.HandlerMapping.Mappings  : 
+	c.s.c.r.ThrottlerResource:
+	{GET [/throttle/testMRS]}: demoMRSThrottler(String)
+	{GET [/throttle/health]}: checkHealth()
+	{GET [/throttle/test]}: demoRateLimiterThrottler()
+	{GET [/throttle/collections]}: throttleCollectionResource()
+2021-12-27 13:42:33.226 DEBUG 14824 --- [    Test worker] _.s.web.servlet.HandlerMapping.Mappings  : 
+	c.s.c.r.UserJWTController:
+	{POST [/api/authenticate]}: authorize(LoginVM)
+2021-12-27 13:42:33.229 DEBUG 14824 --- [    Test worker] _.s.web.servlet.HandlerMapping.Mappings  : 
+	o.s.b.a.w.s.e.BasicErrorController:
+	{ [/error], produces [text/html]}: errorHtml(HttpServletRequest,HttpServletResponse)
+	{ [/error]}: error(HttpServletRequest)
+2021-12-27 13:42:33.232 DEBUG 14824 --- [    Test worker] _.s.web.servlet.HandlerMapping.Mappings  : 
+	o.s.w.a.OpenApiWebMvcResource:
+	{GET [/v3/api-docs.yaml], produces [application/vnd.oai.openapi]}: openapiYaml(HttpServletRequest,String)
+	{GET [/v3/api-docs], produces [application/json]}: openapiJson(HttpServletRequest,String)
+2021-12-27 13:42:33.235 DEBUG 14824 --- [    Test worker] _.s.web.servlet.HandlerMapping.Mappings  : 
+	o.s.w.u.SwaggerWelcomeWebMvc:
+	{GET [/swagger-ui.html]}: redirectToUi(HttpServletRequest)
+	{GET [/v3/api-docs/swagger-config], produces [application/json]}: openapiJson(HttpServletRequest)
+2021-12-27 13:42:33.306 DEBUG 14824 --- [    Test worker] _.s.web.servlet.HandlerMapping.Mappings  : 'beanNameHandlerMapping' {}
+2021-12-27 13:42:33.460  WARN 14824 --- [ntainer#0-0-C-1] org.apache.kafka.clients.NetworkClient   : [Consumer clientId=consumer-group_id-2, groupId=group_id] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Broker may not be available.
+2021-12-27 13:42:33.460  WARN 14824 --- [ntainer#0-0-C-1] org.apache.kafka.clients.NetworkClient   : [Consumer clientId=consumer-group_id-2, groupId=group_id] Bootstrap broker localhost:9092 (id: -1 rack: null) disconnected
+2021-12-27 13:42:35.069 DEBUG 14824 --- [    Test worker] _.s.web.servlet.HandlerMapping.Mappings  : 'resourceHandlerMapping' {/webjars/**=ResourceHttpRequestHandler [Classpath [META-INF/resources/webjars/]], /**=ResourceHttpRequestHandler [Classpath [META-INF/resources/], Classpath [resources/], Classpath [static/], Classpath [public/], ServletContext [/]], /swagger-ui*/**=ResourceHttpRequestHandler [Classpath [META-INF/resources/webjars/]]}
+2021-12-27 13:42:35.409  WARN 14824 --- [ntainer#0-0-C-1] org.apache.kafka.clients.NetworkClient   : [Consumer clientId=consumer-group_id-1, groupId=group_id] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Broker may not be available.
+2021-12-27 13:42:35.410  WARN 14824 --- [ntainer#0-0-C-1] org.apache.kafka.clients.NetworkClient   : [Consumer clientId=consumer-group_id-1, groupId=group_id] Bootstrap broker localhost:9092 (id: -1 rack: null) disconnected
+2021-12-27 13:42:35.736  WARN 14824 --- [ntainer#0-0-C-1] org.apache.kafka.clients.NetworkClient   : [Consumer clientId=consumer-group_id-2, groupId=group_id] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Broker may not be available.
+2021-12-27 13:42:35.736  WARN 14824 --- [ntainer#0-0-C-1] org.apache.kafka.clients.NetworkClient   : [Consumer clientId=consumer-group_id-2, groupId=group_id] Bootstrap broker localhost:9092 (id: -1 rack: null) disconnected
+2021-12-27 13:42:36.947  INFO 14824 --- [    Test worker] c.s.c.S.SolrDocParserResourceTest        : Started SolrDocParserResourceTest in 8.987 seconds (JVM running for 103.898)
+2021-12-27 13:42:36.982 DEBUG 14824 --- [    Test worker] c.s.c.rest.SolrDocParserResource         : Multipart File Upload 
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

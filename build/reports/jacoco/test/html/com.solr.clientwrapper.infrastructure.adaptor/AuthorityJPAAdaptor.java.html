@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AuthorityJPAAdaptor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">search-as-a-service</a> &gt; <a href="index.source.html" class="el_package">com.solr.clientwrapper.infrastructure.adaptor</a> &gt; <span class="el_source">AuthorityJPAAdaptor.java</span></div><h1>AuthorityJPAAdaptor.java</h1><pre class="source lang-java linenums">package com.solr.clientwrapper.infrastructure.adaptor;
+
+import java.util.List;
+import java.util.Optional;
+
+import com.solr.clientwrapper.domain.port.spi.AuthorityPersistencePort;
+import com.solr.clientwrapper.infrastructure.entity.Authority;
+import com.solr.clientwrapper.infrastructure.repository.AuthorityRepository;
+import org.springframework.stereotype.Service;
+
+@Service
+public class AuthorityJPAAdaptor implements AuthorityPersistencePort {
+
+
+
+    private final AuthorityRepository authRepository;
+
+<span class="fc" id="L18">    public AuthorityJPAAdaptor(AuthorityRepository authRepository) {</span>
+<span class="fc" id="L19">        this.authRepository = authRepository;</span>
+<span class="fc" id="L20">    }</span>
+    
+    public List&lt;Authority&gt; findAll() {
+<span class="nc" id="L23">        return authRepository.findAll();</span>
+    }
+    
+    public Optional&lt;Authority&gt; findById(String id) {
+<span class="nc" id="L27">        return     authRepository.findById(id);</span>
+
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
