@@ -59,22 +59,34 @@ public class SolrCollectionService implements SolrCollectionServicePort {
             return solrResponseDTO;
         }
 
-        CollectionAdminRequest.Create request = CollectionAdminRequest.createCollection(collectionName, selectedCapacityPlan.getShards(), selectedCapacityPlan.getReplicas());
+        //ABOVE VALIDATIONS WILL BE THERE IN CLIENT LIBRARY
 
-        HttpSolrClient solrClient = new HttpSolrClient.Builder(baseSolrUrl).build();
+        //BELOW CODE THAT IS COMMENTED WILL ONLY BE THERE IN THE MICROSERVICE. THE CODE THAT INTERACTS WITH SOLR REMAINS IN MICROSERVICE
 
+//        CollectionAdminRequest.Create request = CollectionAdminRequest.createCollection(collectionName, selectedCapacityPlan.getShards(), selectedCapacityPlan.getReplicas());
+//
+//        HttpSolrClient solrClient = new HttpSolrClient.Builder(baseSolrUrl).build();
+//
+//
+//        request.setMaxShardsPerNode(selectedCapacityPlan.getShards()*selectedCapacityPlan.getReplicas());
+//
+//        try {
+//            CollectionAdminResponse response = request.process(solrClient);
+//            solrResponseDTO.setStatusCode(200);
+//            solrResponseDTO.setMessage("Successfully created Solr Collection: "+collectionName);
+//        } catch (Exception e) {
+//            log.error(e.toString());
+//            solrResponseDTO.setStatusCode(400);
+//            solrResponseDTO.setMessage("Unable to create Solr Collection: "+collectionName+". Exception.");
+//        }
 
-        request.setMaxShardsPerNode(selectedCapacityPlan.getShards()*selectedCapacityPlan.getReplicas());
+        //IN PLACE OF THE ABOVE CODE, THE SKU NAME AND THE COLLECTION NAME WILL BE SENT TO THE MICROSERVICE USING HTTP REQUEST
+        // THE HTTP URL, PORT OF THE MICROSERVICE SHOULD BE STORED IN APPLICATION.YML CONFIG FILE. THE PATH EG. /CREATE/COLLECTION/{name} CAN BE DIRECTLY ADDED HERE
+        //WHATEVER THE RESPONSE IS FROM THE MICRO SERVICE, RETURN IT HERE.
+        //RESPONSE WILL BE IN JSON FORMAT, SO CONVERT THAT INTO SOLR RESPONSE DTO AND THEN RETURN IT FROM THIS FUNCTION
 
-        try {
-            CollectionAdminResponse response = request.process(solrClient);
-            solrResponseDTO.setStatusCode(200);
-            solrResponseDTO.setMessage("Successfully created Solr Collection: "+collectionName);
-        } catch (Exception e) {
-            log.error(e.toString());
-            solrResponseDTO.setStatusCode(400);
-            solrResponseDTO.setMessage("Unable to create Solr Collection: "+collectionName+". Exception.");
-        }
+        //ITS BETTER KEEP LESS VALIDATION ON THE MICROSERVICE SIDE, BUT KEEP THE ESSENTIAL MICROSERVICES
+        //- KARTHIK PILLAI
 
         return solrResponseDTO;
     }
