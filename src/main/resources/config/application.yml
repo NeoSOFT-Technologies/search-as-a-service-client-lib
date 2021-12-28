@@ -218,6 +218,8 @@ user-registration:
 #Solr Configurations
 base-solr-url: http://localhost:8983/solr
 
+base-microservice-url: http://localhost:8080
+
 capacity-plan:
   plans:
     - sku: B
