@@ -6,10 +6,11 @@ import com.solr.clientwrapper.domain.dto.solr.collection.SolrCreateCollectionDTO
 import com.solr.clientwrapper.domain.dto.solr.collection.SolrGetCapacityPlanDTO;
 import com.solr.clientwrapper.domain.dto.solr.collection.SolrGetCollectionsResponseDTO;
 import com.solr.clientwrapper.domain.port.api.SolrCollectionServicePort;
-import com.solr.clientwrapper.domain.utils.MicroservicePost;
+import com.solr.clientwrapper.domain.utils.Microservice;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.request.CollectionAdminRequest;
 import org.apache.solr.client.solrj.response.CollectionAdminResponse;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,14 +74,14 @@ public class SolrCollectionService implements SolrCollectionServicePort {
 
         SolrCreateCollectionDTO solrCreateCollectionDTO=new SolrCreateCollectionDTO(collectionName,sku);
 
-        MicroservicePost microservicePost=new MicroservicePost();
-        microservicePost.setApiEndpoint(baseMicroserviceUrl+apiEndpoint+"/create");
-        microservicePost.setRequestBodyDTO(solrCreateCollectionDTO);
+        Microservice microservice =new Microservice();
+        microservice.setApiEndpoint(baseMicroserviceUrl+apiEndpoint+"/create");
+        microservice.setRequestBodyDTO(solrCreateCollectionDTO);
 
-        MicroservicePost.MicroservicePostResponse microservicePostResponse = microservicePost.run();
+        JSONObject jsonObject= microservice.post();
 
-        solrResponseDTO.setMessage(microservicePostResponse.getMessage());
-        solrResponseDTO.setStatusCode(microservicePostResponse.getStatusCode());
+        solrResponseDTO.setMessage(jsonObject.get("message").toString());
+        solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
 
         return solrResponseDTO;
     }
@@ -90,24 +91,16 @@ public class SolrCollectionService implements SolrCollectionServicePort {
 
         SolrResponseDTO solrResponseDTO=new SolrResponseDTO(collectionName);
 
-        CollectionAdminRequest.Delete request = CollectionAdminRequest.deleteCollection(collectionName);
-        CollectionAdminRequest.DeleteAlias deleteAliasRequest=CollectionAdminRequest.deleteAlias(collectionName);
+        Microservice microservice =new Microservice();
+        microservice.setApiEndpoint(baseMicroserviceUrl+apiEndpoint+"/delete/"+collectionName);
 
-        HttpSolrClient solrClient = new HttpSolrClient.Builder(baseSolrUrl).build();
+        JSONObject jsonObject= microservice.delete();
 
-        try {
-            CollectionAdminResponse response = request.process(solrClient);
-            CollectionAdminResponse deleteAliasResponse = deleteAliasRequest.process(solrClient);
-
-            solrResponseDTO.setStatusCode(200);
-            solrResponseDTO.setMessage("Successfully deleted Solr Collection: "+collectionName);
-        } catch (Exception e) {
-            log.error(e.toString());
-            solrResponseDTO.setStatusCode(400);
-            solrResponseDTO.setMessage("Unable to delete Solr Collection: "+collectionName+". Exception.");
-        }
+        solrResponseDTO.setMessage(jsonObject.get("message").toString());
+        solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
 
         return solrResponseDTO;
+
     }
 
     @Override
