@@ -124,6 +124,8 @@ user-registration:
 #Solr Configurations
 base-solr-url: http://localhost:8983/solr
 
+base-microservice-url: http://localhost:8080
+
 # Throttler configurations
 base-app-url: http://localhost:8080
 throttler-test-app-url: http://localhost:8081
