@@ -1,23 +1,15 @@
 package com.solr.clientwrapper.domain.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solr.clientwrapper.config.CapacityPlanProperties;
 import com.solr.clientwrapper.domain.dto.solr.SolrResponseDTO;
 import com.solr.clientwrapper.domain.dto.solr.collection.SolrCreateCollectionDTO;
 import com.solr.clientwrapper.domain.dto.solr.collection.SolrGetCapacityPlanDTO;
 import com.solr.clientwrapper.domain.dto.solr.collection.SolrGetCollectionsResponseDTO;
 import com.solr.clientwrapper.domain.port.api.SolrCollectionServicePort;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
+import com.solr.clientwrapper.domain.utils.MicroservicePost;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.request.CollectionAdminRequest;
 import org.apache.solr.client.solrj.response.CollectionAdminResponse;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +35,8 @@ public class SolrCollectionService implements SolrCollectionServicePort {
     private String apiEndpoint="/searchservice/table";
 
 
-    @Autowired
-    private ObjectMapper objectMapper;
+//    @Autowired
+//    private ObjectMapper objectMapper;
 
     @Autowired
     CapacityPlanProperties capacityPlanProperties;
@@ -78,50 +70,17 @@ public class SolrCollectionService implements SolrCollectionServicePort {
             return solrResponseDTO;
         }
 
-        CloseableHttpClient client = HttpClients.createDefault();
-        HttpPost httpPost = new HttpPost(baseMicroserviceUrl+apiEndpoint+"/create");
 
         SolrCreateCollectionDTO solrCreateCollectionDTO=new SolrCreateCollectionDTO(collectionName,sku);
 
-        try {
+        MicroservicePost microservicePost=new MicroservicePost();
+        microservicePost.setApiEndpoint(baseMicroserviceUrl+apiEndpoint+"/create");
+        microservicePost.setRequestBodyDTO(solrCreateCollectionDTO);
 
-            String objJackson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(solrCreateCollectionDTO);
-            StringEntity entity = new StringEntity(objJackson);
+        MicroservicePost.MicroservicePostResponse microservicePostResponse = microservicePost.run();
 
-            httpPost.setEntity(entity);
-            httpPost.setHeader("Accept", "application/json");
-            httpPost.setHeader("Content-type", "application/json");
-
-            CloseableHttpResponse response = client.execute(httpPost);
-            HttpEntity entityResponse = response.getEntity();
-            String result = EntityUtils.toString(entityResponse);
-            log.debug("RESPONSE: "+ result);
-
-            JSONObject jsonObject= new JSONObject(result );
-
-            solrResponseDTO.setMessage(jsonObject.get("message").toString());
-            solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
-
-            client.close();
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-            log.error(e.toString());
-
-            solrResponseDTO.setMessage(e.toString());
-            solrResponseDTO.setStatusCode(400);
-
-        }
-
-        //BELOW TEXT WAS WRITTEN BEFORE THE CHANGES
-        //IN PLACE OF THE ABOVE CODE, THE SKU NAME AND THE COLLECTION NAME WILL BE SENT TO THE MICROSERVICE USING HTTP REQUEST
-        // THE HTTP URL, PORT OF THE MICROSERVICE SHOULD BE STORED IN APPLICATION.YML CONFIG FILE. THE PATH EG. /CREATE/COLLECTION/{name} CAN BE DIRECTLY ADDED HERE
-        //WHATEVER THE RESPONSE IS FROM THE MICRO SERVICE, RETURN IT HERE.
-        //RESPONSE WILL BE IN JSON FORMAT, SO CONVERT THAT INTO SOLR RESPONSE DTO AND THEN RETURN IT FROM THIS FUNCTION
-
-        //ITS BETTER KEEP LESS VALIDATION ON THE MICROSERVICE SIDE, BUT KEEP THE ESSENTIAL MICROSERVICES
-        //- KARTHIK PILLAI
+        solrResponseDTO.setMessage(microservicePostResponse.getMessage());
+        solrResponseDTO.setStatusCode(microservicePostResponse.getStatusCode());
 
         return solrResponseDTO;
     }
