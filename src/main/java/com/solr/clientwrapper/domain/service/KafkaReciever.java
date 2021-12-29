@@ -1,15 +1,13 @@
 package com.solr.clientwrapper.domain.service;
 
+import com.solr.clientwrapper.domain.port.api.KafkaRecievers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.stereotype.Service;
-
-import com.solr.clientwrapper.domain.port.api.KafkaRecievers;
 
 
 
-@Service
+//@Service
 public class KafkaReciever implements KafkaRecievers {
 
 	private String message = null;
