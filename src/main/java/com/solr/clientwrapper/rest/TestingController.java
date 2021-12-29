@@ -22,7 +22,7 @@ public class TestingController {
     @GetMapping("/collectionTesting")
     public SolrResponseDTO collectionTesting() throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
 
-        return solrCollectionServicePort.create("collectionTesting7","B");
+        return solrCollectionServicePort.create("collectionTesting10","B");
 
 
     }

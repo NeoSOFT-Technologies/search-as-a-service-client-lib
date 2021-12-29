@@ -1,6 +1,5 @@
 package com.solr.clientwrapper.domain.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solr.clientwrapper.config.CapacityPlanProperties;
 import com.solr.clientwrapper.domain.dto.solr.SolrResponseDTO;
@@ -26,8 +25,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @Service
@@ -42,6 +39,9 @@ public class SolrCollectionService implements SolrCollectionServicePort {
 
     @Value("${base-microservice-url}")
     private String baseMicroserviceUrl;
+
+    private String apiEndpoint="/searchservice/table";
+
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -78,57 +78,24 @@ public class SolrCollectionService implements SolrCollectionServicePort {
             return solrResponseDTO;
         }
 
-        //ABOVE VALIDATIONS WILL BE THERE IN CLIENT LIBRARY
-
-        //BELOW CODE THAT IS COMMENTED WILL ONLY BE THERE IN THE MICROSERVICE. THE CODE THAT INTERACTS WITH SOLR REMAINS IN MICROSERVICE
-
-//        CollectionAdminRequest.Create request = CollectionAdminRequest.createCollection(collectionName, selectedCapacityPlan.getShards(), selectedCapacityPlan.getReplicas());
-//
-//        HttpSolrClient solrClient = new HttpSolrClient.Builder(baseSolrUrl).build();
-//
-//
-//        request.setMaxShardsPerNode(selectedCapacityPlan.getShards()*selectedCapacityPlan.getReplicas());
-//
-//        try {
-//            CollectionAdminResponse response = request.process(solrClient);
-//            solrResponseDTO.setStatusCode(200);
-//            solrResponseDTO.setMessage("Successfully created Solr Collection: "+collectionName);
-//        } catch (Exception e) {
-//            log.error(e.toString());
-//            solrResponseDTO.setStatusCode(400);
-//            solrResponseDTO.setMessage("Unable to create Solr Collection: "+collectionName+". Exception.");
-//        }
-
         CloseableHttpClient client = HttpClients.createDefault();
-        HttpPost httpPost = new HttpPost(baseMicroserviceUrl+"/searchservice/table"+"/create");
+        HttpPost httpPost = new HttpPost(baseMicroserviceUrl+apiEndpoint+"/create");
 
         SolrCreateCollectionDTO solrCreateCollectionDTO=new SolrCreateCollectionDTO(collectionName,sku);
 
-        String objJackson=null;
         try {
-            objJackson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(solrCreateCollectionDTO);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return null;
-        }
 
-        StringEntity entity = null;
-        try {
-            entity = new StringEntity(objJackson);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+            String objJackson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(solrCreateCollectionDTO);
+            StringEntity entity = new StringEntity(objJackson);
 
-        httpPost.setEntity(entity);
-        httpPost.setHeader("Accept", "application/json");
-        httpPost.setHeader("Content-type", "application/json");
+            httpPost.setEntity(entity);
+            httpPost.setHeader("Accept", "application/json");
+            httpPost.setHeader("Content-type", "application/json");
 
-        CloseableHttpResponse response = null;
-        try {
-            response = client.execute(httpPost);
+            CloseableHttpResponse response = client.execute(httpPost);
             HttpEntity entityResponse = response.getEntity();
             String result = EntityUtils.toString(entityResponse);
-            System.out.println("RESPONSE: "+ result);
+            log.debug("RESPONSE: "+ result);
 
             JSONObject jsonObject= new JSONObject(result );
 
@@ -137,11 +104,17 @@ public class SolrCollectionService implements SolrCollectionServicePort {
 
             client.close();
 
-            return solrResponseDTO;
-        } catch (IOException e) {
+        } catch (Exception e) {
+
             e.printStackTrace();
+            log.error(e.toString());
+
+            solrResponseDTO.setMessage(e.toString());
+            solrResponseDTO.setStatusCode(400);
+
         }
 
+        //BELOW TEXT WAS WRITTEN BEFORE THE CHANGES
         //IN PLACE OF THE ABOVE CODE, THE SKU NAME AND THE COLLECTION NAME WILL BE SENT TO THE MICROSERVICE USING HTTP REQUEST
         // THE HTTP URL, PORT OF THE MICROSERVICE SHOULD BE STORED IN APPLICATION.YML CONFIG FILE. THE PATH EG. /CREATE/COLLECTION/{name} CAN BE DIRECTLY ADDED HERE
         //WHATEVER THE RESPONSE IS FROM THE MICRO SERVICE, RETURN IT HERE.
