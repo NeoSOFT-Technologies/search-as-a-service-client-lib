@@ -1,259 +1,71 @@
 package com.solr.clientwrapper.rest;
 
-
-import com.solr.clientwrapper.domain.dto.solr.collection.SolrGetCollectionsResponseDTO;
-import com.solr.clientwrapper.domain.port.api.SolrCollectionServicePort;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
-import java.io.IOException;
-import java.net.URISyntaxException;
+
+import org.apache.solr.client.solrj.SolrServerException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.solr.clientwrapper.domain.dto.solr.SolrFieldDTO;
+import com.solr.clientwrapper.domain.dto.solr.SolrSchemaDTO;
+import com.solr.clientwrapper.domain.dto.solr.SolrSchemaResponseDTO;
+import com.solr.clientwrapper.domain.port.api.SolrCollectionServicePort;
+import com.solr.clientwrapper.domain.port.api.SolrSchemaServicePort;
+import com.solr.clientwrapper.infrastructure.Enum.SolrFieldType;
+
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
 public class TestingController {
 
-    @Autowired
-    SolrCollectionServicePort solrCollectionServicePort;
+	@Autowired
+	SolrCollectionServicePort solrCollectionServicePort;
 
-    @GetMapping("/collectionTesting")
-    public SolrGetCollectionsResponseDTO collectionTesting() throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
+	@Autowired
+	SolrSchemaServicePort solrSchemaServicePort;
 
-        //return solrCollectionServicePort.create("collectionTesting13","B");
+	String tableName = "colors";
+	String name = "Ravi";
 
-        //return solrCollectionServicePort.delete("collectionTesting13");
+	SolrFieldDTO sfd = new SolrFieldDTO("Ravi", SolrFieldType._nest_path_, "Mangesh", false, false, false, false,
+			false);
+	List<SolrFieldDTO> list = new ArrayList<SolrFieldDTO>();
+	SolrSchemaDTO dto = new SolrSchemaDTO(tableName, name, list);
 
-        //return solrCollectionServicePort.rename("collectionTesting10","collectionTesting100");
+	@GetMapping("/schemaGet")
+	public SolrSchemaResponseDTO collectionTesting() throws SolrServerException, IOException, URISyntaxException,
+			ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
 
-        return solrCollectionServicePort.getCollections();
-    }
+		return solrSchemaServicePort.get(tableName, name);
+	}
 
+	@PutMapping("/schemaupdate")
+	public SolrSchemaResponseDTO SchemaUpdate(@RequestBody SolrSchemaDTO newSolrSchemaDTO) {
+		list.add(sfd);
+		return solrSchemaServicePort.update(tableName, name, newSolrSchemaDTO);
+	}
 
-//    @Autowired
-//    private SolrClient solrClient;
-//    private final static String solrDataName = "employee";
+	@PostMapping("/schema/create")
+	public SolrSchemaResponseDTO create() {
+		list.add(sfd);
+		return solrSchemaServicePort.create(tableName, name, dto);
 
-//    @GetMapping("/addDocument")
-//    public SolrGetCapacityPlanDTO addDocument() throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
-//
-//        String SOLR_URL="http://localhost:8983/solr/S3Collection";
-//        SolrClient solrClient = new HttpSolrClient.Builder(SOLR_URL).build();
-//
-//        SolrInputDocument document = new SolrInputDocument();
-//        document.addField("item_id",102);
-//        document.addField("item_name","Spring not in action");
-//        document.addField("item_category","Weird Books");
-//
-//        solrClient.add(document);
-//        solrClient.commit();
-//
-//        return null;
-//
-//    }
+	}
 
-//    @GetMapping("/testCollection/{name}")
-//    public String testCollection(@PathVariable String name) throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
-//
-////        CollectionAdminRequest.Reload request=CollectionAdminRequest.reloadCollection(name);
-////        CollectionAdminResponse response = request.process(solrClient);
-//
-//        CollectionAdminRequest.SplitShard request=CollectionAdminRequest.splitShard(name);
-//        CollectionAdminResponse response = request.process(solrClient);
-//
-//        SolrDocumentList
-//
-//        System.out.println(response);
-//
-//        return response.toString();
-//    }
-//
-//    @Autowired
-//    CapacityPlanProperties capacityPlanProperties;
-//
-//    @GetMapping("/getCapacityPlans")
-//    public SolrGetCapacityPlanDTO getCapacityPlans() throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
-//
-//        List<CapacityPlanProperties.Plan> capacityPlans = capacityPlanProperties.getPlans();
-//
-//        SolrGetCapacityPlanDTO solrGetCapacityPlanDTO=new SolrGetCapacityPlanDTO(capacityPlans);
-//        return solrGetCapacityPlanDTO;
-//
-//    }
-//
-//    @GetMapping("/createCollection/{name}")
-//    public String createCollection(@PathVariable String name) throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
-//
-//        CollectionAdminRequest.Create request = CollectionAdminRequest.createCollection(name, 1, 1);
-//        CollectionAdminResponse response = request.process(solrClient);
-//
-//        System.out.println(response);
-//
-//        return response.toString();
-//    }
-//
-//
-//    @GetMapping("/deleteCollection/{name}")
-//    public String deleteCollection(@PathVariable String name) throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
-//
-//        CollectionAdminRequest.Delete request = CollectionAdminRequest.deleteCollection(name);
-//        CollectionAdminResponse response = request.process(solrClient);
-//
-//        System.out.println(response);
-//
-//        return response.toString();
-//    }
-//
-//    @GetMapping("/renameCollection/{name}")
-//    public String renameCollection(@PathVariable String name) throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
-//
-//        CollectionAdminRequest.Rename request = CollectionAdminRequest.renameCollection(name,name+"renamed");
-//        CollectionAdminResponse response = request.process(solrClient);
-//
-//        System.out.println(response);
-//
-//        return response.toString();
-//    }
-//
-//    @GetMapping("/listCollections")
-//    public String listCollections() throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
-//
-//        CollectionAdminRequest.List request = new CollectionAdminRequest.List();
-//        CollectionAdminResponse response = request.process(solrClient);
-//
-//        List<String> collection= (List<String>) response.getResponse().get("collections");
-//
-//        System.out.println(collection.get(0));
-//
-////        System.out.println(response.getResponse().get("collections"));
-//
-//        return response.toString();
-//    }
-//
-//
-//    @GetMapping("/doesCollectionsExists/{name}")
-//    public Boolean doesCollectionsExists(@PathVariable String name) throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
-//
-//        CollectionAdminRequest.List request = new CollectionAdminRequest.List();
-//        CollectionAdminResponse response = request.process(solrClient);
-//        List<String> existingCollections = (List<String>) response.getResponse().get("collections");
-//
-//        return existingCollections != null && existingCollections.contains(name);
-//
-//
-//    }
-//
-//
-//
-//    @GetMapping("/coreStatus/{name}")
-//    public String coreStatus(@PathVariable String name) throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
-//
-//        HttpSolrClient solrClient = new HttpSolrClient.Builder("http://localhost:8983/solr").build();
-//        CoreAdminResponse coreAdminResponse=CoreAdminRequest.getStatus(name,solrClient);
-//
-//        return coreAdminResponse.toString();
-//    }
-//
-//
-//    @GetMapping("/reloadCore/{name}")
-//    public boolean reloadCore(@PathVariable String name) throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
-//
-//        HttpSolrClient solrClient = new HttpSolrClient.Builder("http://localhost:8983/solr").build();
-//
-//        CoreAdminResponse coreAdminResponse=CoreAdminRequest.reloadCore(name,solrClient);
-//
-//        System.out.println(coreAdminResponse);
-//
-//        return true;
-//    }
-//
-//    @GetMapping("/mergeIndexes/{name}")
-//    public CoreAdminResponse mergeIndexes(@PathVariable String name) throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
-//
-//        HttpSolrClient solrClient = new HttpSolrClient.Builder("http://localhost:8983/solr").build();
-//        CoreAdminResponse coreAdminResponse=CoreAdminRequest.getStatus(name,solrClient);
-//
-//        CoreAdminRequest.getCoreStatus(name,solrClient).getDataDirectory();
-//
-////        CoreAdminRequest.mergeIndexes(name,)
-//
-//        return coreAdminResponse;
-//    }
-//
-//    @GetMapping("/deleteCore/{name}")
-//    public boolean createCore(@PathVariable String name) throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
-//
-//        HttpSolrClient solrClient = new HttpSolrClient.Builder("http://localhost:8983/solr").build();
-//        CoreAdminRequest.Unload request1=new CoreAdminRequest.Unload(true);
-//        request1.setCoreName(name);
-//        request1.isDeleteDataDir();
-//
-//        request1.process(solrClient);
-//
-//        return true;
-//    }
-//
-//    @GetMapping("/renameCore/{name}")
-//    public boolean renameCore(@PathVariable String name) throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
-//
-//        HttpSolrClient solrClient = new HttpSolrClient.Builder("http://localhost:8983/solr").build();
-//        //CoreAdminRequest.Create request = new CoreAdminRequest.Create();
-//
-//        CoreAdminResponse coreAdminResponse=CoreAdminRequest.renameCore(name,name+"New",solrClient);
-//
-//        System.out.println(coreAdminResponse);
-//
-//        return true;
-//    }
-//
-//
-//
-//    @GetMapping("/getEmployeeByNameCustom/{name}")
-//    public SolrDocumentList getEmployeeByNameCustom(@PathVariable String name) {
-//
-//        SolrQuery query = new SolrQuery();
-//        query.set("q","name:"+name);
-//        query.set("fl","id,address");
-//
-//        query.setFacet(true);
-//        query.addFacetField("id");
-//        query.setFacetMinCount(1);
-//        query.setFacetLimit(10);
-//
-//        //query.
-//
-//        try {
-//            QueryResponse response = solrClient.query(solrDataName, query);
-//            //System.out.print(response);
-//
-//
-//            SolrDocumentList solrDocumentList = response.getResults();
-//            //System.out.print(solrDocumentList);
-//
-//
-//            List<FacetField> facetFields =response.getFacetFields();
-//            for (int i = 0; i < facetFields.size(); i++) {
-//                FacetField facetField = facetFields.get(i);
-//                List<FacetField.Count> facetInfo = facetField.getValues();
-//
-//                for (FacetField.Count facetInstance : facetInfo) {
-//                    System.out.println(facetInstance.getName() + " : " +
-//                            facetInstance.getCount() + " [drilldown qry:" +
-//                            facetInstance.getAsFilterQuery());
-//                }
-//            }
-//
-//            return solrDocumentList;
-//        } catch (SolrServerException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return null;
-//    }
-
+	@DeleteMapping("/schema/delete/{tableName}/{name}")
+	public SolrSchemaResponseDTO delete(@PathVariable String tableName, @PathVariable String name) {
+		return solrSchemaServicePort.delete(tableName, name);
+	}
 
 }
