@@ -1,11 +1,16 @@
 package com.solr.clientwrapper.rest;
 
 
+import com.solr.clientwrapper.domain.dto.solr.SolrResponseDTO;
 import com.solr.clientwrapper.domain.dto.solr.collection.SolrGetCollectionsResponseDTO;
 import com.solr.clientwrapper.domain.port.api.SolrCollectionServicePort;
+import com.solr.clientwrapper.domain.port.api.SolrCoreServicePort;
+
 import org.apache.solr.client.solrj.SolrServerException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -17,10 +22,16 @@ import java.net.URISyntaxException;
 public class TestingController {
 
     @Autowired
+    SolrCoreServicePort solrCoreServicePort;
+    
+    @Autowired
     SolrCollectionServicePort solrCollectionServicePort;
-
-    @GetMapping("/collectionTesting")
-    public SolrGetCollectionsResponseDTO collectionTesting() throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
+    
+    String solrcore;
+    String newcore;
+    
+    @GetMapping("/coreCreate")
+    public SolrResponseDTO collectionTesting(String solrcore) throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
 
         //return solrCollectionServicePort.create("collectionTesting13","B");
 
@@ -28,7 +39,31 @@ public class TestingController {
 
         //return solrCollectionServicePort.rename("collectionTesting10","collectionTesting100");
 
-        return solrCollectionServicePort.getCollections();
+        return solrCoreServicePort.create(solrcore);
+    }
+    
+    @PutMapping("/rename")
+    public SolrResponseDTO renamecoreTesting(String solrcore, String newcore) throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
+
+        //return solrCollectionServicePort.create("collectionTesting13","B");
+
+        //return solrCollectionServicePort.delete("collectionTesting13");
+
+        //return solrCollectionServicePort.rename("collectionTesting10","collectionTesting100");
+
+        return solrCoreServicePort.rename(solrcore,newcore);
+    }
+    
+    @GetMapping("/delete")
+    public SolrResponseDTO delete(String corename) throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
+    	System.out.println("strig "+corename);
+        //return solrCollectionServicePort.create("collectionTesting13","B");
+
+        //return solrCollectionServicePort.delete("collectionTesting13");
+
+        //return solrCollectionServicePort.rename("collectionTesting10","collectionTesting100");
+
+        return solrCollectionServicePort.delete(corename);
     }
 
 

@@ -1,176 +1,144 @@
 package com.solr.clientwrapper.domain.service;
 
-import com.solr.clientwrapper.domain.dto.solr.SolrResponseDTO;
-import com.solr.clientwrapper.domain.port.api.SolrCoreServicePort;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
-import org.apache.solr.client.solrj.request.CoreAdminRequest;
 import org.apache.solr.client.solrj.response.CoreAdminResponse;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.solr.clientwrapper.domain.dto.solr.SolrResponseDTO;
+import com.solr.clientwrapper.domain.dto.solr.core.SolrDoubleCoreDTO;
+import com.solr.clientwrapper.domain.dto.solr.core.SolrSingleCoreDTO;
+import com.solr.clientwrapper.domain.port.api.SolrCoreServicePort;
+import com.solr.clientwrapper.domain.utils.MicroserviceHttpGateway;
+
 @Service
 @Transactional
 public class SolrCoreService implements SolrCoreServicePort {
 
-    private final Logger log = LoggerFactory.getLogger(SolrCoreService.class);
+	private final Logger log = LoggerFactory.getLogger(SolrCoreService.class);
 
-    //http://localhost:8983/solr
-    @Value("${base-solr-url}")
-    private String baseSolrUrl;
+	// http://localhost:8983/solr
+	@Value("${base-solr-url}")
+	private String baseSolrUrl;
 
-    @Override
-    public SolrResponseDTO create(String coreName) {
+	@Value("${base-microservice-url}")
+	private String baseMicroserviceUrl;
 
-        log.debug("create");
+	private String apiEndpoint = "/solr-core";
 
-        CoreAdminRequest.Create request = new CoreAdminRequest.Create();
-        request.setCoreName(coreName);
-        request.setInstanceDir(coreName);
-        request.setConfigSet("_default");
-        request.setDataDir("data");
+	@Override
+	public SolrResponseDTO create(String coreName) {
 
-        SolrResponseDTO solrResponseDTO=new SolrResponseDTO(coreName);
-        HttpSolrClient solrClient = new HttpSolrClient.Builder(baseSolrUrl).build();
-        try {
-            CoreAdminResponse coreAdminResponse =request.process(solrClient);
+		log.debug("create");
 
-            solrResponseDTO.setStatusCode(200);
-            solrResponseDTO.setMessage("Successfully created Solr Core: "+coreName);
+		SolrSingleCoreDTO solrSingleCore = new SolrSingleCoreDTO(coreName);
 
-        } catch (Exception e){
-            log.error(e.toString());
+		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(coreName);
 
-            solrResponseDTO.setStatusCode(400);
-            solrResponseDTO.setMessage("Unable to create Solr Core: "+coreName+". Exception.");
+		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/create");
+		microserviceHttpGateway.setRequestBodyDTO(solrSingleCore);
+		JSONObject jsonObject = microserviceHttpGateway.postRequest();
 
-        }
+		solrResponseDTO.setMessage(jsonObject.get("message").toString());
+		solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
 
-        return solrResponseDTO;
-    }
+		return solrResponseDTO;
+	}
 
-    @Override
-    public SolrResponseDTO rename(String coreName, String newName) {
+	@Override
+	public SolrResponseDTO rename(String coreName, String newName) {
 
-        log.debug("rename");
+		log.debug("rename");
 
-        SolrResponseDTO solrResponseDTO=new SolrResponseDTO(coreName);
-        HttpSolrClient solrClient = new HttpSolrClient.Builder(baseSolrUrl).build();
-        try {
-            CoreAdminResponse coreAdminResponse=CoreAdminRequest.renameCore(coreName,newName,solrClient);
+		SolrDoubleCoreDTO solrSingleCore = new SolrDoubleCoreDTO(coreName, newName);
+		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(coreName);
 
-            solrResponseDTO.setStatusCode(200);
-            solrResponseDTO.setMessage("Successfully renamed Solr Core: "+coreName+" to "+newName);
+		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/rename");
+		microserviceHttpGateway.setRequestBodyDTO(solrSingleCore);
 
-        } catch (Exception e){
-            log.error(e.toString());
+		JSONObject jsonObject = microserviceHttpGateway.putRequest();
+		System.out.println("jsonobject" + jsonObject);
+		solrResponseDTO.setMessage(jsonObject.get("message").toString());
+		solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
 
-            solrResponseDTO.setStatusCode(400);
-            solrResponseDTO.setMessage("Unable to rename Solr Core: "+coreName+" to "+newName+". Exception.");
+		return solrResponseDTO;
+	}
 
-        }
+	@Override
+	public SolrResponseDTO delete(String coreName) {
 
-        return solrResponseDTO;
-    }
+		log.debug("delete" + coreName);
 
-    @Override
-    public SolrResponseDTO delete(String coreName) {
+		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(coreName);
 
-        log.debug("delete");
+		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/delete/" + coreName);
 
+		JSONObject jsonObject = microserviceHttpGateway.deleteRequest();
 
-        CoreAdminRequest.Unload request=new CoreAdminRequest.Unload(true);
-        request.setCoreName(coreName);
-        request.setDeleteIndex(true);
-        request.setDeleteDataDir(true);
-        request.setDeleteInstanceDir(true);
+		solrResponseDTO.setMessage(jsonObject.get("message").toString());
+		solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
 
-        SolrResponseDTO solrResponseDTO=new SolrResponseDTO(coreName);
-        HttpSolrClient solrClient = new HttpSolrClient.Builder(baseSolrUrl).build();
-        try {
-            request.process(solrClient);
+		return solrResponseDTO;
 
-            solrResponseDTO.setStatusCode(200);
-            solrResponseDTO.setMessage("Successfully deleted Solr Core: "+coreName);
+	}
 
-        } catch (Exception e){
-            log.error(e.toString());
+	@Override
+	public SolrResponseDTO swap(String coreOne, String coreTwo) {
 
-            solrResponseDTO.setStatusCode(400);
-            solrResponseDTO.setMessage("Unable to delete Solr Core: "+coreName+". Exception.");
+		log.debug("swap");
+		SolrDoubleCoreDTO solrSingleCore = new SolrDoubleCoreDTO(coreOne, coreTwo);
+		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(coreOne);
 
-        }
+		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/swap");
+		microserviceHttpGateway.setRequestBodyDTO(solrSingleCore);
 
-        return solrResponseDTO;
+		JSONObject jsonObject = microserviceHttpGateway.putRequest();
 
-    }
+		System.out.println("jsonobject" + jsonObject);
+		solrResponseDTO.setMessage(jsonObject.get("message").toString());
+		solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
 
-    @Override
-    public SolrResponseDTO swap(String coreOne, String coreTwo) {
+		return solrResponseDTO;
+	}
 
-        log.debug("swap");
+	@Override
+	public SolrResponseDTO reload(String coreName) {
 
-        SolrResponseDTO solrResponseDTO=new SolrResponseDTO(coreOne);
-        HttpSolrClient solrClient = new HttpSolrClient.Builder(baseSolrUrl).build();
-        try {
-            CoreAdminRequest.swapCore(coreOne,coreTwo,solrClient);
+		log.debug("reload");
+		SolrSingleCoreDTO solrSingleCore = new SolrSingleCoreDTO(coreName);
+		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(coreName);
 
-            solrResponseDTO.setStatusCode(200);
-            solrResponseDTO.setMessage("Successfully swapped Solr Core: "+coreOne+" to "+coreTwo);
+		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/reload");
 
-        } catch (Exception e){
-            log.error(e.toString());
+		microserviceHttpGateway.setRequestBodyDTO(solrSingleCore);
+		JSONObject jsonObject = microserviceHttpGateway.postRequest();
 
-            solrResponseDTO.setStatusCode(400);
-            solrResponseDTO.setMessage("Unable to swap Solr Core: "+coreOne+" to "+coreTwo+". Exception.");
+		solrResponseDTO.setMessage(jsonObject.get("message").toString());
+		solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
 
-        }
+		return solrResponseDTO;
+	}
 
-        return solrResponseDTO;
-    }
+	@Override
+	public String status(String coreName) {
 
-    @Override
-    public SolrResponseDTO reload(String coreName) {
+		log.debug("status");
 
-        log.debug("reload");
+		CoreAdminResponse coreAdminResponse = null;
+		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/status/" + coreName);
+		String jsonObject = microserviceHttpGateway.stringRequest();
+		
+		return jsonObject;
 
-        SolrResponseDTO solrResponseDTO=new SolrResponseDTO(coreName);
-        HttpSolrClient solrClient = new HttpSolrClient.Builder(baseSolrUrl).build();
-        try {
-            CoreAdminResponse coreAdminResponse=CoreAdminRequest.reloadCore(coreName,solrClient);
-
-            solrResponseDTO.setStatusCode(200);
-            solrResponseDTO.setMessage("Successfully reloaded Solr Core: "+coreName);
-
-        } catch (Exception e){
-            log.error(e.toString());
-
-            solrResponseDTO.setStatusCode(400);
-            solrResponseDTO.setMessage("Unable to reload Solr Core: "+coreName+". Exception.");
-
-        }
-
-        return solrResponseDTO;
-    }
-
-    @Override
-    public String status(String coreName) {
-
-        log.debug("status");
-
-        CoreAdminResponse coreAdminResponse= null;
-        HttpSolrClient solrClient = new HttpSolrClient.Builder(baseSolrUrl).build();
-        try {
-            coreAdminResponse = CoreAdminRequest.getStatus(coreName,solrClient);
-            return coreAdminResponse.toString();
-        } catch (Exception e) {
-            log.error(e.toString());
-            return null;
-        }
-
-    }
-
+	}
 
 }
