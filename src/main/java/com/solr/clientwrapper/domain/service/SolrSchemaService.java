@@ -1,45 +1,22 @@
 package com.solr.clientwrapper.domain.service;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.CloudSolrClient;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
-import org.apache.solr.client.solrj.impl.HttpSolrClient.RemoteExecutionException;
-import org.apache.solr.client.solrj.request.schema.FieldTypeDefinition;
-import org.apache.solr.client.solrj.request.schema.SchemaRequest;
-import org.apache.solr.client.solrj.response.schema.SchemaRepresentation;
-import org.apache.solr.client.solrj.response.schema.SchemaResponse;
-import org.apache.solr.client.solrj.response.schema.SchemaResponse.UpdateResponse;
-import org.apache.solr.common.SolrException;
-import org.apache.solr.common.util.NamedList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.gson.GsonAutoConfiguration;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solr.clientwrapper.domain.dto.solr.SolrFieldDTO;
-import com.solr.clientwrapper.domain.dto.solr.SolrResponseDTO;
 import com.solr.clientwrapper.domain.dto.solr.SolrSchemaDTO;
 import com.solr.clientwrapper.domain.dto.solr.SolrSchemaResponseDTO;
 import com.solr.clientwrapper.domain.port.api.SolrSchemaServicePort;
 import com.solr.clientwrapper.domain.utils.MicroserviceHttpGateway;
 import com.solr.clientwrapper.infrastructure.Enum.SolrFieldType;
-import com.solr.clientwrapper.infrastructure.adaptor.SolrSchemaAPIAdapter;
-import com.solr.clientwrapper.rest.errors.SolrSchemaValidationException;
-
-import io.vavr.collection.Iterator;
 
 @Service
 @Transactional
@@ -64,7 +41,7 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 		JSONObject jsonObject = microserviceHttpGateway.getRequest();
 
 		log.debug("Response :" + jsonObject);
-		
+
 		JSONArray jsonArray = (JSONArray) jsonObject.get("attributes");
 
 		List<SolrFieldDTO> attributes = new ArrayList<SolrFieldDTO>();
