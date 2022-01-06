@@ -17,32 +17,26 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 
 	@Value("${base-microservice-url}")
 	private String baseMicroserviceUrl;
+
 	private final Logger log = LoggerFactory.getLogger(SolrDocumentService.class);
 
 	@Override
-	public SolrResponseDTO addDocument(String collectionName, String payload) {
-
-		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
-
-		MicroserviceHttpGateway microserviceHttpgateway = new MicroserviceHttpGateway();
-		microserviceHttpgateway.setApiEndpoint(baseMicroserviceUrl + "/document/" + collectionName);
-		microserviceHttpgateway.setRequestBodyDTO(solrResponseDTO);
-		JSONObject jsonObject = microserviceHttpgateway.postRequest();
-
-		solrResponseDTO.setMessage(jsonObject.get("message").toString());
-		solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
-
-		return solrResponseDTO;
-	}
-
-	@Override
-	public SolrResponseDTO addDocuments(String collectionName, String payload) {
+	public SolrResponseDTO addDocuments(String collectionName, String payload, boolean isNRT) {
 
 		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
 
 		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
-		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + "/documents" + collectionName);
-		microserviceHttpGateway.setRequestBodyDTO(solrResponseDTO);
+
+		String url=baseMicroserviceUrl + "/documents/" + collectionName;
+
+		if(isNRT){
+			url+="?isNRT=true";
+		}else{
+			url+="?isNRT=false";
+		}
+
+		microserviceHttpGateway.setApiEndpoint(url);
+		microserviceHttpGateway.setRequestBodyDTO(payload);
 		JSONObject jsonObject = microserviceHttpGateway.postRequest();
 
 		solrResponseDTO.setMessage(jsonObject.get("message").toString());
