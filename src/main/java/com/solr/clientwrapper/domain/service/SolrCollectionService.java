@@ -8,9 +8,6 @@ import com.solr.clientwrapper.domain.dto.solr.collection.SolrGetCollectionsRespo
 import com.solr.clientwrapper.domain.dto.solr.collection.SolrRenameCollectionDTO;
 import com.solr.clientwrapper.domain.port.api.SolrCollectionServicePort;
 import com.solr.clientwrapper.domain.utils.MicroserviceHttpGateway;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
-import org.apache.solr.client.solrj.request.CollectionAdminRequest;
-import org.apache.solr.client.solrj.response.CollectionAdminResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -123,7 +120,6 @@ public class SolrCollectionService implements SolrCollectionServicePort {
 
     }
 
-
     @Override
     public SolrGetCollectionsResponseDTO getCollections() {
 
@@ -149,22 +145,19 @@ public class SolrCollectionService implements SolrCollectionServicePort {
     }
 
     @Override
-    public boolean isCollectionExists(String collectionName) {
-        CollectionAdminRequest.List request = new CollectionAdminRequest.List();
-        HttpSolrClient solrClient = new HttpSolrClient.Builder(baseSolrUrl).build();
+    public SolrResponseDTO isCollectionExists(String collectionName) {
 
-        try {
-            CollectionAdminResponse response = request.process(solrClient);
+        SolrResponseDTO solrResponseDTO=new SolrResponseDTO(collectionName);
 
-            List<String> allCollections=(List<String>) response.getResponse().get("collections");
+        MicroserviceHttpGateway microserviceHttpGateway =new MicroserviceHttpGateway();
+        microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl+apiEndpoint+"/isCollectionExists/"+collectionName);
 
-            return allCollections.contains(collectionName);
+        JSONObject jsonObject= microserviceHttpGateway.getRequest();
 
-        } catch (Exception e) {
-            log.error(e.toString());
+        solrResponseDTO.setMessage(jsonObject.get("message").toString());
+        solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
 
-            return false;
-        }
+        return solrResponseDTO;
 
     }
 

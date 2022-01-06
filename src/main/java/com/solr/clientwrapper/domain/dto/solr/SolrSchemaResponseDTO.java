@@ -1,5 +1,7 @@
 package com.solr.clientwrapper.domain.dto.solr;
 
+import java.util.List;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -11,7 +13,7 @@ public class SolrSchemaResponseDTO {
 
 	private String tableName;
 	private String name;
-	private SolrFieldDTO[] attributes;
+	private List<SolrFieldDTO> attributes;
 	private int statusCode;
 	public SolrSchemaResponseDTO(SolrSchemaResponseDTO solrSchemaResponseDto) {
 		this.tableName = solrSchemaResponseDto.getTableName();
@@ -20,10 +22,16 @@ public class SolrSchemaResponseDTO {
 		this.statusCode=solrSchemaResponseDto.getStatusCode();
 	}
 	
-	public SolrSchemaResponseDTO(String tableName, String name, SolrFieldDTO[] attributes) {
+	public SolrSchemaResponseDTO(String tableName, String name, List<SolrFieldDTO> attributes) {
 		this.tableName = tableName;
 		this.name = name;
 		this.attributes = attributes;
 	}
+
+	public SolrSchemaResponseDTO(String tableName, String name) {
+		this.tableName = tableName;
+		this.name = name;
+	}
+	
 	
 }
