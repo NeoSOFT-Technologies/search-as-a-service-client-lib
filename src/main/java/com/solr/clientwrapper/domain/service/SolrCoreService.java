@@ -136,7 +136,7 @@ public class SolrCoreService implements SolrCoreServicePort {
 		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/status/" + coreName);
 		String jsonObject = microserviceHttpGateway.stringRequest();
-		
+
 		return jsonObject;
 
 	}
