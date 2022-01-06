@@ -23,6 +23,9 @@ public class MicroserviceHttpGateway {
 
     public JSONObject postRequest(){
 
+        log.debug("Post Request Method Called in MicroserviceHttpGateway");
+        log.debug("API Endpoint -"+ apiEndpoint);
+
         JSONObject jsonObject=null;
 
         CloseableHttpClient client = HttpClients.createDefault();
@@ -38,6 +41,8 @@ public class MicroserviceHttpGateway {
             http.setEntity(entity);
             http.setHeader("Accept", "application/json");
             http.setHeader("Content-type", "application/json");
+
+            log.debug("Sending POST request");
 
             CloseableHttpResponse response = client.execute(http);
             HttpEntity entityResponse = response.getEntity();
@@ -61,6 +66,9 @@ public class MicroserviceHttpGateway {
 
     public JSONObject putRequest(){
 
+        log.debug("Put Request Method Called in MicroserviceHttpGateway");
+        log.debug("API Endpoint -"+ apiEndpoint);
+
         JSONObject jsonObject=null;
 
         CloseableHttpClient client = HttpClients.createDefault();
@@ -76,6 +84,8 @@ public class MicroserviceHttpGateway {
             http.setEntity(entity);
             http.setHeader("Accept", "application/json");
             http.setHeader("Content-type", "application/json");
+
+            log.debug("Sending PUT request");
 
             CloseableHttpResponse response = client.execute(http);
             HttpEntity entityResponse = response.getEntity();
@@ -99,6 +109,9 @@ public class MicroserviceHttpGateway {
 
     public JSONObject deleteRequest(){
 
+        log.debug("Delete Request Method Called in MicroserviceHttpGateway");
+        log.debug("API Endpoint -"+ apiEndpoint);
+
         JSONObject jsonObject=null;
 
         CloseableHttpClient client = HttpClients.createDefault();
@@ -113,6 +126,8 @@ public class MicroserviceHttpGateway {
 
             http.setHeader("Accept", "application/json");
             http.setHeader("Content-type", "application/json");
+
+            log.debug("Sending DELETE request");
 
             CloseableHttpResponse response = client.execute(http);
             HttpEntity entityResponse = response.getEntity();
@@ -136,6 +151,9 @@ public class MicroserviceHttpGateway {
 
     public JSONObject getRequest(){
 
+        log.debug("Get Request Method Called in MicroserviceHttpGateway");
+        log.debug("API Endpoint -"+ apiEndpoint);
+
         JSONObject jsonObject=null;
 
         CloseableHttpClient client = HttpClients.createDefault();
@@ -150,6 +168,8 @@ public class MicroserviceHttpGateway {
 
             http.setHeader("Accept", "application/json");
             http.setHeader("Content-type", "application/json");
+
+            log.debug("Sending GET request");
 
             CloseableHttpResponse response = client.execute(http);
             HttpEntity entityResponse = response.getEntity();

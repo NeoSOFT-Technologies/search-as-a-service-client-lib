@@ -1,7 +1,7 @@
 package com.solr.clientwrapper.rest;
 
 
-import com.solr.clientwrapper.domain.dto.solr.collection.SolrGetCollectionsResponseDTO;
+import com.solr.clientwrapper.domain.dto.solr.SolrResponseDTO;
 import com.solr.clientwrapper.domain.port.api.SolrCollectionServicePort;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class TestingController {
     SolrCollectionServicePort solrCollectionServicePort;
 
     @GetMapping("/collectionTesting")
-    public SolrGetCollectionsResponseDTO collectionTesting() throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
+    public SolrResponseDTO collectionTesting() throws SolrServerException, IOException, URISyntaxException, ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
 
         //return solrCollectionServicePort.create("collectionTesting13","B");
 
@@ -28,7 +28,9 @@ public class TestingController {
 
         //return solrCollectionServicePort.rename("collectionTesting10","collectionTesting100");
 
-        return solrCollectionServicePort.getCollections();
+        //return solrCollectionServicePort.getCollections();
+
+        return solrCollectionServicePort.isCollectionExists("collectionTesting2we");
     }
 
 
