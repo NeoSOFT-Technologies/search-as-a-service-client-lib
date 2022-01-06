@@ -5,6 +5,9 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
+
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
@@ -89,10 +92,12 @@ public class TestingController {
 	@Autowired
 	SolrCollectionServicePort solrCollectionServicePort;
 
+
 	@Autowired
 	SolrDocumentServicePort solrdocServicePort;
 	@Autowired
 	SolrSchemaServicePort solrSchemaServicePort;
+
 
 	@Autowired
 	DataIngectionServicePort dataIngectionServicePort;
@@ -105,12 +110,7 @@ public class TestingController {
 	List<SolrFieldDTO> list = new ArrayList<SolrFieldDTO>();
 	SolrSchemaDTO dto = new SolrSchemaDTO(tableName, name, list);
 
-	@GetMapping("/schemaGet")
-	public SolrSchemaResponseDTO collectionTesting() throws SolrServerException, IOException, URISyntaxException,
-			ParserConfigurationException, InterruptedException, TransformerException, org.xml.sax.SAXException {
-
-		return solrSchemaServicePort.get(tableName, name);
-	}
+	
 
 	@PutMapping("/schemaupdate")
 	public SolrSchemaResponseDTO SchemaUpdate(@RequestBody SolrSchemaDTO newSolrSchemaDTO) {

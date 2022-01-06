@@ -1,17 +1,19 @@
   package com.solr.clientwrapper.domain.service;
-import com.solr.clientwrapper.domain.port.api.KafkaSenders;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.KafkaHeaders;
-import org.springframework.messaging.support.GenericMessage;
 
-import java.util.HashMap;
-import java.util.Map;
+  import com.solr.clientwrapper.domain.port.api.KafkaSenders;
+  import org.slf4j.Logger;
+  import org.slf4j.LoggerFactory;
+  import org.springframework.beans.factory.annotation.Autowired;
+  import org.springframework.beans.factory.annotation.Value;
+  import org.springframework.kafka.core.KafkaTemplate;
+  import org.springframework.kafka.support.KafkaHeaders;
+  import org.springframework.messaging.support.GenericMessage;
+  import org.springframework.stereotype.Service;
 
-//@Service
+  import java.util.HashMap;
+  import java.util.Map;
+
+@Service
 public class KafkaSender implements KafkaSenders {
 	private static final Logger LOGGER = LoggerFactory.getLogger(KafkaSender.class);
 
