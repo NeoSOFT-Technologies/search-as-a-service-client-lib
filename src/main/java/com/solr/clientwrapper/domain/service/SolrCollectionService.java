@@ -8,6 +8,8 @@ import com.solr.clientwrapper.domain.dto.solr.collection.SolrGetCollectionsRespo
 import com.solr.clientwrapper.domain.dto.solr.collection.SolrRenameCollectionDTO;
 import com.solr.clientwrapper.domain.port.api.SolrCollectionServicePort;
 import com.solr.clientwrapper.domain.utils.MicroserviceHttpGateway;
+import com.solr.clientwrapper.domain.utils.TypeCastingUtil;
+
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.request.CollectionAdminRequest;
 import org.apache.solr.client.solrj.response.CollectionAdminResponse;
@@ -149,22 +151,36 @@ public class SolrCollectionService implements SolrCollectionServicePort {
     }
 
     @Override
-    public boolean isCollectionExists(String collectionName) {
+    public SolrResponseDTO isCollectionExists(String collectionName) {
+
+        SolrResponseDTO solrResponseDTO=new SolrResponseDTO(collectionName);
+
         CollectionAdminRequest.List request = new CollectionAdminRequest.List();
         HttpSolrClient solrClient = new HttpSolrClient.Builder(baseSolrUrl).build();
 
         try {
             CollectionAdminResponse response = request.process(solrClient);
 
-            List<String> allCollections=(List<String>) response.getResponse().get("collections");
+            Object objectOfCollections=response.getResponse().get("collections");
+            List<String> allCollections=TypeCastingUtil.castToListOfStrings(objectOfCollections);
 
-            return allCollections.contains(collectionName);
+            if(allCollections.contains(collectionName)){
+                solrResponseDTO.setStatusCode(200);
+                solrResponseDTO.setMessage("true");
+            }else{
+                solrResponseDTO.setStatusCode(200);
+                solrResponseDTO.setMessage("false");
+            }
 
         } catch (Exception e) {
             log.error(e.toString());
 
-            return false;
+            solrResponseDTO.setStatusCode(400);
+            solrResponseDTO.setMessage("Error!");
+
         }
+
+        return solrResponseDTO;
 
     }
 
