@@ -1,21 +1,16 @@
 package com.solr.clientwrapper.domain.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solr.clientwrapper.domain.service.SolrDocumentService;
 import lombok.Data;
-import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
-import org.apache.solr.client.solrj.request.schema.SchemaRequest;
-import org.apache.solr.client.solrj.response.schema.SchemaResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class DocumentParserUtil {
 
@@ -208,22 +203,28 @@ public class DocumentParserUtil {
         return new DocumentSatisfiesSchemaResponse(true,"Success!");
     }
 
-    public static Map<String,Map<String, Object>> getSchemaOfCollection(String baseSolrUrl, String collectionName){
+    public static Map<String,Map<String, Object>> getSchemaOfCollection(String baseMicroserviceUrl, String collectionName){
+
+        // THIS METHOD HITS THE GET SCHEMA METHOD OF THE MICROSERVICE AND GETS THE SCHEMA
+        // THE "ATTRIBUTE" NODE CONSISTS OF THE LIST OF ALL THE SCHEMA FIELDS (ATTRIBUTES)
 
         Logger log = LoggerFactory.getLogger(DocumentParserUtil.class);
 
-        SolrClient solrClient=new HttpSolrClient.Builder(baseSolrUrl+"/"+collectionName).build();
+        MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+        String url=baseMicroserviceUrl + "/schema/get/"+collectionName+"/"+"random";
 
-        SchemaRequest schemaRequest = new SchemaRequest();
-        SchemaResponse schemaResponse = null;
-        try {
-            schemaResponse = schemaRequest.process(solrClient);
-        } catch (Exception e) {
-            log.error(e.toString());
-            return null;
-        }
+        microserviceHttpGateway.setApiEndpoint(url);
+        microserviceHttpGateway.setRequestBodyDTO(null);
 
-        List<Map<String, Object>> schemaResponseFields= schemaResponse.getSchemaRepresentation().getFields();
+        JSONObject jsonObject = microserviceHttpGateway.getRequest();
+
+        JSONArray jsonArrayOfAttributesFields=(JSONArray)jsonObject.get("attributes");
+
+        ObjectMapper objectMapper=new ObjectMapper();
+
+        List<Map<String, Object>> schemaResponseFields = jsonArrayOfAttributesFields.toList().stream()
+                .map(eachField->(Map<String, Object>) objectMapper.convertValue(eachField, Map.class))
+                .collect(Collectors.toList());
 
         // Converting response schema from Solr to HashMap for quick access
         //Key contains the field name and value contains the object which has schema description of that key eg. multivalued etc

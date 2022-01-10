@@ -66,8 +66,9 @@ public class MicroserviceHttpGateway {
 
 	public JSONObject postRequest() {
 
-		log.debug("Put Request Method Called in MicroserviceHttpGateway");
+		log.debug("Post Request Method Called in MicroserviceHttpGateway");
 		log.debug("API Endpoint -" + apiEndpoint);
+		log.debug("REQUEST BODY -"+ requestBodyDTO);
 
 		JSONObject jsonObject = null;
 
@@ -85,7 +86,7 @@ public class MicroserviceHttpGateway {
 			http.setHeader("Accept", "application/json");
 			http.setHeader("Content-type", "application/json");
 
-			log.debug("Sending PUT request");
+			log.debug("Sending POST request");
 
 			CloseableHttpResponse response = client.execute(http);
 			HttpEntity entityResponse = response.getEntity();
@@ -109,7 +110,7 @@ public class MicroserviceHttpGateway {
 	}
 
 	public JSONObject putRequest() {
-		log.debug("Delete Request Method Called in MicroserviceHttpGateway");
+		log.debug("Put Request Method Called in MicroserviceHttpGateway");
 		log.debug("API Endpoint -" + apiEndpoint);
 
 		JSONObject jsonObject = null;
@@ -150,7 +151,7 @@ public class MicroserviceHttpGateway {
 	}
 
 	public JSONObject deleteRequest() {
-		log.debug("Get Request Method Called in MicroserviceHttpGateway");
+		log.debug("Delete Request Method Called in MicroserviceHttpGateway");
 		log.debug("API Endpoint -" + apiEndpoint);
 
 		JSONObject jsonObject = null;
