@@ -10,9 +10,10 @@ import com.solr.clientwrapper.domain.port.api.SolrDocumentServicePort;
 import com.solr.clientwrapper.domain.port.api.SolrSchemaServicePort;
 import com.solr.clientwrapper.infrastructure.Enum.SolrFieldType;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -108,13 +109,40 @@ public class TestingController {
 
 	}
 
-	@PostMapping("/Documents/{collectionName}")
-	@Operation(summary = "/Documents", security = @SecurityRequirement(name = "bearerAuth"))
-	public SolrResponseDTO documents(@PathVariable String collectionName, @RequestParam boolean isNRT) {
-//		System.out.println("PAYLOAD - "+payload);
-		String payload="[{'name':'karthik3'}]";
-		return solrdocServicePort.addDocuments(collectionName, payload, isNRT);
+	@PostMapping("/documents/{collectionName}")
+	@Operation(summary = "/add-documents", security = @SecurityRequirement(name = "bearerAuth"))
+	public ResponseEntity<SolrResponseDTO> documents(@PathVariable String collectionName, @RequestBody String payload, @RequestParam boolean isNRT) {
+
+		System.out.println("Controller"+payload);
+		SolrResponseDTO solrResponseDTO=solrdocServicePort.addDocuments(collectionName, payload, isNRT);
+
+		if(solrResponseDTO.getStatusCode()==200){
+			return ResponseEntity.status(HttpStatus.OK).body(solrResponseDTO);
+		}else{
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(solrResponseDTO);
+		}
+
 	}
+
+//	@PostMapping("/Documents/{collectionName}")
+//	@Operation(summary = "/Documents", security = @SecurityRequirement(name = "bearerAuth"))
+//	public SolrResponseDTO documents(@PathVariable String collectionName, @RequestParam boolean isNRT) {
+////		System.out.println("PAYLOAD - "+payload);
+////		String payload="[{'name':'karthik3'}]";
+//		String payload="[\n" +
+//				"{\n" +
+//				"\"id\":4,\n" +
+//				"\"product_name\":\"manimala\",\n" +
+//				" \"product_quantity\":10,\n" +
+//				"},\n" +
+//				"{\n" +
+//				"\"id\":5,\n" +
+//				"\"product_name\":\"manimala\",\n" +
+//				" \"product_quantity\":10,\n" +
+//				"}\n" +
+//				"]";
+//		return solrdocServicePort.addDocuments(collectionName, payload, isNRT);
+//	}
 
 	@DeleteMapping("/schema/delete/{tableName}/{name}")
 	public SolrSchemaResponseDTO delete(@PathVariable String tableName, @PathVariable String name) {

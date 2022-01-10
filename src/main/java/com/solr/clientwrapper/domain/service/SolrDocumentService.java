@@ -28,6 +28,8 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 	@Override
 	public SolrResponseDTO addDocuments(String collectionName, String payload, boolean isNRT) {
 
+		//System.out.println("Service"+payload);
+
 		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
 
 		Map<String, Map<String, Object>> schemaKeyValuePair= DocumentParserUtil.getSchemaOfCollection(baseMicroserviceUrl,collectionName);
@@ -58,6 +60,8 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 				return solrResponseDTO;
 			}
 		}
+
+		//System.out.println("Service - after parsing"+payload);
 
 		//TO CHECK IF THE INPUT DOCUMENT SATISFIES THE SCHEMA
 		for(int i=0;i<payloadJSONArray.length();i++){
