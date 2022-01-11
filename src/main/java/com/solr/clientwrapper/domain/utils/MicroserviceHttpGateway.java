@@ -66,8 +66,11 @@ public class MicroserviceHttpGateway {
 
 	public JSONObject postRequest() {
 
-		log.debug("Put Request Method Called in MicroserviceHttpGateway");
+		log.debug("Post Request Method Called in MicroserviceHttpGateway");
 		log.debug("API Endpoint -" + apiEndpoint);
+		log.debug("REQUEST BODY -"+ requestBodyDTO);
+
+		//System.out.println("Gateway postRequest"+requestBodyDTO);
 
 		JSONObject jsonObject = null;
 
@@ -78,7 +81,9 @@ public class MicroserviceHttpGateway {
 
 		try {
 
-			String objJackson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(requestBodyDTO);
+			//String objJackson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(requestBodyDTO);
+			String objJackson = requestBodyDTO.toString();
+			//System.out.println("Gateway objJackson"+objJackson);
 			StringEntity entity = new StringEntity((String) objJackson);
 
 			http.setEntity(entity);
@@ -109,7 +114,7 @@ public class MicroserviceHttpGateway {
 	}
 
 	public JSONObject putRequest() {
-		log.debug("Delete Request Method Called in MicroserviceHttpGateway");
+		log.debug("Put Request Method Called in MicroserviceHttpGateway");
 		log.debug("API Endpoint -" + apiEndpoint);
 
 		JSONObject jsonObject = null;
@@ -150,7 +155,7 @@ public class MicroserviceHttpGateway {
 	}
 
 	public JSONObject deleteRequest() {
-		log.debug("Get Request Method Called in MicroserviceHttpGateway");
+		log.debug("Delete Request Method Called in MicroserviceHttpGateway");
 		log.debug("API Endpoint -" + apiEndpoint);
 
 		JSONObject jsonObject = null;
