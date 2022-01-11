@@ -49,12 +49,15 @@ public class DataIngectionServiceTest {
 	@Autowired
 	DataIngectionServicePort dataIngectionServicePort;
 	
+	
+	//SET MOCKITO FOR SUCCESS RESPONSE
 	public void setMockitoSucccessResponseForService() {
 		
 		Mockito.when(dataIngectionService.parseSolrSchemaArray(Mockito.any(), Mockito.any())).thenReturn(expected);
 		Mockito.when(dataIngectionService.parseSolrSchemaBatch(Mockito.any(),Mockito.any())).thenReturn(expected2);
 	}
 
+	//SET MOCKITO FOR BAD REQUEST RESPONSE
 	public void setMockitoBadResponseForService() {
 	   Mockito.when(dataIngectionService.parseSolrSchemaArray(Mockito.any(),Mockito.any())).thenReturn(expected2);
 	   Mockito.when(dataIngectionService.parseSolrSchemaBatch(Mockito.any(),Mockito.any())).thenReturn(expected);
@@ -67,6 +70,8 @@ public class DataIngectionServiceTest {
 		JSONAssert.assertEquals(expected, data1,true);
 	}
 	
+	
+	//FOR BADRESPONSE 
 	@Test
 	void parseSolrSchemaArrayfalseTest() {
 		setMockitoBadResponseForService();
@@ -81,6 +86,7 @@ public class DataIngectionServiceTest {
 		JSONAssert.assertEquals(expected2, data1, true);
 	}
 	
+	//FOR BADRESPONSE
 	@Test
 	void parseSolrSchemaBatchFalseTest() {
 		setMockitoBadResponseForService();
