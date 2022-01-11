@@ -7,6 +7,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -40,45 +41,50 @@ public class DataIngectionServiceTest {
 	
 
 	String expected = "[{\"color\":\"The Lightning Thief\",\"author\":\"Rick Riordan\",\"price\":123,\"id\":1}]";
+	String expected2 = "[[{\"color\":\"The Lightning Thief\",\"author\":\"Rick Riordan\",\"price\":123,\"id\":1},{\"color\":\"The Lightning Thief\",\"author\":\"Rick Riordan\",\"price\":123,\"id\":2}],[{\"actor\":\"Rick Riordan\",\"movie\":\"The Lightning Thief\",\"price\":123,\"id\":1},{\"actor\":\"Rick\",\"movie\":\"The Thief\",\"price\":623,\"id\":2}],[{\"actor\":\"Rick Riordan\",\"movie\":\"The Lightning Thief\",\"price\":123,\"id\":1},{\"actor\":\"Rick\",\"movie\":\"The Thief\",\"price\":623,\"id\":2}]]";
 	String tableName = "Demo";
 	@MockBean
 	DataIngectionService dataIngectionService;
 	
-	@MockBean
+	@Autowired
 	DataIngectionServicePort dataIngectionServicePort;
 	
 	public void setMockitoSucccessResponseForService() {
 		
-		
-		Mockito.when(dataIngectionServicePort.parseSolrSchemaArray(Mockito.any(),Mockito.any())).thenReturn(expected);
-		
 		Mockito.when(dataIngectionService.parseSolrSchemaArray(Mockito.any(), Mockito.any())).thenReturn(expected);
-//		Mockito.when(solrschemaServicePort.update(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
-//		Mockito.when(solrschemaServicePort.get(Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
-
-//		Mockito.when(solrSchemaService.delete(Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
-//		Mockito.when(solrSchemaService.update(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
-//		Mockito.when(solrSchemaService.get(Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
+		Mockito.when(dataIngectionService.parseSolrSchemaBatch(Mockito.any(),Mockito.any())).thenReturn(expected2);
 	}
 
-//	public void setMockitoBadResponseForService() {
-//		SolrSchemaResponseDTO solrResponseDTO = new SolrSchemaResponseDTO(tableName, name, attributes);
-//		solrResponseDTO.setStatusCode(400);
-//		Mockito.when(solrSchemaService.create(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
-//		Mockito.when(solrSchemaService.delete(Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
-//		Mockito.when(solrSchemaService.update(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
-//		Mockito.when(solrSchemaService.get(Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
-//		
-//		Mockito.when(solrschemaServicePort.create(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
-//		Mockito.when(solrschemaServicePort.delete(Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
-//		Mockito.when(solrschemaServicePort.update(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
-//		Mockito.when(solrschemaServicePort.get(Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
-//	}
+	public void setMockitoBadResponseForService() {
+	   Mockito.when(dataIngectionService.parseSolrSchemaArray(Mockito.any(),Mockito.any())).thenReturn(expected2);
+	   Mockito.when(dataIngectionService.parseSolrSchemaBatch(Mockito.any(),Mockito.any())).thenReturn(expected);
+	}
 	
 	@Test
 	void parseSolrSchemaArrayTest(){
 		setMockitoSucccessResponseForService();
 		String data1 = dataIngectionServicePort.parseSolrSchemaArray(tableName, data);
-				JSONAssert.assertEquals(expected, data1, true);
+		JSONAssert.assertEquals(expected, data1,true);
+	}
+	
+	@Test
+	void parseSolrSchemaArrayfalseTest() {
+		setMockitoBadResponseForService();
+		String data1 = dataIngectionServicePort.parseSolrSchemaArray(tableName, data);
+		JSONAssert.assertNotEquals(expected, data1,true);
+	}
+	
+	@Test
+	void parseSolrSchemaBatchTest() {
+		setMockitoSucccessResponseForService();
+		String data1  = dataIngectionServicePort.parseSolrSchemaBatch(tableName, batchdata);
+		JSONAssert.assertEquals(expected2, data1, true);
+	}
+	
+	@Test
+	void parseSolrSchemaBatchFalseTest() {
+		setMockitoBadResponseForService();
+		String data1  = dataIngectionServicePort.parseSolrSchemaBatch(tableName, batchdata);
+		JSONAssert.assertNotEquals(expected2, data1, true);
 	}
 }

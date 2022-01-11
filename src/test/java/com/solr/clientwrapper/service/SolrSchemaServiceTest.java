@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -74,7 +75,7 @@ public class SolrSchemaServiceTest {
 	@MockBean
 	SolrSchemaDTO solrSchemaDto;
 	
-	@MockBean
+	@Autowired
 	SolrSchemaServicePort solrschemaServicePort;
 	
 	@MockBean
@@ -94,10 +95,7 @@ public class SolrSchemaServiceTest {
 		solrResponseDTO = new SolrSchemaResponseDTO(tableName, name, attributes);
 		solrResponseDTO.setStatusCode(200);
 		
-		Mockito.when(solrschemaServicePort.create(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
-		Mockito.when(solrschemaServicePort.delete(Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
-		Mockito.when(solrschemaServicePort.update(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
-		Mockito.when(solrschemaServicePort.get(Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
+
 		
 		Mockito.when(solrSchemaService.create(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
 		Mockito.when(solrSchemaService.delete(Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
@@ -113,10 +111,7 @@ public class SolrSchemaServiceTest {
 		Mockito.when(solrSchemaService.update(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
 		Mockito.when(solrSchemaService.get(Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
 		
-		Mockito.when(solrschemaServicePort.create(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
-		Mockito.when(solrschemaServicePort.delete(Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
-		Mockito.when(solrschemaServicePort.update(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
-		Mockito.when(solrschemaServicePort.get(Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
+
 	}
 	
 	
