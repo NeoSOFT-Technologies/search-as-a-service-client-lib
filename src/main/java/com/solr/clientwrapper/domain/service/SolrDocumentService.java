@@ -4,7 +4,6 @@ import com.solr.clientwrapper.domain.dto.solr.SolrResponseDTO;
 import com.solr.clientwrapper.domain.port.api.SolrDocumentServicePort;
 import com.solr.clientwrapper.domain.utils.DocumentParserUtil;
 import com.solr.clientwrapper.domain.utils.MicroserviceHttpGateway;
-import org.apache.solr.common.SolrInputDocument;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Iterator;
 import java.util.Map;
 
 @Service
@@ -71,26 +69,16 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 			DocumentParserUtil.DocumentSatisfiesSchemaResponse documentSatisfiesSchemaResponse =
 					DocumentParserUtil.isDocumentSatisfySchema(schemaKeyValuePair,jsonSingleObject);
 
-			if(documentSatisfiesSchemaResponse.isObjectSatisfiesSchema()){
+			if(!documentSatisfiesSchemaResponse.isObjectSatisfiesSchema()){
 
-				SolrInputDocument solrInputSingleDocument=new SolrInputDocument();
-
-				Iterator<String> itr = jsonSingleObject.keySet().iterator();
-				while (itr.hasNext())
-				{
-					String payloadJsonObjectKey = itr.next();
-					Object payloadJsonObjectValue = jsonSingleObject.get(payloadJsonObjectKey);
-
-					solrInputSingleDocument.addField(payloadJsonObjectKey,payloadJsonObjectValue);
-				}
-
-			}else{
 				//ERROR IN A DOCUMENT STRUCTURE
 				solrResponseDTO.setMessage(documentSatisfiesSchemaResponse.getMessage());
 				solrResponseDTO.setMessage("The JSON input document in the array doesn't satisfy the Schema. Error: "+ documentSatisfiesSchemaResponse.getMessage());
 				solrResponseDTO.setStatusCode(400);
 				return solrResponseDTO;
+
 			}
+
 		}
 
 

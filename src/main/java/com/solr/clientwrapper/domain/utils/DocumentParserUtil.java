@@ -109,6 +109,11 @@ public class DocumentParserUtil {
                             isMultivaluedField = true;
                         }
                     }
+                    if (fieldValueForTheKey.containsKey("multiValue")) {
+                        if (fieldValueForTheKey.get("multiValue").toString().equals("true")) {
+                            isMultivaluedField = true;
+                        }
+                    }
 
                     //log.debug(fieldTypeDefinedInSchema);
 
@@ -159,6 +164,7 @@ public class DocumentParserUtil {
                             break;
 
                         case "boolean":
+                        case "boolean_":
                         case "booleans":
                             if (isMultivaluedField) {
                                 if (!payloadJsonObjectValue.getClass().equals(JSONArray.class)) {
