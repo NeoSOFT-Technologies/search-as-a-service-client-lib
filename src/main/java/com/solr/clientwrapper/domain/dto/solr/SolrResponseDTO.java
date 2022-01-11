@@ -1,5 +1,7 @@
 package com.solr.clientwrapper.domain.dto.solr;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -7,6 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode
+@Builder
+@AllArgsConstructor
 public class SolrResponseDTO {
 
     private int statusCode;

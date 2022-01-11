@@ -85,7 +85,7 @@ public class MicroserviceHttpGateway {
 			http.setHeader("Accept", "application/json");
 			http.setHeader("Content-type", "application/json");
 
-			log.debug("Sending PUT request");
+			log.debug("Sending POST request");
 
 			CloseableHttpResponse response = client.execute(http);
 			HttpEntity entityResponse = response.getEntity();

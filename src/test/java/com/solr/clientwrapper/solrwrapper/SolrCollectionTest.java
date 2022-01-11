@@ -1,23 +1,30 @@
 package com.solr.clientwrapper.solrwrapper;
 
+import com.solr.clientwrapper.IntegrationTest;
 import com.solr.clientwrapper.domain.dto.solr.SolrResponseDTO;
 import com.solr.clientwrapper.domain.dto.solr.collection.SolrCreateCollectionDTO;
 import com.solr.clientwrapper.domain.dto.solr.collection.SolrDeleteCollectionDTO;
 import com.solr.clientwrapper.domain.dto.solr.collection.SolrGetCollectionsResponseDTO;
 import com.solr.clientwrapper.domain.dto.solr.collection.SolrRenameCollectionDTO;
 import com.solr.clientwrapper.domain.service.SolrCollectionService;
+
+import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-//@IntegrationTest
-//@AutoConfigureMockMvc
-//@WithMockUser
+import javax.transaction.Transactional;
+
+@IntegrationTest
+@AutoConfigureMockMvc
+@WithMockUser
 class SolrCollectionTest {
 
     String solrCollectionEndpoint ="/searchservice/table";
@@ -65,8 +72,8 @@ class SolrCollectionTest {
         //Mockito.when(solrCollectionService.isCollectionExists(Mockito.any())).thenReturn(false);
     }
 
-    //@Test
-    //@Transactional
+    @Test
+    @Transactional
     void testCreateSolrCollection() throws Exception {
 
         SolrCreateCollectionDTO solrCreateCollectionDTO =new SolrCreateCollectionDTO(collectionName,"B");
