@@ -159,6 +159,7 @@ public class DocumentParserUtil {
                             break;
 
                         case "boolean":
+                        case "boolean_":
                         case "booleans":
                             if (isMultivaluedField) {
                                 if (!payloadJsonObjectValue.getClass().equals(JSONArray.class)) {
