@@ -191,6 +191,7 @@ public class MicroserviceHttpGateway {
 
 		return jsonObject;
 
+
 	}
 
 	public JSONObject getRequest() {
@@ -229,5 +230,40 @@ public class MicroserviceHttpGateway {
 		return jsonObject;
 
 	}
+
+    public String stringRequest(){ 
+
+        CloseableHttpClient client = HttpClients.createDefault();
+        HttpGet http = new HttpGet(apiEndpoint);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String result = null;
+        try {
+
+            String objJackson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(requestBodyDTO);
+            StringEntity entity = new StringEntity(objJackson);
+
+            http.setHeader("Accept", "application/json");
+            http.setHeader("Content-type", "application/json");
+
+            CloseableHttpResponse response = client.execute(http);
+            HttpEntity entityResponse = response.getEntity();
+            result = EntityUtils.toString(entityResponse);
+            log.debug("RESPONSE: "+ result);
+
+           
+
+            client.close();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            log.error(e.toString());
+
+        }
+
+        return result;
+
+    }
 
 }

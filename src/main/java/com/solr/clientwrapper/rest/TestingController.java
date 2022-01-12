@@ -1,5 +1,18 @@
 package com.solr.clientwrapper.rest;
 
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.solr.clientwrapper.domain.dto.solr.SolrFieldDTO;
+
 import com.solr.clientwrapper.domain.dto.solr.SolrResponseDTO;
 import com.solr.clientwrapper.domain.port.api.SolrDocumentServicePort;
 import io.swagger.v3.oas.annotations.Operation;
