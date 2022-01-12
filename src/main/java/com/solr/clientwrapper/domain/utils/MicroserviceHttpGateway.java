@@ -82,8 +82,9 @@ public class MicroserviceHttpGateway {
 
 		try {
 
-			String objJackson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(requestBodyDTO);
-			System.out.println("Gateway objJackson"+objJackson);
+			//String objJackson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(requestBodyDTO);
+			String objJackson = requestBodyDTO.toString();
+			//System.out.println("Gateway objJackson"+objJackson);
 			StringEntity entity = new StringEntity((String) objJackson);
 
 			http.setEntity(entity);
