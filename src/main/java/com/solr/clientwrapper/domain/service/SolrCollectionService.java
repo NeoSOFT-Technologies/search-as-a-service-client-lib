@@ -33,7 +33,7 @@ public class SolrCollectionService implements SolrCollectionServicePort {
     @Value("${base-microservice-url}")
     private String baseMicroserviceUrl;
 
-    private String apiEndpoint="/searchservice/table";
+    private String apiEndpoint="/api/table";
 
 
 
@@ -73,7 +73,7 @@ public class SolrCollectionService implements SolrCollectionServicePort {
         SolrCreateCollectionDTO solrCreateCollectionDTO=new SolrCreateCollectionDTO(collectionName,sku);
 
         MicroserviceHttpGateway microserviceHttpGateway =new MicroserviceHttpGateway();
-        microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl+apiEndpoint+"/create");
+        microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl+apiEndpoint);
         microserviceHttpGateway.setRequestBodyDTO(solrCreateCollectionDTO);
 
         JSONObject jsonObject= microserviceHttpGateway.postRequest();
@@ -90,7 +90,7 @@ public class SolrCollectionService implements SolrCollectionServicePort {
         SolrResponseDTO solrResponseDTO=new SolrResponseDTO(collectionName);
 
         MicroserviceHttpGateway microserviceHttpGateway =new MicroserviceHttpGateway();
-        microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl+apiEndpoint+"/delete/"+collectionName);
+        microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl+apiEndpoint+"/"+collectionName);
 
         JSONObject jsonObject= microserviceHttpGateway.deleteRequest();
 
@@ -126,7 +126,7 @@ public class SolrCollectionService implements SolrCollectionServicePort {
         SolrGetCollectionsResponseDTO solrGetCollectionsResponseDTO=new SolrGetCollectionsResponseDTO();
 
         MicroserviceHttpGateway microserviceHttpGateway =new MicroserviceHttpGateway();
-        microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl+apiEndpoint+"/collections/");
+        microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl+apiEndpoint);
 
         JSONObject jsonObject= microserviceHttpGateway.getRequest();
 
@@ -150,7 +150,7 @@ public class SolrCollectionService implements SolrCollectionServicePort {
         SolrResponseDTO solrResponseDTO=new SolrResponseDTO(collectionName);
 
         MicroserviceHttpGateway microserviceHttpGateway =new MicroserviceHttpGateway();
-        microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl+apiEndpoint+"/isCollectionExists/"+collectionName);
+        microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl+apiEndpoint+"/isTableExists/"+collectionName);
 
         JSONObject jsonObject= microserviceHttpGateway.getRequest();
 
