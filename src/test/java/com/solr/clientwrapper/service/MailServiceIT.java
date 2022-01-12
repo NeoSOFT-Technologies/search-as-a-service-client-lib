@@ -25,6 +25,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -46,6 +47,7 @@ import tech.jhipster.config.JHipsterProperties;
 /**
  * Integration tests for {@link MailService}.
  */
+@Disabled
 @IntegrationTest
 class MailServiceIT {
 

@@ -9,12 +9,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.solr.clientwrapper.domain.port.api.SolarDocParseServicePort;
+import com.solr.clientwrapper.domain.port.api.SolrParseDocServicePort;
 
 @Service
-public class SolrParseDocSerice implements SolarDocParseServicePort {
+public class SolrParseDocService implements SolrParseDocServicePort {
 	
-	   private final Logger log = LoggerFactory.getLogger(SolrParseDocSerice.class);
+	   private final Logger log = LoggerFactory.getLogger(SolrParseDocService.class);
 
 	@Override
 	public String MultipartUploder(MultipartFile file) {

@@ -30,7 +30,7 @@ public class MicroserviceHttpGateway {
 
 		String jsonObject = null;
 		log.debug("Post Request Method Called in MicroserviceHttpGateway");
-		log.debug("API Endpoint -" + apiEndpoint);
+		log.debug("API Endpoint -"+apiEndpoint);
 
 		CloseableHttpClient client = HttpClients.createDefault();
 		HttpPost http = new HttpPost(apiEndpoint);
@@ -66,8 +66,11 @@ public class MicroserviceHttpGateway {
 
 	public JSONObject postRequest() {
 
-		log.debug("Put Request Method Called in MicroserviceHttpGateway");
+		log.debug("Post Request Method Called in MicroserviceHttpGateway");
 		log.debug("API Endpoint -" + apiEndpoint);
+		log.debug("REQUEST BODY -"+ requestBodyDTO);
+
+		//System.out.println("Gateway postRequest"+requestBodyDTO);
 
 		JSONObject jsonObject = null;
 
@@ -75,17 +78,19 @@ public class MicroserviceHttpGateway {
 		HttpPost http = new HttpPost(apiEndpoint);
 
 		ObjectMapper objectMapper = new ObjectMapper();
+		
 
 		try {
 
 			String objJackson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(requestBodyDTO);
+			System.out.println("Gateway objJackson"+objJackson);
 			StringEntity entity = new StringEntity((String) objJackson);
 
 			http.setEntity(entity);
 			http.setHeader("Accept", "application/json");
 			http.setHeader("Content-type", "application/json");
 
-			log.debug("Sending PUT request");
+			log.debug("Sending POST request");
 
 			CloseableHttpResponse response = client.execute(http);
 			HttpEntity entityResponse = response.getEntity();
@@ -109,7 +114,7 @@ public class MicroserviceHttpGateway {
 	}
 
 	public JSONObject putRequest() {
-		log.debug("Delete Request Method Called in MicroserviceHttpGateway");
+		log.debug("Put Request Method Called in MicroserviceHttpGateway");
 		log.debug("API Endpoint -" + apiEndpoint);
 
 		JSONObject jsonObject = null;
@@ -150,7 +155,7 @@ public class MicroserviceHttpGateway {
 	}
 
 	public JSONObject deleteRequest() {
-		log.debug("Get Request Method Called in MicroserviceHttpGateway");
+		log.debug("Delete Request Method Called in MicroserviceHttpGateway");
 		log.debug("API Endpoint -" + apiEndpoint);
 
 		JSONObject jsonObject = null;

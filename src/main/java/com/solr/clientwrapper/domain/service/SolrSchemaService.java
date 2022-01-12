@@ -25,7 +25,7 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 
 	private final Logger log = LoggerFactory.getLogger(SolrSchemaService.class);
 
-	@Value("${base-microservice-url}")
+	@Value(value ="${base-microservice-url}")
 	private String baseMicroserviceUrl;
 
 	private String apiEndpoint = "/schema";
