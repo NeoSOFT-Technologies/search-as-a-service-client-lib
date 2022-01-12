@@ -20,9 +20,6 @@ public class SolrCoreService implements SolrCoreServicePort {
 
 	private final Logger log = LoggerFactory.getLogger(SolrCoreService.class);
 
-	// http://localhost:8983/solr
-	@Value("${base-solr-url}")
-	private String baseSolrUrl;
 
 	@Value("${base-microservice-url}")
 	private String baseMicroserviceUrl;
