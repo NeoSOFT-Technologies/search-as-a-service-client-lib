@@ -217,7 +217,7 @@ public class DocumentParserUtil {
         Logger log = LoggerFactory.getLogger(DocumentParserUtil.class);
 
         MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
-        String url=baseMicroserviceUrl + "/schema/get/"+collectionName+"/"+"random";
+        String url=baseMicroserviceUrl + "/api/schema/"+collectionName;
 
         microserviceHttpGateway.setApiEndpoint(url);
         microserviceHttpGateway.setRequestBodyDTO(null);

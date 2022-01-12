@@ -1,8 +1,11 @@
 package com.solr.clientwrapper.domain.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.solr.clientwrapper.domain.dto.solr.SolrFieldDTO;
+import com.solr.clientwrapper.domain.dto.solr.SolrSchemaDTO;
+import com.solr.clientwrapper.domain.dto.solr.SolrSchemaResponseDTO;
+import com.solr.clientwrapper.domain.port.api.SolrSchemaServicePort;
+import com.solr.clientwrapper.domain.utils.MicroserviceHttpGateway;
+import com.solr.clientwrapper.infrastructure.Enum.SolrFieldType;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -11,12 +14,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.solr.clientwrapper.domain.dto.solr.SolrFieldDTO;
-import com.solr.clientwrapper.domain.dto.solr.SolrSchemaDTO;
-import com.solr.clientwrapper.domain.dto.solr.SolrSchemaResponseDTO;
-import com.solr.clientwrapper.domain.port.api.SolrSchemaServicePort;
-import com.solr.clientwrapper.domain.utils.MicroserviceHttpGateway;
-import com.solr.clientwrapper.infrastructure.Enum.SolrFieldType;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -28,7 +27,7 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 	@Value(value ="${base-microservice-url}")
 	private String baseMicroserviceUrl;
 
-	private String apiEndpoint = "/schema";
+	private String apiEndpoint = "/api/schema";
 
 	@Override
 	public SolrSchemaResponseDTO get(String tableName, String name) {
@@ -37,7 +36,7 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 		SolrSchemaResponseDTO solrSchemaResponsedto = new SolrSchemaResponseDTO(tableName, name);
 
 		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
-		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/get/" + tableName + "/" + name);
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/" + tableName);
 		JSONObject jsonObject = microserviceHttpGateway.getRequest();
 
 		log.debug("Response :" + jsonObject);
@@ -76,7 +75,7 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 		SolrSchemaResponseDTO solrSchemaResponseDTO = new SolrSchemaResponseDTO(tableName, name);
 
 		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
-		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/update/" + tableName + "/" + name);
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/" + tableName);
 		microserviceHttpGateway.setRequestBodyDTO(newSolrSchemaDTO);
 
 		JSONObject jsonObject = microserviceHttpGateway.putRequest();
@@ -117,7 +116,7 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 				newSolrSchemaDTO.getAttributes());
 
 		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
-		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/create");
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint);
 		microserviceHttpGateway.setRequestBodyDTO(solrSchemaResponseDto);
 
 		JSONObject jsonObject = microserviceHttpGateway.postRequest();
@@ -131,7 +130,7 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 		SolrSchemaResponseDTO solrSchemaResponseDto = new SolrSchemaResponseDTO(tableName, name);
 
 		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
-		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/delete/" + tableName + "/" + name);
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/" + tableName);
 
 		JSONObject jsonObject = microserviceHttpGateway.deleteRequest();
 
