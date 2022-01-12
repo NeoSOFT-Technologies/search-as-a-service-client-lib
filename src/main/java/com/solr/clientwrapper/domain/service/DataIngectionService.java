@@ -13,7 +13,7 @@ import com.solr.clientwrapper.domain.utils.MicroserviceHttpGateway;
 @Transactional
 public class DataIngectionService implements DataIngectionServicePort {
 
-	private final Logger log = LoggerFactory.getLogger(DataIngectionService.class);
+	private final Logger logger = LoggerFactory.getLogger(DataIngectionService.class);
 
 	@Value("${base-solr-url}")
 	private String baseSolrUrl;
@@ -21,6 +21,7 @@ public class DataIngectionService implements DataIngectionServicePort {
 	@Value("${base-microservice-url}")
 	private String baseMicroserviceUrl;
 
+	String jsonStringRes;
 	String apiEndPoint = "/ingection";
 	@Override
 	public String parseSolrSchemaArray(String collectionName, String jsonString) {
@@ -30,7 +31,7 @@ public class DataIngectionService implements DataIngectionServicePort {
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndPoint + "/batcharray/"+collectionName);
 		microserviceHttpGateway.setRequestBodyDTO(jsonString);
 		
-		String jsonStringRes = microserviceHttpGateway.postRequestString();
+		jsonStringRes = microserviceHttpGateway.postRequestString();
 		return jsonStringRes;
 	}
 
@@ -42,7 +43,7 @@ public class DataIngectionService implements DataIngectionServicePort {
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndPoint + "/batchcollection/"+collectionName);
 		microserviceHttpGateway.setRequestBodyDTO(jsonString);
 		
-		String jsonStringRes = microserviceHttpGateway.postRequestString();
+		 jsonStringRes = microserviceHttpGateway.postRequestString();
 		return jsonStringRes;
 	}
 

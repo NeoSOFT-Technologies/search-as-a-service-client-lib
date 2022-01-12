@@ -3,6 +3,7 @@ package com.solr.clientwrapper.solrwrapper;
 import com.solr.clientwrapper.IntegrationTest;
 import com.solr.clientwrapper.domain.utils.DocumentParserUtil;
 import org.json.JSONObject;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.security.test.context.support.WithMockUser;

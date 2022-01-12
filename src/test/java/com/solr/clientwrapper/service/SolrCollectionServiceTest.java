@@ -20,7 +20,7 @@ import com.solr.clientwrapper.domain.service.SolrCollectionService;
 
 @ExtendWith(MockitoExtension.class)
 @ExtendWith(SpringExtension.class)
-public class SolrCollectionServiceTest {
+class SolrCollectionServiceTest {
 	
 	Logger logger = LoggerFactory.getLogger(SolrCollectionServiceTest.class);
 

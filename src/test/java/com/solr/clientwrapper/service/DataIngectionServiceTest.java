@@ -16,7 +16,7 @@ import com.solr.clientwrapper.domain.service.DataIngectionService;
 
 @ExtendWith(MockitoExtension.class)
 @ExtendWith(SpringExtension.class)
-public class DataIngectionServiceTest {
+class DataIngectionServiceTest {
 
 	Logger logger = LoggerFactory.getLogger(DataIngectionServiceTest.class);
 	
