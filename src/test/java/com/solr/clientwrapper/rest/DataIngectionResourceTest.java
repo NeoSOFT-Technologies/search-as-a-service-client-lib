@@ -3,6 +3,7 @@ package com.solr.clientwrapper.rest;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import com.solr.clientwrapper.IntegrationTest;
 @IntegrationTest
 @AutoConfigureMockMvc
 @WithMockUser
+@Disabled
 class DataIngectionResourceTest {
 
 	@Autowired
