@@ -1,19 +1,8 @@
 package com.solr.clientwrapper.rest;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.solr.clientwrapper.domain.dto.solr.SolrFieldDTO;
-
 import com.solr.clientwrapper.domain.dto.solr.SolrResponseDTO;
+import com.solr.clientwrapper.domain.port.api.SolrCollectionServicePort;
 import com.solr.clientwrapper.domain.port.api.SolrDocumentServicePort;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -31,6 +20,25 @@ public class TestingController {
 
 	@Autowired
 	SolrDocumentServicePort solrdocServicePort;
+
+	@Autowired
+	SolrCollectionServicePort solrCollectionServicePort;
+
+	@PostMapping("/temp")
+	@Operation(summary = "", security = @SecurityRequirement(name = "bearerAuth"))
+	public ResponseEntity<SolrResponseDTO> temp() {
+
+		SolrResponseDTO solrResponseDTO=solrCollectionServicePort.create("testCollection1","B");
+
+		SolrResponseDTO solrResponseDTO2=solrCollectionServicePort.delete("testCollection3");
+
+		if(solrResponseDTO.getStatusCode()==200){
+			return ResponseEntity.status(HttpStatus.OK).body(solrResponseDTO);
+		}else{
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(solrResponseDTO);
+		}
+
+	}
 
 	@PostMapping("/documents/{collectionName}")
 	@Operation(summary = "/add-documents", security = @SecurityRequirement(name = "bearerAuth"))

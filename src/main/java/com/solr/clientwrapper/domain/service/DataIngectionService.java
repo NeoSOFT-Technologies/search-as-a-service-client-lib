@@ -31,7 +31,7 @@ public class DataIngectionService implements DataIngectionServicePort {
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndPoint + "/batcharray/"+collectionName);
 		microserviceHttpGateway.setRequestBodyDTO(jsonString);
 		
-		jsonStringRes = microserviceHttpGateway.postRequestString();
+		jsonStringRes = microserviceHttpGateway.postRequestWithStringBody();
 		return jsonStringRes;
 	}
 
@@ -43,7 +43,7 @@ public class DataIngectionService implements DataIngectionServicePort {
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndPoint + "/batchcollection/"+collectionName);
 		microserviceHttpGateway.setRequestBodyDTO(jsonString);
 		
-		 jsonStringRes = microserviceHttpGateway.postRequestString();
+		 jsonStringRes = microserviceHttpGateway.postRequestWithStringBody();
 		return jsonStringRes;
 	}
 

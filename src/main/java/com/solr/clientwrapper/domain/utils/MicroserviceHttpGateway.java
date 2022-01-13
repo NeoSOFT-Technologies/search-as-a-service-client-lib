@@ -26,18 +26,23 @@ public class MicroserviceHttpGateway {
 	private String apiEndpoint;
 	private Object requestBodyDTO;
 
-	public String postRequestString() {
+	public String postRequestWithStringBody() {
 
 		String jsonObject = null;
-		log.debug("Post Request Method Called in MicroserviceHttpGateway");
-		log.debug("API Endpoint -"+apiEndpoint);
+		log.debug("Post Request String Method Called in MicroserviceHttpGateway");
+		log.debug("API Endpoint - "+apiEndpoint);
+		log.debug("Request Body - "+requestBodyDTO);
 
 		CloseableHttpClient client = HttpClients.createDefault();
 		HttpPost http = new HttpPost(apiEndpoint);
 
 		try {
 
-			StringEntity entity = new StringEntity((String) requestBodyDTO);
+			String objJackson = requestBodyDTO.toString();
+			System.out.println("GATEWAY OBJ-JACKSON - "+objJackson);
+			StringEntity entity = new StringEntity(objJackson);
+
+			//StringEntity entity = new StringEntity((String) requestBodyDTO);
 
 			http.setEntity(entity);
 			http.setHeader("Accept", "application/json");
@@ -82,9 +87,9 @@ public class MicroserviceHttpGateway {
 
 		try {
 
-			//String objJackson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(requestBodyDTO);
-			String objJackson = requestBodyDTO.toString();
-			//System.out.println("Gateway objJackson"+objJackson);
+			String objJackson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(requestBodyDTO);
+			//String objJackson = requestBodyDTO.toString();
+			System.out.println("GATEWAY OBJ-JACKSON - "+objJackson);
 			StringEntity entity = new StringEntity((String) objJackson);
 
 			http.setEntity(entity);
