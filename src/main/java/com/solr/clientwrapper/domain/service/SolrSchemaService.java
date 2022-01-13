@@ -19,7 +19,6 @@ import java.util.List;
 
 @Service
 @Transactional
-@SuppressWarnings({ "deprecation", "unused" })
 public class SolrSchemaService implements SolrSchemaServicePort {
 
 	private final Logger log = LoggerFactory.getLogger(SolrSchemaService.class);
@@ -30,16 +29,16 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 	private String apiEndpoint = "/api/schema";
 
 	@Override
-	public SolrSchemaResponseDTO get(String tableName, String name) {
-		log.debug("Get Solr Schema: {}", name);
+	public SolrSchemaResponseDTO get(String tableName) {
+		log.debug("Get Solr Schema");
 
-		SolrSchemaResponseDTO solrSchemaResponsedto = new SolrSchemaResponseDTO(tableName, name);
+		SolrSchemaResponseDTO solrSchemaResponsedto = new SolrSchemaResponseDTO(tableName, "");
 
 		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/" + tableName);
 		JSONObject jsonObject = microserviceHttpGateway.getRequest();
 
-		log.debug("Response :" + jsonObject);
+		log.debug("Response :{}", jsonObject);
 
 		JSONArray jsonArray = (JSONArray) jsonObject.get("attributes");
 
@@ -68,11 +67,11 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 	}
 
 	@Override
-	public SolrSchemaResponseDTO update(String tableName, String name, SolrSchemaDTO newSolrSchemaDTO) {
-		log.debug("Update Solr Schema: {}", name);
+	public SolrSchemaResponseDTO update(String tableName, SolrSchemaDTO newSolrSchemaDTO) {
+		log.debug("Update Solr Schema");
 		log.debug("Target Schema: {}", newSolrSchemaDTO);
 
-		SolrSchemaResponseDTO solrSchemaResponseDTO = new SolrSchemaResponseDTO(tableName, name);
+		SolrSchemaResponseDTO solrSchemaResponseDTO = new SolrSchemaResponseDTO(tableName, "");
 
 		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/" + tableName);
@@ -80,7 +79,7 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 
 		JSONObject jsonObject = microserviceHttpGateway.putRequest();
 
-		log.debug("Response :" + jsonObject);
+		log.debug("Response :{}", jsonObject);
 
 		JSONArray jsonArray = (JSONArray) jsonObject.get("attributes");
 
@@ -109,10 +108,10 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 	}
 
 	@Override
-	public SolrSchemaResponseDTO create(String tableName, String name, SolrSchemaDTO newSolrSchemaDTO) {
-		log.debug("Create Solr Schema: {}", name);
+	public SolrSchemaResponseDTO create(String tableName, SolrSchemaDTO newSolrSchemaDTO) {
+		log.debug("Create Solr Schema");
 
-		SolrSchemaResponseDTO solrSchemaResponseDto = new SolrSchemaResponseDTO(tableName, name,
+		SolrSchemaResponseDTO solrSchemaResponseDto = new SolrSchemaResponseDTO(tableName, "",
 				newSolrSchemaDTO.getAttributes());
 
 		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
@@ -126,15 +125,16 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 	}
 
 	@Override
-	public SolrSchemaResponseDTO delete(String tableName, String name) {
-		SolrSchemaResponseDTO solrSchemaResponseDto = new SolrSchemaResponseDTO(tableName, name);
+	public SolrSchemaResponseDTO delete(String tableName) {
+		log.debug("Delete Solr Schema");
+		SolrSchemaResponseDTO solrSchemaResponseDto = new SolrSchemaResponseDTO(tableName, "");
 
 		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/" + tableName);
 
 		JSONObject jsonObject = microserviceHttpGateway.deleteRequest();
 
-		log.debug("Response :" + jsonObject);
+		log.debug("Response :{}", jsonObject);
 
 		JSONArray jsonArray = (JSONArray) jsonObject.get("attributes");
 		List<SolrFieldDTO> attributes = new ArrayList<SolrFieldDTO>();

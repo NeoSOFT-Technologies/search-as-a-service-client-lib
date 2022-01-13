@@ -8,12 +8,12 @@ public interface SolrSchemaServicePort {
 	/*
 	 * CRUD operations on solr schema
 	 */
-	SolrSchemaResponseDTO create(String tableName, String name, SolrSchemaDTO newSolrSchemaDTO);
+	SolrSchemaResponseDTO create(String tableName, SolrSchemaDTO newSolrSchemaDTO);
 
-	SolrSchemaResponseDTO update(String tableName, String name, SolrSchemaDTO solrSchemaDTO);
+	SolrSchemaResponseDTO update(String tableName, SolrSchemaDTO solrSchemaDTO);
 
-	SolrSchemaResponseDTO delete(String tableName, String name);
+	SolrSchemaResponseDTO delete(String tableName);
 
-	SolrSchemaResponseDTO get(String tableName, String name);
+	SolrSchemaResponseDTO get(String tableName);
 
 }
