@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.Duration;
 import java.time.Instant;
 
-@RestController
+//@RestController
 @RequestMapping("/test")
 public class TestingController {
 
