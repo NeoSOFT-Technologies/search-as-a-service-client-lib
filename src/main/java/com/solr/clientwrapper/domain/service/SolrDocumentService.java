@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -29,7 +28,6 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 	@Override
 	public SolrResponseDTO addDocuments(String collectionName, String payload, boolean isNRT) {
 
-		//System.out.println("Service"+payload);
 		log.debug("Given payload is >>>>>>>>>>>>> ::::: {}", payload);
 		log.debug("payload type ***** :: {}", payload.getClass());
 
@@ -64,7 +62,6 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 			}
 		}
 
-		//System.out.println("Service - after parsing"+payload);
 
 		//TO CHECK IF THE INPUT DOCUMENT SATISFIES THE SCHEMA
 		for(int i=0;i<payloadJSONArray.length();i++){
@@ -155,8 +152,6 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 				return solrResponseDTO;
 			}
 		}
-
-		//System.out.println("Service - after parsing"+payload);
 
 		//TO CHECK IF THE INPUT DOCUMENT SATISFIES THE SCHEMA
 		for(int i=0;i<payloadJSONArray.length();i++){
