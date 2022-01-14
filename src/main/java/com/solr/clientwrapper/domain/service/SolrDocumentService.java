@@ -28,9 +28,6 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 	@Override
 	public SolrResponseDTO addDocuments(String collectionName, String payload, boolean isNRT) {
 
-		log.debug("Given payload is >>>>>>>>>>>>> ::::: {}", payload);
-		log.debug("payload type ***** :: {}", payload.getClass());
-
 		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
 
 		Map<String, Map<String, Object>> schemaKeyValuePair= DocumentParserUtil.getSchemaOfCollection(baseMicroserviceUrl,collectionName);
@@ -54,7 +51,7 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 				log.debug(e.toString());
 				log.debug(e1.toString());
 
-				String message="Invalid input JSON array of document &&&& ||| ***********************.";
+				String message="Invalid input JSON array of document.";
 				log.debug(message);
 				solrResponseDTO.setMessage(message);
 				solrResponseDTO.setStatusCode(400);
