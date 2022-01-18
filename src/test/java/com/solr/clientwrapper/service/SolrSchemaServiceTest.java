@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.solr.clientwrapper.IntegrationTest;
 import com.solr.clientwrapper.domain.dto.solr.SolrFieldDTO;
 import com.solr.clientwrapper.domain.dto.solr.SolrSchemaDTO;
 import com.solr.clientwrapper.domain.dto.solr.SolrSchemaResponseDTO;
@@ -97,19 +96,19 @@ public class SolrSchemaServiceTest {
 		
 
 		
-		Mockito.when(solrSchemaService.create(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
-		Mockito.when(solrSchemaService.delete(Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
-		Mockito.when(solrSchemaService.update(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
-		Mockito.when(solrSchemaService.get(Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
+		Mockito.when(solrSchemaService.create(Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
+		Mockito.when(solrSchemaService.delete(Mockito.any())).thenReturn(solrResponseDTO);
+		Mockito.when(solrSchemaService.update(Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
+		Mockito.when(solrSchemaService.get(Mockito.any())).thenReturn(solrResponseDTO);
 	}
 
 	public void setMockitoBadResponseForService() {
 		SolrSchemaResponseDTO solrResponseDTO = new SolrSchemaResponseDTO(tableName, name, attributes);
 		solrResponseDTO.setStatusCode(400);
-		Mockito.when(solrSchemaService.create(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
-		Mockito.when(solrSchemaService.delete(Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
-		Mockito.when(solrSchemaService.update(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
-		Mockito.when(solrSchemaService.get(Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
+		Mockito.when(solrSchemaService.create(Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
+		Mockito.when(solrSchemaService.delete(Mockito.any())).thenReturn(solrResponseDTO);
+		Mockito.when(solrSchemaService.update(Mockito.any(), Mockito.any())).thenReturn(solrResponseDTO);
+		Mockito.when(solrSchemaService.get(Mockito.any())).thenReturn(solrResponseDTO);
 		
 
 	}
@@ -121,12 +120,12 @@ public class SolrSchemaServiceTest {
 		// GET EXISTING SCHEMA
 		SolrSchemaResponseDTO receivedsolrSchemaResponseDto;
 		setMockitoSucccessResponseForService();
-		receivedsolrSchemaResponseDto = solrschemaServicePort.get("Demo", "DemoSchema");
+		receivedsolrSchemaResponseDto = solrschemaServicePort.get("Demo");
 		assertEquals(solrResponseDTO.getStatusCode(), receivedsolrSchemaResponseDto.getStatusCode());
 		
 		//GET NON EXISTING SCHEMA
 		setMockitoBadResponseForService();
-		receivedsolrSchemaResponseDto = solrschemaServicePort.get("DEMO2", "name");
+		receivedsolrSchemaResponseDto = solrschemaServicePort.get("DEMO2");
 		assertNotEquals(solrResponseDTO.getStatusCode(), receivedsolrSchemaResponseDto.getStatusCode());
 	}
 	
@@ -138,12 +137,12 @@ public class SolrSchemaServiceTest {
 	  
 	  //CREATE SCHEMA
 	  setMockitoSucccessResponseForService();
-	  SolrSchemaResponseDTO receivedResponse  = solrschemaServicePort.create(tableName, name, solrSchemaDto);
+	  SolrSchemaResponseDTO receivedResponse  = solrschemaServicePort.create(tableName, solrSchemaDto);
 	  assertEquals(solrResponseDTO.getStatusCode(),receivedResponse.getStatusCode());
 	
 	  //CREATE SCHEMA WITH SAME NAME
 	  setMockitoBadResponseForService();
-	  SolrSchemaResponseDTO receivedResponse2  = solrschemaServicePort.create(tableName, name, solrSchemaDto);
+	  SolrSchemaResponseDTO receivedResponse2  = solrschemaServicePort.create(tableName, solrSchemaDto);
 	  assertNotEquals(solrResponseDTO.getStatusCode(), receivedResponse2.getStatusCode());
 	
 	}
@@ -154,12 +153,12 @@ public class SolrSchemaServiceTest {
 		
 		// DELETE A NON EXISTING SCHEMA
 		  setMockitoBadResponseForService();
-		  SolrSchemaResponseDTO receivedResponse2  = solrschemaServicePort.delete(tableName, name);
+		  SolrSchemaResponseDTO receivedResponse2  = solrschemaServicePort.delete(tableName);
 		  assertNotEquals(solrResponseDTO.getStatusCode(), receivedResponse2.getStatusCode());
 	
 		//DELETE A SCHEMA
 		  setMockitoSucccessResponseForService();
-		  SolrSchemaResponseDTO receivedResponse  = solrschemaServicePort.delete(tableName, name);
+		  SolrSchemaResponseDTO receivedResponse  = solrschemaServicePort.delete(tableName);
 		  assertEquals(solrResponseDTO.getStatusCode(),receivedResponse.getStatusCode());
 	}
 	
@@ -168,7 +167,7 @@ public class SolrSchemaServiceTest {
 		
 		//Update Schema
 		 setMockitoSucccessResponseForService();
-		 SolrSchemaResponseDTO receivedResponse2 = solrschemaServicePort.update(tableName, name, solrSchemaDto);
+		 SolrSchemaResponseDTO receivedResponse2 = solrschemaServicePort.update(tableName, solrSchemaDto);
 		 assertEquals(solrResponseDTO.getStatusCode(), receivedResponse2.getStatusCode());
 	 }
 	

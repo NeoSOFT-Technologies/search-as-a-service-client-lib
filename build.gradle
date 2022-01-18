@@ -142,7 +142,7 @@ liquibase {
             driver "com.mysql.cj.jdbc.Driver"
             url "jdbc:mysql://localhost:3306/basicSample"
             username "root"
-            password "Ravikiran@123"
+            password "admin"
 
 
             changeLogFile "src/main/resources/config/liquibase/master.xml"
@@ -154,7 +154,7 @@ liquibase {
             driver "com.mysql.cj.jdbc.Driver"
             url "jdbc:mysql://localhost:3306/basicSample"
             username "root"
-            password "Ravikiran@123"
+            password "admin"
 
             changeLogFile project.ext.diffChangelogFile
             referenceUrl "hibernate:spring:com.solr.clientwrapper.domain?dialect=org.hibernate.dialect.MySQL8Dialect&hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy"
@@ -197,6 +197,27 @@ repositories {
     mavenLocal()
     mavenCentral()
     //jhipster-needle-gradle-repositories - JHipster will add additional repositories
+    
+    //// create FAT jar ////
+    jcenter()
+}
+
+//// create FAT jar ////
+task clientLibraryCustomJar(type: Jar) {
+	
+	//bootRepackage.enabled = false
+	zip64 = true
+	
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+	manifest {
+		attributes 'Main-Class': 'com.solr.clientwrapper.BasicSampleApp'
+	}
+	baseName = 'saas-clientlib-fat'
+	from {
+		configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+	}
+	with jar
 }
 
 dependencies {
