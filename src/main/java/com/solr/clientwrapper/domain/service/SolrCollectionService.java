@@ -5,7 +5,6 @@ import com.solr.clientwrapper.domain.dto.solr.SolrResponseDTO;
 import com.solr.clientwrapper.domain.dto.solr.collection.SolrCreateCollectionDTO;
 import com.solr.clientwrapper.domain.dto.solr.collection.SolrGetCapacityPlanDTO;
 import com.solr.clientwrapper.domain.dto.solr.collection.SolrGetCollectionsResponseDTO;
-import com.solr.clientwrapper.domain.dto.solr.collection.SolrRenameCollectionDTO;
 import com.solr.clientwrapper.domain.port.api.SolrCollectionServicePort;
 import com.solr.clientwrapper.domain.utils.MicroserviceHttpGateway;
 import org.json.JSONArray;
@@ -101,24 +100,24 @@ public class SolrCollectionService implements SolrCollectionServicePort {
 
     }
 
-    @Override
-    public SolrResponseDTO rename(String collectionName, String collectionNewName) {
-        SolrResponseDTO solrResponseDTO=new SolrResponseDTO(collectionName);
-
-        SolrRenameCollectionDTO solrRenameCollectionDTO=new SolrRenameCollectionDTO(collectionName,collectionNewName);
-
-        MicroserviceHttpGateway microserviceHttpGateway =new MicroserviceHttpGateway();
-        microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl+apiEndpoint+"/rename");
-        microserviceHttpGateway.setRequestBodyDTO(solrRenameCollectionDTO);
-
-        JSONObject jsonObject= microserviceHttpGateway.putRequest();
-
-        solrResponseDTO.setMessage(jsonObject.get("message").toString());
-        solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
-
-        return solrResponseDTO;
-
-    }
+//    @Override
+//    public SolrResponseDTO rename(String collectionName, String collectionNewName) {
+//        SolrResponseDTO solrResponseDTO=new SolrResponseDTO(collectionName);
+//
+//        SolrRenameCollectionDTO solrRenameCollectionDTO=new SolrRenameCollectionDTO(collectionName,collectionNewName);
+//
+//        MicroserviceHttpGateway microserviceHttpGateway =new MicroserviceHttpGateway();
+//        microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl+apiEndpoint+"/rename");
+//        microserviceHttpGateway.setRequestBodyDTO(solrRenameCollectionDTO);
+//
+//        JSONObject jsonObject= microserviceHttpGateway.putRequest();
+//
+//        solrResponseDTO.setMessage(jsonObject.get("message").toString());
+//        solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
+//
+//        return solrResponseDTO;
+//
+//    }
 
     @Override
     public SolrGetCollectionsResponseDTO getCollections() {

@@ -1,8 +1,9 @@
 package com.solr.clientwrapper.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-
+import com.solr.clientwrapper.domain.dto.solr.SolrResponseDTO;
+import com.solr.clientwrapper.domain.dto.solr.collection.SolrGetCollectionsResponseDTO;
+import com.solr.clientwrapper.domain.port.api.SolrCollectionServicePort;
+import com.solr.clientwrapper.domain.service.SolrCollectionService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -13,10 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.solr.clientwrapper.domain.dto.solr.SolrResponseDTO;
-import com.solr.clientwrapper.domain.dto.solr.collection.SolrGetCollectionsResponseDTO;
-import com.solr.clientwrapper.domain.port.api.SolrCollectionServicePort;
-import com.solr.clientwrapper.domain.service.SolrCollectionService;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @ExtendWith(MockitoExtension.class)
 @ExtendWith(SpringExtension.class)
@@ -45,7 +44,7 @@ class SolrCollectionServiceTest {
 
 	        Mockito.when(solrCollectionService.create(Mockito.any(),Mockito.any())).thenReturn(solrResponseDTO);
 	        Mockito.when(solrCollectionService.delete(Mockito.any())).thenReturn(solrResponseDTO);
-	        Mockito.when(solrCollectionService.rename(Mockito.any(),Mockito.any())).thenReturn(solrResponseDTO);
+	        //Mockito.when(solrCollectionService.rename(Mockito.any(),Mockito.any())).thenReturn(solrResponseDTO);
 	        Mockito.when(solrCollectionService.getCollections()).thenReturn(solrGetCollectionsResponseDTO);
 	        Mockito.when(solrCollectionService.isCollectionExists(Mockito.any())).thenReturn(solrResponseDTO);
 	 }
@@ -61,7 +60,7 @@ class SolrCollectionServiceTest {
 
 	        Mockito.when(solrCollectionService.create(Mockito.any(),Mockito.any())).thenReturn(solrResponseDTO);
 	        Mockito.when(solrCollectionService.delete(Mockito.any())).thenReturn(solrResponseDTO);
-	        Mockito.when(solrCollectionService.rename(Mockito.any(),Mockito.any())).thenReturn(solrResponseDTO);
+	        //Mockito.when(solrCollectionService.rename(Mockito.any(),Mockito.any())).thenReturn(solrResponseDTO);
 	        Mockito.when(solrCollectionService.getCollections()).thenReturn(solrGetCollectionsResponseDTO);
 	        Mockito.when(solrCollectionService.isCollectionExists(Mockito.any())).thenReturn(solrResponseDTO);
 	    }
@@ -96,21 +95,22 @@ class SolrCollectionServiceTest {
 		 assertNotEquals(statusCode, solrresponseDto2.getStatusCode());
 	 }
 	 
-	 @Test
-	 void testRenameSolrCollection() {
-		 
-		 int statusCode = 200;
-		 
-		 //RNAME COLLECTION
-		 setMockitoSuccessResponseForService();
-		 SolrResponseDTO solrresponseDto  = solrCollectionServicePort.rename(collectionName, "ABC");
-		 assertEquals(statusCode, solrresponseDto.getStatusCode());
-		 
-		 //RENAME NON EXISTING COLLECTION
-		 setMockitoBadResponseForService();
-		 SolrResponseDTO solrresponseDto2 = solrCollectionServicePort.rename(collectionName, "ACBD");
-		 assertNotEquals(statusCode, solrresponseDto2.getStatusCode());
-	 }
+//	 @Test
+//	 void testRenameSolrCollection() {
+//
+//		 int statusCode = 200;
+//
+//		 //RNAME COLLECTION
+//		 setMockitoSuccessResponseForService();
+//		 SolrResponseDTO solrresponseDto  = solrCollectionServicePort.rename(collectionName, "ABC");
+//		 assertEquals(statusCode, solrresponseDto.getStatusCode());
+//
+//		 //RENAME NON EXISTING COLLECTION
+//		 setMockitoBadResponseForService();
+//		 SolrResponseDTO solrresponseDto2 = solrCollectionServicePort.rename(collectionName, "ACBD");
+//		 assertNotEquals(statusCode, solrresponseDto2.getStatusCode());
+//	 }
+
 	 @Test
 	 void testGetSolrCollections() {
 		 int statusCode = 200;
