@@ -208,8 +208,6 @@ user-registration:
 #Solr Configurations
 base-solr-url: http://localhost:8983/solr
 
-base-microservice-url: http://localhost:8080
-
 capacity-plan:
   plans:
     - sku: B
@@ -241,7 +239,32 @@ capacity-plan:
       replicas: 3
       shards: 5
       storage: 2
-      
+
+base-microservice-url: http://localhost:8080
+
+#URL Path to the Microservice Endpoints
+microservice-url:
+  table-collection:
+    create: /api/table
+    delete: /api/table
+    rename: /api/table/rename
+    get-collections: /api/table
+    is-collection-exists: /api/table/isTableExists
+  core:
+    create: /solr-core/create
+    rename: /solr-core/rename
+    delete: /solr-core/delete
+    swap: /solr-core/swap
+    reload: /solr-core/reload
+    status: /solr-core/status
+  schema:
+    get: /api/schema
+    update: /api/schema
+    create: /api/schema
+    delete: /api/schema
+  document:
+    input: /api/documents
+
 # Throttler configurations
 base-app-url: http://localhost:8080
 throttler-test-app-url: http://localhost:8081
