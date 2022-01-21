@@ -1,24 +1,23 @@
 package com.searchclient.clientwrapper.service;
 
-import com.searchclient.clientwrapper.domain.dto.solr.SolrFieldDTO;
-import com.searchclient.clientwrapper.domain.dto.solr.SolrSchemaDTO;
-import com.searchclient.clientwrapper.domain.dto.solr.SolrSchemaResponseDTO;
-import com.searchclient.clientwrapper.domain.port.api.SolrSchemaServicePort;
-import com.searchclient.clientwrapper.domain.utils.MicroserviceHttpGateway;
-import com.searchclient.clientwrapper.infrastructure.Enum.SolrFieldType;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.searchclient.clientwrapper.domain.dto.solr.SolrFieldDTO;
+import com.searchclient.clientwrapper.domain.dto.solr.SolrSchemaDTO;
+import com.searchclient.clientwrapper.domain.dto.solr.SolrSchemaResponseDTO;
+import com.searchclient.clientwrapper.domain.port.api.SolrSchemaServicePort;
+import com.searchclient.clientwrapper.domain.utils.MicroserviceHttpGateway;
+import com.searchclient.clientwrapper.infrastructure.Enum.SolrFieldType;
 
 @Service
-@Transactional
 public class SolrSchemaService implements SolrSchemaServicePort {
 
 	private final Logger log = LoggerFactory.getLogger(SolrSchemaService.class);

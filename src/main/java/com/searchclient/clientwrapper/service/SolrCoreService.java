@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.searchclient.clientwrapper.domain.dto.solr.SolrResponseDTO;
 import com.searchclient.clientwrapper.domain.dto.solr.core.SolrDoubleCoreDTO;
@@ -15,7 +14,6 @@ import com.searchclient.clientwrapper.domain.port.api.SolrCoreServicePort;
 import com.searchclient.clientwrapper.domain.utils.MicroserviceHttpGateway;
 
 @Service
-@Transactional
 public class SolrCoreService implements SolrCoreServicePort {
 
 	private final Logger log = LoggerFactory.getLogger(SolrCoreService.class);

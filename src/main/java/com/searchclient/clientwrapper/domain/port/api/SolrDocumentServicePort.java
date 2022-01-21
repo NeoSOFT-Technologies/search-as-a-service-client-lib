@@ -4,8 +4,7 @@ import com.searchclient.clientwrapper.domain.dto.solr.SolrResponseDTO;
 
 public interface SolrDocumentServicePort {
 
-    SolrResponseDTO addDocument(String collectionName, String payload);
-
-    SolrResponseDTO addDocuments(String collectionName, String payload);
+	SolrResponseDTO addDocuments(String collectionName, String payload, boolean isNRT);
+    SolrResponseDTO addDocumentsWithPayloadObject(String collectionName, Object payload, boolean isNRT);
 
 }

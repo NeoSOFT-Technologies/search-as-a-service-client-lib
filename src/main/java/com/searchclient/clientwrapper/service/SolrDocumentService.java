@@ -1,23 +1,22 @@
-package com.solr.clientwrapper.domain.service;
+package com.searchclient.clientwrapper.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.solr.clientwrapper.domain.dto.solr.SolrResponseDTO;
-import com.solr.clientwrapper.domain.port.api.SolrDocumentServicePort;
-import com.solr.clientwrapper.domain.utils.DocumentParserUtil;
-import com.solr.clientwrapper.domain.utils.MicroserviceHttpGateway;
+import java.util.Map;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.searchclient.clientwrapper.domain.dto.solr.SolrResponseDTO;
+import com.searchclient.clientwrapper.domain.port.api.SolrDocumentServicePort;
+import com.searchclient.clientwrapper.domain.utils.DocumentParserUtil;
+import com.searchclient.clientwrapper.domain.utils.MicroserviceHttpGateway;
 
 @Service
-@Transactional
 public class SolrDocumentService implements SolrDocumentServicePort {
 
 	@Value("${base-microservice-url}")
