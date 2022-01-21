@@ -7,8 +7,8 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-//import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartFile;
+
 import com.searchclient.clientwrapper.domain.port.api.SolrParseDocServicePort;
 
 @Service
@@ -17,7 +17,7 @@ public class SolrParseDocService implements SolrParseDocServicePort {
 	   private final Logger log = LoggerFactory.getLogger(SolrParseDocService.class);
 
 	@Override
-	public String multipartUploder(MultipartFile file) {
+	public String MultipartUploder(MultipartFile file) {
 		
 		if (!file.isEmpty()) {
 	        try {
