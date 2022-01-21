@@ -1,6 +1,5 @@
 package com.searchclient.clientwrapper.service;
 
-import org.apache.solr.client.solrj.response.CoreAdminResponse;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -127,7 +126,7 @@ public class SolrCoreService implements SolrCoreServicePort {
 
 		log.debug("status");
 
-		CoreAdminResponse coreAdminResponse = null;
+		//CoreAdminResponse coreAdminResponse = null;
 		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/status/" + coreName);
 		String jsonObject = microserviceHttpGateway.stringRequest();
