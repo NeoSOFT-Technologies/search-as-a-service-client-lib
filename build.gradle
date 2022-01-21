@@ -10,6 +10,8 @@ sourceCompatibility = '1.8'
 
 repositories {
 	mavenCentral()
+	//// create FAT jar ////
+    jcenter()
 }
 
 dependencyManagement {
@@ -18,7 +20,27 @@ dependencyManagement {
 	}
 }
 
+//// create FAT jar ////
+task clientLibraryCustomJar(type: Jar) {
+	
+	//bootRepackage.enabled = false
+	zip64 = true
+	
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+	manifest {
+		//attributes 'Main-Class': 'com.solr.clientwrapper.BasicSampleApp'
+	}
+	baseName = 'saas-clientlib-fat-0.0.2'
+	from {
+		configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+	}
+	with jar
+}
+
+
 dependencies {
+ 	implementation 'org.springframework.boot:spring-boot-starter-web:2.6.2'
 	implementation 'org.springframework.boot:spring-boot-starter'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	compileOnly 'org.projectlombok:lombok:1.18.22'

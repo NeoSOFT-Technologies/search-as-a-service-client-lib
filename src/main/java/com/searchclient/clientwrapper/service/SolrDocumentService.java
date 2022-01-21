@@ -1,5 +1,6 @@
 package com.searchclient.clientwrapper.service;
 
+import java.io.IOException;
 import java.util.Map;
 
 import org.json.JSONArray;
@@ -111,7 +112,7 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
 		try {
 			payload = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(payloadObj);
-		} catch (JsonProcessingException e2) {
+		} catch (IOException e2) {
 			String message="Payload java.lang.Object to java.lang.String casting could not be done. Error";
 			log.debug(message);
 			log.debug(e2.toString());
