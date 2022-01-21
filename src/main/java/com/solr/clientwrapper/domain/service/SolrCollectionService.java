@@ -45,6 +45,8 @@ public class SolrCollectionService implements SolrCollectionServicePort {
     @Value("${microservice-url.table-collection.is-collection-exists}")
     private String isCollectionExistsMicroserviceAPI;
 
+    @Value("${microservice-url.table-collection.get-collection-details}")
+    private String getCollectionDetailsMicroserviceAPI;
 
     @Autowired
     CapacityPlanProperties capacityPlanProperties;
@@ -168,6 +170,14 @@ public class SolrCollectionService implements SolrCollectionServicePort {
 
         return solrResponseDTO;
 
+    }
+
+    @Override
+    public JSONObject getCollectionDetails(String collectionName) {
+        MicroserviceHttpGateway microserviceHttpGateway =new MicroserviceHttpGateway();
+        microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl+getCollectionDetailsMicroserviceAPI+"/" +collectionName);
+
+        return microserviceHttpGateway.getRequest();
     }
 
 }

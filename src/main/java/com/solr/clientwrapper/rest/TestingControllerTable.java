@@ -8,6 +8,7 @@ import com.solr.clientwrapper.domain.dto.solr.collection.SolrGetCollectionsRespo
 import com.solr.clientwrapper.domain.port.api.SolrCollectionServicePort;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,6 +98,22 @@ public class TestingControllerTable {
 			return ResponseEntity.status(HttpStatus.OK).body(solrResponseDTO);
 		}else{
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(solrResponseDTO);
+		}
+
+	}
+
+	@GetMapping("/details/{tableName}")
+	@Operation(summary = "/ Get the table details like Shards, Nodes & Replication Factor.", security = @SecurityRequirement(name = "bearerAuth"))
+	public ResponseEntity<String> getCollectionDetails(@PathVariable String tableName) {
+
+		log.debug("getCollectionDetails");
+
+		JSONObject response=solrCollectionServicePort.getCollectionDetails(tableName);
+
+		if(!response.has("Error")){
+			return ResponseEntity.status(HttpStatus.OK).body(response.toString());
+		}else{
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response.toString());
 		}
 
 	}

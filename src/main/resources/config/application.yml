@@ -250,6 +250,7 @@ microservice-url:
     rename: /api/table/rename
     get-collections: /api/table
     is-collection-exists: /api/table/isTableExists
+    get-collection-details: /api/table/details
   core:
     create: /solr-core/create
     rename: /solr-core/rename
