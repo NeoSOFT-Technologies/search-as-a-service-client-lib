@@ -59,11 +59,10 @@ public class DocumentParserUtil {
     }
 
     private static DocumentSatisfiesSchemaResponse checkIfRequiredFieldsAreAvailable(Map<String,Map<String, Object>> schemaKeyValuePair, JSONObject payloadJSON){
-
         for (Map.Entry<String,Map<String, Object>> entry : schemaKeyValuePair.entrySet()){
             if(entry.getValue().containsKey("required")){
                 if(entry.getValue().get("required").toString().equals("true")){
-                    if(!payloadJSON.has(entry.getKey())){
+                    if(!payloadJSON.has(entry.getKey())){                    	
                         return new DocumentSatisfiesSchemaResponse(false, "Required field is missing in document. Field: "+entry.getKey());
                     }
                 }
@@ -76,33 +75,44 @@ public class DocumentParserUtil {
 
     public static DocumentSatisfiesSchemaResponse isDocumentSatisfySchema(Map<String, Map<String, Object>> schemaKeyValuePair, JSONObject payloadJSON){
         Logger log = LoggerFactory.getLogger(DocumentParserUtil.class);
-
+      
         DocumentSatisfiesSchemaResponse checkIfRequireFieldsAreAvailableResponse= DocumentParserUtil.checkIfRequiredFieldsAreAvailable(schemaKeyValuePair,payloadJSON);
 
         if(!checkIfRequireFieldsAreAvailableResponse.isObjectSatisfiesSchema()){
             //A REQUIRED FIELD IS MISSING IN THE INPUT JSON DOCUMENT
+        	
             return checkIfRequireFieldsAreAvailableResponse;
         }
 
-
+        
         Iterator<String> itr = payloadJSON.keySet().iterator();
-
+       
         //ITERATE THROUGH EACH KEY IN THE INPUT JSON OBJECT PAYLOAD
         while (itr.hasNext())
         {
+        
             String payloadJsonObjectKey = itr.next();
             Object payloadJsonObjectValue = payloadJSON.get(payloadJsonObjectKey);
-
+       
             log.debug(payloadJsonObjectKey + "=" + payloadJsonObjectValue);
             //log.debug(schemaKeyValuePair.get(payloadJsonObjectKey).toString());
 
             if(schemaKeyValuePair.containsKey(payloadJsonObjectKey)) {
-
+            	
                 if (!payloadJsonObjectKey.equals("id")) {
+                	
 
                     Map<String, Object> fieldValueForTheKey = schemaKeyValuePair.get(payloadJsonObjectKey);
+              
+                    if( fieldValueForTheKey.get("type")==null) {
+                    	
+                    	  String message="key is not define in schema";
+                          log.debug(message);
+                          return new DocumentSatisfiesSchemaResponse(true, message);
+                    }else {
+          
                     String fieldTypeDefinedInSchema = fieldValueForTheKey.get("type").toString();
-
+               
                     boolean isMultivaluedField = false;
                     if (fieldValueForTheKey.containsKey("multiValued")) {
                         if (fieldValueForTheKey.get("multiValued").toString().equals("true")) {
@@ -116,10 +126,10 @@ public class DocumentParserUtil {
                     }
 
                     //log.debug(fieldTypeDefinedInSchema);
-
+                  
                     switch (fieldTypeDefinedInSchema) {
                         case "string":
-                        case "strings":
+                        case "strings":                     
                             if (isMultivaluedField) {
                                 if (!payloadJsonObjectValue.getClass().equals(JSONArray.class)) {
                                     String message="Multivalued string field should be a JSONArray of strings.";
@@ -193,19 +203,20 @@ public class DocumentParserUtil {
                             break;
 
                         default:
-                            return new DocumentSatisfiesSchemaResponse(false, "Code unable to handle the schema data type. Contact the developer!");
+                            return new DocumentSatisfiesSchemaResponse(true, "allow all data-types");
                     }
-                }else{
+                    }}else{
                     //OBJECT KEY IS "id" and hence it can be string or long but ultimately converted into long
                     log.debug("Object key IS \"id\" and hence it can be string or long but ultimately converted into long");
                 }
             }else{
                 String message="Input JSON Object's key doesn't exists in the Schema. Please check the input document or add new field to the schema.";
                 log.debug(message);
+               
                 return new DocumentSatisfiesSchemaResponse(false,message);
             }
         }
-
+ 
         return new DocumentSatisfiesSchemaResponse(true,"Success!");
     }
 

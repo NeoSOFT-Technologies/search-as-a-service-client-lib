@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Iterator;
 import java.util.Map;
 
 @Service
@@ -26,11 +27,10 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 	private final Logger log = LoggerFactory.getLogger(SolrDocumentService.class);
 
 	@Override
-	public SolrResponseDTO addDocuments(String collectionName, String payload, boolean isNRT) {
-
-		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
-
+	public SolrResponseDTO addDocuments(String collectionName, String payload, boolean isNRT) {	
+		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);	
 		Map<String, Map<String, Object>> schemaKeyValuePair= DocumentParserUtil.getSchemaOfCollection(baseMicroserviceUrl,collectionName);
+		
 		if(schemaKeyValuePair == null){
 			String message="Unable to get the Schema. Please check the collection name again!";
 			log.debug(message);
@@ -38,15 +38,17 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 			solrResponseDTO.setStatusCode(400);
 			return solrResponseDTO;
 		}
-
+	
 		JSONArray payloadJSONArray=null;
 		try {
 			payloadJSONArray = new JSONArray(payload);
+			
 		}catch (Exception e){
 			//TRY BY REMOVING THE QUOTES FROM THE STRING
 			try{
 				payload=payload.substring(1, payload.length() - 1);
 				payloadJSONArray = new JSONArray(payload);
+				
 			}catch (Exception e1){
 				log.debug(e.toString());
 				log.debug(e1.toString());
@@ -58,18 +60,19 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 				return solrResponseDTO;
 			}
 		}
-
+		
 
 		//TO CHECK IF THE INPUT DOCUMENT SATISFIES THE SCHEMA
 		for(int i=0;i<payloadJSONArray.length();i++){
-
+		
 			JSONObject jsonSingleObject= (JSONObject) payloadJSONArray.get(i);
-
+			
+			Iterator<String> itr = jsonSingleObject.keySet().iterator();
+			
 			DocumentParserUtil.DocumentSatisfiesSchemaResponse documentSatisfiesSchemaResponse =
 					DocumentParserUtil.isDocumentSatisfySchema(schemaKeyValuePair,jsonSingleObject);
 
-			if(!documentSatisfiesSchemaResponse.isObjectSatisfiesSchema()){
-
+			if(!documentSatisfiesSchemaResponse.isObjectSatisfiesSchema()){				
 				//ERROR IN A DOCUMENT STRUCTURE
 				solrResponseDTO.setMessage(documentSatisfiesSchemaResponse.getMessage());
 				solrResponseDTO.setMessage("The JSON input document in the array doesn't satisfy the Schema. Error: "+ documentSatisfiesSchemaResponse.getMessage());
@@ -91,15 +94,13 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 		}else{
 			url+="?isNRT=false";
 		}
-
+		
 		microserviceHttpGateway.setApiEndpoint(url);
 		microserviceHttpGateway.setRequestBodyDTO(payload);
 		String jsonString=microserviceHttpGateway.postRequestWithStringBody();
-		JSONObject jsonObject  = new JSONObject(jsonString);
-
+		JSONObject jsonObject  = new JSONObject(jsonString);	
 		solrResponseDTO.setMessage(jsonObject.get("message").toString());
-		solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
-
+		solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));		
 		return solrResponseDTO;
 
 	}
