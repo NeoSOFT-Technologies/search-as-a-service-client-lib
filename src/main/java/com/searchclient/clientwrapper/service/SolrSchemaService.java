@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,9 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 	private String baseMicroserviceUrl;
 
 	private String apiEndpoint = "/api/schema";
+	
+	@Autowired
+	MicroserviceHttpGateway microserviceHttpGateway;
 
 	@Override
 	public SolrSchemaResponseDTO get(String tableName) {
@@ -33,7 +37,7 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 
 		SolrSchemaResponseDTO solrSchemaResponsedto = new SolrSchemaResponseDTO(tableName, "");
 
-		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+		//MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/" + tableName);
 		JSONObject jsonObject = microserviceHttpGateway.getRequest();
 
@@ -48,12 +52,12 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 
 			SolrFieldDTO sfd = new SolrFieldDTO();
 
-			sfd.setMultiValue(childJsonObject.getBoolean("multiValue"));
+			sfd.setMultiValued(childJsonObject.getBoolean("multiValued"));
 			sfd.setDefault_(childJsonObject.getString("default_"));
-			sfd.setFilterable(childJsonObject.getBoolean("filterable"));
+			sfd.setIndexed(childJsonObject.getBoolean("indexed"));
 			sfd.setName(childJsonObject.getString("name"));
 			sfd.setRequired(childJsonObject.getBoolean("required"));
-			sfd.setSortable(childJsonObject.getBoolean("sortable"));
+			sfd.setDocValues(childJsonObject.getBoolean("docValues"));
 			sfd.setStorable(childJsonObject.getBoolean("storable"));
 			sfd.setType(SolrFieldType.fromObject(childJsonObject.get("type").toString()));
 
@@ -72,7 +76,7 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 
 		SolrSchemaResponseDTO solrSchemaResponseDTO = new SolrSchemaResponseDTO(tableName, "");
 
-		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+		//MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/" + tableName);
 		microserviceHttpGateway.setRequestBodyDTO(newSolrSchemaDTO);
 
@@ -89,12 +93,12 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 
 			SolrFieldDTO sfd = new SolrFieldDTO();
 
-			sfd.setMultiValue(childJsonObject.getBoolean("multiValue"));
+			sfd.setMultiValued(childJsonObject.getBoolean("multiValued"));
 			sfd.setDefault_(childJsonObject.getString("default_"));
-			sfd.setFilterable(childJsonObject.getBoolean("filterable"));
+			sfd.setIndexed(childJsonObject.getBoolean("indexed"));
 			sfd.setName(childJsonObject.getString("name"));
 			sfd.setRequired(childJsonObject.getBoolean("required"));
-			sfd.setSortable(childJsonObject.getBoolean("sortable"));
+			sfd.setDocValues(childJsonObject.getBoolean("docValues"));
 			sfd.setStorable(childJsonObject.getBoolean("storable"));
 			sfd.setType(SolrFieldType.fromObject(childJsonObject.get("type").toString()));
 
@@ -113,7 +117,7 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 		SolrSchemaResponseDTO solrSchemaResponseDto = new SolrSchemaResponseDTO(tableName, "",
 				newSolrSchemaDTO.getAttributes());
 
-		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+		//MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint);
 		microserviceHttpGateway.setRequestBodyDTO(solrSchemaResponseDto);
 
@@ -128,7 +132,7 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 		log.debug("Delete Solr Schema");
 		SolrSchemaResponseDTO solrSchemaResponseDto = new SolrSchemaResponseDTO(tableName, "");
 
-		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+		//MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/" + tableName);
 
 		JSONObject jsonObject = microserviceHttpGateway.deleteRequest();
@@ -143,12 +147,12 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 
 			SolrFieldDTO sfd = new SolrFieldDTO();
 
-			sfd.setMultiValue(childJsonObject.getBoolean("multiValue"));
+			sfd.setMultiValued(childJsonObject.getBoolean("multiValued"));
 			sfd.setDefault_(childJsonObject.getString("default_"));
-			sfd.setFilterable(childJsonObject.getBoolean("filterable"));
+			sfd.setIndexed(childJsonObject.getBoolean("indexed"));
 			sfd.setName(childJsonObject.getString("name"));
 			sfd.setRequired(childJsonObject.getBoolean("required"));
-			sfd.setSortable(childJsonObject.getBoolean("sortable"));
+			sfd.setDocValues(childJsonObject.getBoolean("docValues"));
 			sfd.setStorable(childJsonObject.getBoolean("storable"));
 			sfd.setType(SolrFieldType.fromObject(childJsonObject.get("type").toString()));
 

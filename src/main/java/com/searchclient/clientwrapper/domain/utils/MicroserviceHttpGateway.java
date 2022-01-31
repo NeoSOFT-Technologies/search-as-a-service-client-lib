@@ -218,6 +218,7 @@ public class MicroserviceHttpGateway {
 			http.setHeader("Content-type", "application/json");
 
 			CloseableHttpResponse response = client.execute(http);
+			System.out.println("response:::::"+response);
 			HttpEntity entityResponse = response.getEntity();
 			String result = EntityUtils.toString(entityResponse);
 			log.debug("RESPONSE: " + result);

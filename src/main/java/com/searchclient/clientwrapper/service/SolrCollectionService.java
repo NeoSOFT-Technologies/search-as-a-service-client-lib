@@ -10,9 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import com.searchclient.clientwrapper.config.CapacityPlanProperties;
 import com.searchclient.clientwrapper.domain.dto.solr.SolrResponseDTO;
+import com.searchclient.clientwrapper.domain.dto.solr.collection.CapacityPlanDTO;
 import com.searchclient.clientwrapper.domain.dto.solr.collection.SolrCreateCollectionDTO;
 import com.searchclient.clientwrapper.domain.dto.solr.collection.SolrGetCapacityPlanDTO;
 import com.searchclient.clientwrapper.domain.dto.solr.collection.SolrGetCollectionsResponseDTO;
@@ -34,31 +33,56 @@ public class SolrCollectionService implements SolrCollectionServicePort {
     private String apiEndpoint = "/api/table";
 
     @Autowired
-    CapacityPlanProperties capacityPlanProperties;
+	SolrCollectionServicePort solrCollectionServicePort;
+    
     @Autowired
     MicroserviceHttpGateway microserviceHttpGateway;
 
     @Override
     public SolrGetCapacityPlanDTO capacityPlans() {
-        List<CapacityPlanProperties.Plan> capacityPlans = capacityPlanProperties.getPlans();
+SolrGetCapacityPlanDTO solrgetCapacityPlans = new SolrGetCapacityPlanDTO();
+		
+		//MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/capacity-plans");
+		JSONObject jsonObject = microserviceHttpGateway.getRequest();
+		
+		log.debug("Response :{}", jsonObject);
+		
+		JSONArray jsonArray = (JSONArray) jsonObject.get("plans");
+		
+		List<CapacityPlanDTO> capacityplan = new ArrayList<CapacityPlanDTO>();
+		
+		for (int i = 0; i < jsonArray.length(); i++) {
+			JSONObject childJsonObject = (JSONObject) jsonArray.get(i);
+			CapacityPlanDTO cpd = new CapacityPlanDTO();
+			cpd.setSku(childJsonObject.getString("sku"));
+			cpd.setName(childJsonObject.getString("name"));
+			cpd.setReplicas(childJsonObject.getInt("replicas"));
+			cpd.setShards(childJsonObject.getInt("shards"));
+			cpd.setStorage(childJsonObject.getInt("storage"));
+			capacityplan.add(cpd);
+		}
+		solrgetCapacityPlans.setPlans(capacityplan);
+		
+		return solrgetCapacityPlans;
 
-        return new SolrGetCapacityPlanDTO(capacityPlans);
-    }
+	}
 
     @Override
     public SolrResponseDTO create(String collectionName, String sku) {
 
         SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
 
-        List<CapacityPlanProperties.Plan> capacityPlans = capacityPlanProperties.getPlans();
-        CapacityPlanProperties.Plan selectedCapacityPlan = null;
-
-        for (CapacityPlanProperties.Plan capacityPlan : capacityPlans) {
+        SolrGetCapacityPlanDTO solrgetCapacityPlanDTO = solrCollectionServicePort.capacityPlans();
+        
+        List<CapacityPlanDTO> capacityPlans = solrgetCapacityPlanDTO.getPlans();
+		CapacityPlanDTO selectedCapacityPlan = null;
+        for (CapacityPlanDTO capacityPlan : capacityPlans) {
             if (capacityPlan.getSku().equals(sku)) {
                 selectedCapacityPlan = capacityPlan;
             }
         }
-
+        
         if (selectedCapacityPlan == null) {
             // INVALD SKU
             solrResponseDTO.setStatusCode(400);
@@ -85,7 +109,7 @@ public class SolrCollectionService implements SolrCollectionServicePort {
 
         SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
 
-        MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+        //MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
         microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/" + collectionName);
 
         JSONObject jsonObject = microserviceHttpGateway.deleteRequest();
@@ -103,7 +127,7 @@ public class SolrCollectionService implements SolrCollectionServicePort {
 
         SolrGetCollectionsResponseDTO solrGetCollectionsResponseDTO = new SolrGetCollectionsResponseDTO();
 
-        MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+       // MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
         microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint);
 
         JSONObject jsonObject = microserviceHttpGateway.getRequest();
@@ -111,6 +135,7 @@ public class SolrCollectionService implements SolrCollectionServicePort {
         solrGetCollectionsResponseDTO.setMessage(jsonObject.get("message").toString());
         solrGetCollectionsResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
 
+        
         List<String> collections = new ArrayList<>();
         JSONArray jsonArray = (JSONArray) jsonObject.get("collections");
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -127,7 +152,7 @@ public class SolrCollectionService implements SolrCollectionServicePort {
 
         SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
 
-        MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+       // MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
         microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/isTableExists/" + collectionName);
 
         JSONObject jsonObject = microserviceHttpGateway.getRequest();

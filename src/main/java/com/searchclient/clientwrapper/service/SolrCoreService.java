@@ -3,6 +3,7 @@ package com.searchclient.clientwrapper.service;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,8 @@ public class SolrCoreService implements SolrCoreServicePort {
 
 	private String apiEndpoint = "/solr-core";
 
+	@Autowired
+	MicroserviceHttpGateway microserviceHttpGateway;
 	@Override
 	public SolrResponseDTO create(String coreName) {
 
@@ -32,7 +35,6 @@ public class SolrCoreService implements SolrCoreServicePort {
 
 		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(coreName);
 
-		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/create");
 		microserviceHttpGateway.setRequestBodyDTO(solrSingleCore);
 		JSONObject jsonObject = microserviceHttpGateway.postRequest();
@@ -51,7 +53,7 @@ public class SolrCoreService implements SolrCoreServicePort {
 		SolrDoubleCoreDTO solrSingleCore = new SolrDoubleCoreDTO(coreName, newName);
 		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(coreName);
 
-		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+		//MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/rename");
 		microserviceHttpGateway.setRequestBodyDTO(solrSingleCore);
 
@@ -70,7 +72,7 @@ public class SolrCoreService implements SolrCoreServicePort {
 
 		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(coreName);
 
-		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+		//MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/delete/" + coreName);
 
 		JSONObject jsonObject = microserviceHttpGateway.deleteRequest();
@@ -89,7 +91,7 @@ public class SolrCoreService implements SolrCoreServicePort {
 		SolrDoubleCoreDTO solrSingleCore = new SolrDoubleCoreDTO(coreOne, coreTwo);
 		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(coreOne);
 
-		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+		//MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/swap");
 		microserviceHttpGateway.setRequestBodyDTO(solrSingleCore);
 
@@ -109,7 +111,7 @@ public class SolrCoreService implements SolrCoreServicePort {
 		SolrSingleCoreDTO solrSingleCore = new SolrSingleCoreDTO(coreName);
 		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(coreName);
 
-		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+		//MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/reload");
 
 		microserviceHttpGateway.setRequestBodyDTO(solrSingleCore);
@@ -127,7 +129,7 @@ public class SolrCoreService implements SolrCoreServicePort {
 		log.debug("status");
 
 		//CoreAdminResponse coreAdminResponse = null;
-		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+		//MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/status/" + coreName);
 		String jsonObject = microserviceHttpGateway.stringRequest();
 
