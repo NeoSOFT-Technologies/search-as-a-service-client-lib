@@ -21,37 +21,48 @@ import com.searchclient.clientwrapper.domain.utils.MicroserviceHttpGateway;
 @Service
 public class SolrCollectionService implements SolrCollectionServicePort {
 
-    private final Logger log = LoggerFactory.getLogger(SolrCollectionService.class);
+	private final Logger log = LoggerFactory.getLogger(SolrCollectionService.class);
 
-    // http://localhost:8983/solr
-    @Value("${base-solr-url}")
-    private String baseSolrUrl;
+	@Value("${base-microservice-url}")
+	private String baseMicroserviceUrl;
 
-    @Value("${base-microservice-url}")
-    private String baseMicroserviceUrl;
+	@Value("${microservice-url.table-collection.create}")
+	private String createMicroserviceAPI;
 
-    private String apiEndpoint = "/api/table";
+	@Value("${microservice-url.table-collection.delete}")
+	private String deleteMicroserviceAPI;
 
-    @Autowired
+	@Value("${microservice-url.table-collection.rename}")
+	private String renameMicroserviceAPI;
+
+	@Value("${microservice-url.table-collection.get-collections}")
+	private String getCollectionsMicroserviceAPI;
+
+	@Value("${microservice-url.table-collection.is-collection-exists}")
+	private String isCollectionExistsMicroserviceAPI;
+
+	@Value("${microservice-url.table-collection.get-capacity-plans}")
+	private String getcapacityplansMicroserviceAPI;
+
+	@Autowired
 	SolrCollectionServicePort solrCollectionServicePort;
-    
-    @Autowired
-    MicroserviceHttpGateway microserviceHttpGateway;
 
-    @Override
-    public SolrGetCapacityPlanDTO capacityPlans() {
-SolrGetCapacityPlanDTO solrgetCapacityPlans = new SolrGetCapacityPlanDTO();
-		
-		//MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
-		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/capacity-plans");
+	@Autowired
+	MicroserviceHttpGateway microserviceHttpGateway;
+
+	@Override
+	public SolrGetCapacityPlanDTO capacityPlans() {
+		SolrGetCapacityPlanDTO solrgetCapacityPlans = new SolrGetCapacityPlanDTO();
+
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + getcapacityplansMicroserviceAPI);
 		JSONObject jsonObject = microserviceHttpGateway.getRequest();
-		
+
 		log.debug("Response :{}", jsonObject);
-		
+
 		JSONArray jsonArray = (JSONArray) jsonObject.get("plans");
-		
+
 		List<CapacityPlanDTO> capacityplan = new ArrayList<CapacityPlanDTO>();
-		
+
 		for (int i = 0; i < jsonArray.length(); i++) {
 			JSONObject childJsonObject = (JSONObject) jsonArray.get(i);
 			CapacityPlanDTO cpd = new CapacityPlanDTO();
@@ -63,105 +74,98 @@ SolrGetCapacityPlanDTO solrgetCapacityPlans = new SolrGetCapacityPlanDTO();
 			capacityplan.add(cpd);
 		}
 		solrgetCapacityPlans.setPlans(capacityplan);
-		
+
 		return solrgetCapacityPlans;
 
 	}
 
-    @Override
-    public SolrResponseDTO create(String collectionName, String sku) {
+	@Override
+	public SolrResponseDTO create(String collectionName, String sku) {
 
-        SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
+		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
 
-        SolrGetCapacityPlanDTO solrgetCapacityPlanDTO = solrCollectionServicePort.capacityPlans();
-        
-        List<CapacityPlanDTO> capacityPlans = solrgetCapacityPlanDTO.getPlans();
+		SolrGetCapacityPlanDTO solrgetCapacityPlanDTO = solrCollectionServicePort.capacityPlans();
+
+		List<CapacityPlanDTO> capacityPlans = solrgetCapacityPlanDTO.getPlans();
 		CapacityPlanDTO selectedCapacityPlan = null;
-        for (CapacityPlanDTO capacityPlan : capacityPlans) {
-            if (capacityPlan.getSku().equals(sku)) {
-                selectedCapacityPlan = capacityPlan;
-            }
-        }
-        
-        if (selectedCapacityPlan == null) {
-            // INVALD SKU
-            solrResponseDTO.setStatusCode(400);
-            solrResponseDTO.setMessage("Invalid SKU: " + sku);
-            return solrResponseDTO;
-        }
+		for (CapacityPlanDTO capacityPlan : capacityPlans) {
+			if (capacityPlan.getSku().equals(sku)) {
+				selectedCapacityPlan = capacityPlan;
+			}
+		}
 
-        SolrCreateCollectionDTO solrCreateCollectionDTO = new SolrCreateCollectionDTO(collectionName, sku);
+		if (selectedCapacityPlan == null) {
+			// INVALD SKU
+			solrResponseDTO.setStatusCode(400);
+			solrResponseDTO.setMessage("Invalid SKU: " + sku);
+			return solrResponseDTO;
+		}
 
-//        MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
-        microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint);
-        microserviceHttpGateway.setRequestBodyDTO(solrCreateCollectionDTO);
+		SolrCreateCollectionDTO solrCreateCollectionDTO = new SolrCreateCollectionDTO(collectionName, sku);
 
-        JSONObject jsonObject = microserviceHttpGateway.postRequest();
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + createMicroserviceAPI);
+		microserviceHttpGateway.setRequestBodyDTO(solrCreateCollectionDTO);
 
-        solrResponseDTO.setMessage(jsonObject.get("message").toString());
-        solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
+		JSONObject jsonObject = microserviceHttpGateway.postRequest();
 
-        return solrResponseDTO;
-    }
+		solrResponseDTO.setMessage(jsonObject.get("message").toString());
+		solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
 
-    @Override
-    public SolrResponseDTO delete(String collectionName) {
+		return solrResponseDTO;
+	}
 
-        SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
+	@Override
+	public SolrResponseDTO delete(String collectionName) {
 
-        //MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
-        microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/" + collectionName);
+		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
 
-        JSONObject jsonObject = microserviceHttpGateway.deleteRequest();
+		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + deleteMicroserviceAPI + "/" + collectionName);
+		JSONObject jsonObject = microserviceHttpGateway.deleteRequest();
 
-        solrResponseDTO.setMessage(jsonObject.get("message").toString());
-        solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
+		solrResponseDTO.setMessage(jsonObject.get("message").toString());
+		solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
 
-        return solrResponseDTO;
+		return solrResponseDTO;
 
-    }
+	}
 
-    
-    @Override
-    public SolrGetCollectionsResponseDTO getCollections() {
+	@Override
+	public SolrGetCollectionsResponseDTO getCollections() {
 
-        SolrGetCollectionsResponseDTO solrGetCollectionsResponseDTO = new SolrGetCollectionsResponseDTO();
+		SolrGetCollectionsResponseDTO solrGetCollectionsResponseDTO = new SolrGetCollectionsResponseDTO();
 
-       // MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
-        microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint);
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + getCollectionsMicroserviceAPI);
+		JSONObject jsonObject = microserviceHttpGateway.getRequest();
 
-        JSONObject jsonObject = microserviceHttpGateway.getRequest();
+		solrGetCollectionsResponseDTO.setMessage(jsonObject.get("message").toString());
+		solrGetCollectionsResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
 
-        solrGetCollectionsResponseDTO.setMessage(jsonObject.get("message").toString());
-        solrGetCollectionsResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
+		List<String> collections = new ArrayList<>();
+		JSONArray jsonArray = (JSONArray) jsonObject.get("collections");
+		for (int i = 0; i < jsonArray.length(); i++) {
+			collections.add(jsonArray.getString(i));
+		}
+		solrGetCollectionsResponseDTO.setCollections(collections);
 
-        
-        List<String> collections = new ArrayList<>();
-        JSONArray jsonArray = (JSONArray) jsonObject.get("collections");
-        for (int i = 0; i < jsonArray.length(); i++) {
-            collections.add(jsonArray.getString(i));
-        }
-        solrGetCollectionsResponseDTO.setCollections(collections);
+		return solrGetCollectionsResponseDTO;
 
-        return solrGetCollectionsResponseDTO;
+	}
 
-    }
+	@Override
+	public SolrResponseDTO isCollectionExists(String collectionName) {
 
-    @Override
-    public SolrResponseDTO isCollectionExists(String collectionName) {
+		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
+		microserviceHttpGateway
+				.setApiEndpoint(baseMicroserviceUrl + isCollectionExistsMicroserviceAPI + "/" + collectionName);
 
-        SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
+		JSONObject jsonObject = microserviceHttpGateway.getRequest();
 
-       // MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
-        microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/isTableExists/" + collectionName);
+		solrResponseDTO.setMessage(jsonObject.get("message").toString());
+		solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
 
-        JSONObject jsonObject = microserviceHttpGateway.getRequest();
+		return solrResponseDTO;
 
-        solrResponseDTO.setMessage(jsonObject.get("message").toString());
-        solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
-
-        return solrResponseDTO;
-
-    }
+	}
 
 }

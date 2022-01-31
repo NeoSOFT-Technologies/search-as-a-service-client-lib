@@ -23,11 +23,21 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 
 	private final Logger log = LoggerFactory.getLogger(SolrSchemaService.class);
 
-	@Value(value ="${base-microservice-url}")
+	@Value(value = "${base-microservice-url}")
 	private String baseMicroserviceUrl;
 
-	private String apiEndpoint = "/api/schema";
-	
+	@Value("${microservice-url.schema.get}")
+	private String getMicroserviceAPI;
+
+	@Value("${microservice-url.schema.update}")
+	private String updateMicroserviceAPI;
+
+	@Value("${microservice-url.schema.create}")
+	private String createMicroserviceAPI;
+
+	@Value("${microservice-url.schema.delete}")
+	private String deleteMicroserviceAPI;
+
 	@Autowired
 	MicroserviceHttpGateway microserviceHttpGateway;
 
@@ -37,8 +47,7 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 
 		SolrSchemaResponseDTO solrSchemaResponsedto = new SolrSchemaResponseDTO(tableName, "");
 
-		//MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
-		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/" + tableName);
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + getMicroserviceAPI + "/" + tableName);
 		JSONObject jsonObject = microserviceHttpGateway.getRequest();
 
 		log.debug("Response :{}", jsonObject);
@@ -76,8 +85,7 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 
 		SolrSchemaResponseDTO solrSchemaResponseDTO = new SolrSchemaResponseDTO(tableName, "");
 
-		//MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
-		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/" + tableName);
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + updateMicroserviceAPI + "/" + tableName);
 		microserviceHttpGateway.setRequestBodyDTO(newSolrSchemaDTO);
 
 		JSONObject jsonObject = microserviceHttpGateway.putRequest();
@@ -117,8 +125,7 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 		SolrSchemaResponseDTO solrSchemaResponseDto = new SolrSchemaResponseDTO(tableName, "",
 				newSolrSchemaDTO.getAttributes());
 
-		//MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
-		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint);
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + createMicroserviceAPI);
 		microserviceHttpGateway.setRequestBodyDTO(solrSchemaResponseDto);
 
 		JSONObject jsonObject = microserviceHttpGateway.postRequest();
@@ -132,8 +139,7 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 		log.debug("Delete Solr Schema");
 		SolrSchemaResponseDTO solrSchemaResponseDto = new SolrSchemaResponseDTO(tableName, "");
 
-		//MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
-		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/" + tableName);
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + deleteMicroserviceAPI + "/" + tableName);
 
 		JSONObject jsonObject = microserviceHttpGateway.deleteRequest();
 
