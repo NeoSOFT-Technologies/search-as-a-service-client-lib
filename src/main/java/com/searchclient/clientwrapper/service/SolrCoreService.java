@@ -1,5 +1,7 @@
 package com.searchclient.clientwrapper.service;
 
+import javax.transaction.Transactional;
+
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +16,7 @@ import com.searchclient.clientwrapper.domain.port.api.SolrCoreServicePort;
 import com.searchclient.clientwrapper.domain.utils.MicroserviceHttpGateway;
 
 @Service
+@Transactional
 public class SolrCoreService implements SolrCoreServicePort {
 
 	private final Logger log = LoggerFactory.getLogger(SolrCoreService.class);

@@ -2,6 +2,8 @@ package com.searchclient.clientwrapper.service;
 
 import java.util.Map;
 
+import javax.transaction.Transactional;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -16,6 +18,7 @@ import com.searchclient.clientwrapper.domain.utils.DocumentParserUtil;
 import com.searchclient.clientwrapper.domain.utils.MicroserviceHttpGateway;
 
 @Service
+@Transactional
 public class SolrDocumentService implements SolrDocumentServicePort {
 
 	@Value("${base-microservice-url}")

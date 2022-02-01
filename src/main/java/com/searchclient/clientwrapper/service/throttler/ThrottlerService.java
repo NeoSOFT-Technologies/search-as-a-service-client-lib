@@ -1,5 +1,7 @@
 package com.searchclient.clientwrapper.service.throttler;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +12,7 @@ import com.searchclient.clientwrapper.domain.dto.throttler.ThrottlerRateLimitRes
 import com.searchclient.clientwrapper.domain.port.api.ThrottlerServicePort;
 
 @Service
+@Transactional
 public class ThrottlerService implements ThrottlerServicePort {
 	private final Logger logger = LoggerFactory.getLogger(ThrottlerService.class);
     @Value("${base-solr-url}")
