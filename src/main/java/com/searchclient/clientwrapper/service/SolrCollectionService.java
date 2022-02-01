@@ -85,6 +85,7 @@ public class SolrCollectionService implements SolrCollectionServicePort {
 		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
 
 		SolrGetCapacityPlanDTO solrgetCapacityPlanDTO = solrCollectionServicePort.capacityPlans();
+        log.debug("Response :{}", solrgetCapacityPlanDTO);
 
 		List<CapacityPlanDTO> capacityPlans = solrgetCapacityPlanDTO.getPlans();
 		CapacityPlanDTO selectedCapacityPlan = null;
