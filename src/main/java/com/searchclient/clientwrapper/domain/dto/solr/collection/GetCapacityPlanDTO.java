@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode
-public class SolrGetCapacityPlanDTO {
+public class GetCapacityPlanDTO {
 
     private List<CapacityPlanDTO> plans;
 
-    public SolrGetCapacityPlanDTO(List<CapacityPlanDTO> plans) {
+    public GetCapacityPlanDTO(List<CapacityPlanDTO> plans) {
         this.plans = plans;
     }
 

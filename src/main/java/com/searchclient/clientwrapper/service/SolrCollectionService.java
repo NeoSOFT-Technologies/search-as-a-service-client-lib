@@ -10,11 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import com.searchclient.clientwrapper.domain.dto.solr.SolrResponseDTO;
+import com.searchclient.clientwrapper.domain.dto.solr.ResponseDTO;
 import com.searchclient.clientwrapper.domain.dto.solr.collection.CapacityPlanDTO;
 import com.searchclient.clientwrapper.domain.dto.solr.collection.SolrCreateCollectionDTO;
-import com.searchclient.clientwrapper.domain.dto.solr.collection.SolrGetCapacityPlanDTO;
-import com.searchclient.clientwrapper.domain.dto.solr.collection.SolrGetCollectionsResponseDTO;
+import com.searchclient.clientwrapper.domain.dto.solr.collection.GetCapacityPlanDTO;
+import com.searchclient.clientwrapper.domain.dto.solr.collection.GetCollectionsResponseDTO;
 import com.searchclient.clientwrapper.domain.port.api.SolrCollectionServicePort;
 import com.searchclient.clientwrapper.domain.utils.MicroserviceHttpGateway;
 
@@ -51,8 +51,8 @@ public class SolrCollectionService implements SolrCollectionServicePort {
 	MicroserviceHttpGateway microserviceHttpGateway;
 
 	@Override
-	public SolrGetCapacityPlanDTO capacityPlans() {
-		SolrGetCapacityPlanDTO solrgetCapacityPlans = new SolrGetCapacityPlanDTO();
+	public GetCapacityPlanDTO capacityPlans() {
+		GetCapacityPlanDTO solrgetCapacityPlans = new GetCapacityPlanDTO();
 
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + getcapacityplansMicroserviceAPI);
 		JSONObject jsonObject = microserviceHttpGateway.getRequest();
@@ -80,11 +80,11 @@ public class SolrCollectionService implements SolrCollectionServicePort {
 	}
 
 	@Override
-	public SolrResponseDTO create(String collectionName, String sku) {
+	public ResponseDTO create(String collectionName, String sku) {
 
-		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
+		ResponseDTO solrResponseDTO = new ResponseDTO(collectionName);
 
-		SolrGetCapacityPlanDTO solrgetCapacityPlanDTO = solrCollectionServicePort.capacityPlans();
+		GetCapacityPlanDTO solrgetCapacityPlanDTO = solrCollectionServicePort.capacityPlans();
 
 		List<CapacityPlanDTO> capacityPlans = solrgetCapacityPlanDTO.getPlans();
 		CapacityPlanDTO selectedCapacityPlan = null;
@@ -115,9 +115,9 @@ public class SolrCollectionService implements SolrCollectionServicePort {
 	}
 
 	@Override
-	public SolrResponseDTO delete(String collectionName) {
+	public ResponseDTO delete(String collectionName) {
 
-		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
+		ResponseDTO solrResponseDTO = new ResponseDTO(collectionName);
 
 		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + deleteMicroserviceAPI + "/" + collectionName);
@@ -131,9 +131,9 @@ public class SolrCollectionService implements SolrCollectionServicePort {
 	}
 
 	@Override
-	public SolrGetCollectionsResponseDTO getCollections() {
+	public GetCollectionsResponseDTO getCollections() {
 
-		SolrGetCollectionsResponseDTO solrGetCollectionsResponseDTO = new SolrGetCollectionsResponseDTO();
+		GetCollectionsResponseDTO solrGetCollectionsResponseDTO = new GetCollectionsResponseDTO();
 
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + getCollectionsMicroserviceAPI);
 		JSONObject jsonObject = microserviceHttpGateway.getRequest();
@@ -153,9 +153,9 @@ public class SolrCollectionService implements SolrCollectionServicePort {
 	}
 
 	@Override
-	public SolrResponseDTO isCollectionExists(String collectionName) {
+	public ResponseDTO isCollectionExists(String collectionName) {
 
-		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
+		ResponseDTO solrResponseDTO = new ResponseDTO(collectionName);
 		microserviceHttpGateway
 				.setApiEndpoint(baseMicroserviceUrl + isCollectionExistsMicroserviceAPI + "/" + collectionName);
 

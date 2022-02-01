@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.searchclient.clientwrapper.domain.dto.solr.SolrResponseDTO;
+import com.searchclient.clientwrapper.domain.dto.solr.ResponseDTO;
 import com.searchclient.clientwrapper.domain.utils.DocumentParserUtil;
 import com.searchclient.clientwrapper.domain.utils.DocumentParserUtil.DocumentSatisfiesSchemaResponse;
 import com.searchclient.clientwrapper.domain.utils.MicroserviceHttpGateway;
@@ -66,7 +66,7 @@ public class SolrDocumentServiceTest {
 	}
 
 	public void setMockitoSuccessResponseForService() {
-		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
+		ResponseDTO solrResponseDTO = new ResponseDTO(collectionName);
 		solrResponseDTO.setStatusCode(200);
 		solrResponseDTO.setMessage("Testing");
 
@@ -86,7 +86,7 @@ public class SolrDocumentServiceTest {
 	}
 
 	public void setMockitoBadResponseForService() {
-		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
+		ResponseDTO solrResponseDTO = new ResponseDTO(collectionName);
 		solrResponseDTO.setStatusCode(400);
 		solrResponseDTO.setMessage("Testing");
 		JsonObject = new JSONObject(solrResponseDTO);
@@ -105,11 +105,11 @@ public class SolrDocumentServiceTest {
 		int statusCode = 200;
 
 		setMockitoSuccessResponseForService();
-		SolrResponseDTO solrresponseDto = solrDocumentService.addDocuments(collectionName, payload, true);
+		ResponseDTO solrresponseDto = solrDocumentService.addDocuments(collectionName, payload, true);
 		assertEquals(statusCode, solrresponseDto.getStatusCode());
 
 		setMockitoBadResponseForService();
-		SolrResponseDTO solrResponseDto = solrDocumentService.addDocuments(collectionName, payload, false);
+		ResponseDTO solrResponseDto = solrDocumentService.addDocuments(collectionName, payload, false);
 		assertNotEquals(statusCode, solrResponseDto.getStatusCode());
 
 	}

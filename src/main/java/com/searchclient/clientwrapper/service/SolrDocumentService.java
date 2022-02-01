@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.searchclient.clientwrapper.domain.dto.solr.SolrResponseDTO;
+import com.searchclient.clientwrapper.domain.dto.solr.ResponseDTO;
 import com.searchclient.clientwrapper.domain.port.api.SolrDocumentServicePort;
 import com.searchclient.clientwrapper.domain.utils.DocumentParserUtil;
 import com.searchclient.clientwrapper.domain.utils.MicroserviceHttpGateway;
@@ -33,9 +33,9 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 	DocumentParserUtil documentparserUtil;
 
 	@Override
-	public SolrResponseDTO addDocuments(String collectionName, String payload, boolean isNRT) {
+	public ResponseDTO addDocuments(String collectionName, String payload, boolean isNRT) {
 
-		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
+		ResponseDTO solrResponseDTO = new ResponseDTO(collectionName);
 
 		Map<String, Map<String, Object>> schemaKeyValuePair = documentparserUtil
 				.getSchemaOfCollection(baseMicroserviceUrl, collectionName);

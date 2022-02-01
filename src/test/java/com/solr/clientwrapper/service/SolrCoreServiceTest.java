@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.searchclient.clientwrapper.domain.dto.solr.SolrResponseDTO;
+import com.searchclient.clientwrapper.domain.dto.solr.ResponseDTO;
 import com.searchclient.clientwrapper.domain.port.api.SolrCoreServicePort;
 import com.searchclient.clientwrapper.domain.utils.MicroserviceHttpGateway;
 import com.searchclient.clientwrapper.service.SolrCoreService;
@@ -44,7 +44,7 @@ class SolrCoreServiceTest {
 	JSONObject jsonObject;
 
 	public void setMockitoSuccessResponseForService() {
-		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(coreName);
+		ResponseDTO solrResponseDTO = new ResponseDTO(coreName);
 		solrResponseDTO.setStatusCode(200);
 		solrResponseDTO.setMessage("Testing");
 
@@ -60,7 +60,7 @@ class SolrCoreServiceTest {
 	}
 
 	public void setMockitoBadResponseForService() {
-		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(coreName);
+		ResponseDTO solrResponseDTO = new ResponseDTO(coreName);
 		solrResponseDTO.setStatusCode(400);
 		solrResponseDTO.setMessage("Testing");
 
@@ -80,13 +80,13 @@ class SolrCoreServiceTest {
 
 		// Create Core
 		setMockitoSuccessResponseForService();
-		SolrResponseDTO solrresponseDto = solrcoreservice.create(coreName);
+		ResponseDTO solrresponseDto = solrcoreservice.create(coreName);
 		assertEquals(statusCode, solrresponseDto.getStatusCode());
 
 		// Create core with Existing CoreName
 
 		setMockitoBadResponseForService();
-		SolrResponseDTO solrResponseDTO = solrcoreservice.create(coreName);
+		ResponseDTO solrResponseDTO = solrcoreservice.create(coreName);
 		assertNotEquals(statusCode, solrResponseDTO.getStatusCode());
 	}
 
@@ -96,13 +96,13 @@ class SolrCoreServiceTest {
 
 		// Delete Core
 		setMockitoSuccessResponseForService();
-		SolrResponseDTO solrresponseDto = solrcoreservice.delete(coreName);
+		ResponseDTO solrresponseDto = solrcoreservice.delete(coreName);
 		assertEquals(statusCode, solrresponseDto.getStatusCode());
 
 		// delete core with NonExisting CoreName
 
 		setMockitoBadResponseForService();
-		SolrResponseDTO solrResponseDTO = solrcoreservice.delete(coreName);
+		ResponseDTO solrResponseDTO = solrcoreservice.delete(coreName);
 		assertNotEquals(statusCode, solrResponseDTO.getStatusCode());
 	}
 
@@ -112,12 +112,12 @@ class SolrCoreServiceTest {
 
 		// Rename Core
 		setMockitoSuccessResponseForService();
-		SolrResponseDTO solrresponseDto = solrcoreservice.rename(coreName, newCoreName);
+		ResponseDTO solrresponseDto = solrcoreservice.rename(coreName, newCoreName);
 		assertEquals(statusCode, solrresponseDto.getStatusCode());
 
 		// rename core with NonExisting CoreName
 		setMockitoBadResponseForService();
-		SolrResponseDTO solrResponseDTO = solrcoreservice.rename("oldCore", newCoreName);
+		ResponseDTO solrResponseDTO = solrcoreservice.rename("oldCore", newCoreName);
 		assertNotEquals(statusCode, solrResponseDTO.getStatusCode());
 	}
 
@@ -127,12 +127,12 @@ class SolrCoreServiceTest {
 
 		// Swap Two Core with Existing Core
 		setMockitoSuccessResponseForService();
-		SolrResponseDTO solrresponseDto = solrcoreservice.swap(coreName, newCoreName);
+		ResponseDTO solrresponseDto = solrcoreservice.swap(coreName, newCoreName);
 		assertEquals(statusCode, solrresponseDto.getStatusCode());
 
 		// Swap core with NonExisting Core
 		setMockitoBadResponseForService();
-		SolrResponseDTO solrResponseDTO = solrcoreservice.swap("oldCore", newCoreName);
+		ResponseDTO solrResponseDTO = solrcoreservice.swap("oldCore", newCoreName);
 		assertNotEquals(statusCode, solrResponseDTO.getStatusCode());
 	}
 
@@ -142,12 +142,12 @@ class SolrCoreServiceTest {
 
 		// Reload Existing Core
 		setMockitoSuccessResponseForService();
-		SolrResponseDTO solrresponseDto = solrcoreservice.reload(coreName);
+		ResponseDTO solrresponseDto = solrcoreservice.reload(coreName);
 		assertEquals(statusCode, solrresponseDto.getStatusCode());
 
 		// Reload core with NonExisting Core
 		setMockitoBadResponseForService();
-		SolrResponseDTO solrResponseDTO = solrcoreservice.reload("oldCore");
+		ResponseDTO solrResponseDTO = solrcoreservice.reload("oldCore");
 		assertNotEquals(statusCode, solrResponseDTO.getStatusCode());
 	}
 

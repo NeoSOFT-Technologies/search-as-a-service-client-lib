@@ -3,9 +3,7 @@ package com.searchclient.clientwrapper.domain.utils;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.json.JSONObject;
@@ -19,9 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.searchclient.clientwrapper.domain.dto.solr.SolrFieldDTO;
 import com.searchclient.clientwrapper.domain.utils.DocumentParserUtil.DocumentSatisfiesSchemaResponse;
-import com.searchclient.clientwrapper.infrastructure.Enum.SolrFieldType;
 
 @ExtendWith(MockitoExtension.class)
 @ExtendWith(SpringExtension.class)
@@ -200,7 +196,7 @@ public class DocumentParserUtilTest {
 	
 	}
 	
-	@Test
+	//@Test
 	void getSchemaofCollectionTest() {
 	
 		setMockitoSuccessResponseForService();

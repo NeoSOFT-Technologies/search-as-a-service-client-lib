@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.searchclient.clientwrapper.domain.dto.solr.SolrResponseDTO;
+import com.searchclient.clientwrapper.domain.dto.solr.ResponseDTO;
 import com.searchclient.clientwrapper.domain.dto.solr.core.SolrDoubleCoreDTO;
 import com.searchclient.clientwrapper.domain.dto.solr.core.SolrSingleCoreDTO;
 import com.searchclient.clientwrapper.domain.port.api.SolrCoreServicePort;
@@ -42,13 +42,13 @@ public class SolrCoreService implements SolrCoreServicePort {
 	MicroserviceHttpGateway microserviceHttpGateway;
 
 	@Override
-	public SolrResponseDTO create(String coreName) {
+	public ResponseDTO create(String coreName) {
 
 		log.debug("create");
 
 		SolrSingleCoreDTO solrSingleCore = new SolrSingleCoreDTO(coreName);
 
-		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(coreName);
+		ResponseDTO solrResponseDTO = new ResponseDTO(coreName);
 
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + createMicroserviceAPI);
 		microserviceHttpGateway.setRequestBodyDTO(solrSingleCore);
@@ -61,12 +61,12 @@ public class SolrCoreService implements SolrCoreServicePort {
 	}
 
 	@Override
-	public SolrResponseDTO rename(String coreName, String newName) {
+	public ResponseDTO rename(String coreName, String newName) {
 
 		log.debug("rename");
 
 		SolrDoubleCoreDTO solrSingleCore = new SolrDoubleCoreDTO(coreName, newName);
-		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(coreName);
+		ResponseDTO solrResponseDTO = new ResponseDTO(coreName);
 
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + renameMicroserviceAPI);
 		microserviceHttpGateway.setRequestBodyDTO(solrSingleCore);
@@ -80,11 +80,11 @@ public class SolrCoreService implements SolrCoreServicePort {
 	}
 
 	@Override
-	public SolrResponseDTO delete(String coreName) {
+	public ResponseDTO delete(String coreName) {
 
 		log.debug("delete" + coreName);
 
-		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(coreName);
+		ResponseDTO solrResponseDTO = new ResponseDTO(coreName);
 
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + deleteMicroserviceAPI + "/" + coreName);
 
@@ -98,11 +98,11 @@ public class SolrCoreService implements SolrCoreServicePort {
 	}
 
 	@Override
-	public SolrResponseDTO swap(String coreOne, String coreTwo) {
+	public ResponseDTO swap(String coreOne, String coreTwo) {
 
 		log.debug("swap");
 		SolrDoubleCoreDTO solrSingleCore = new SolrDoubleCoreDTO(coreOne, coreTwo);
-		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(coreOne);
+		ResponseDTO solrResponseDTO = new ResponseDTO(coreOne);
 
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + swapMicroserviceAPI);
 		microserviceHttpGateway.setRequestBodyDTO(solrSingleCore);
@@ -117,11 +117,11 @@ public class SolrCoreService implements SolrCoreServicePort {
 	}
 
 	@Override
-	public SolrResponseDTO reload(String coreName) {
+	public ResponseDTO reload(String coreName) {
 
 		log.debug("reload");
 		SolrSingleCoreDTO solrSingleCore = new SolrSingleCoreDTO(coreName);
-		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(coreName);
+		ResponseDTO solrResponseDTO = new ResponseDTO(coreName);
 
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + reloadMicroserviceAPI);
 

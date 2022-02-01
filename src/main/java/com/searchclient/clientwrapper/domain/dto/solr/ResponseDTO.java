@@ -11,13 +11,13 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 @Builder
 @AllArgsConstructor
-public class SolrResponseDTO {
+public class ResponseDTO {
 
     private int statusCode;
     private String name;
     private String message;
 
-    public SolrResponseDTO(String name) {
+    public ResponseDTO(String name) {
         this.name = name;
     }
 }

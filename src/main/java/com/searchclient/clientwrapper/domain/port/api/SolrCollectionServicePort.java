@@ -1,21 +1,21 @@
 package com.searchclient.clientwrapper.domain.port.api;
 
-import com.searchclient.clientwrapper.domain.dto.solr.SolrResponseDTO;
-import com.searchclient.clientwrapper.domain.dto.solr.collection.SolrGetCapacityPlanDTO;
-import com.searchclient.clientwrapper.domain.dto.solr.collection.SolrGetCollectionsResponseDTO;
+import com.searchclient.clientwrapper.domain.dto.solr.ResponseDTO;
+import com.searchclient.clientwrapper.domain.dto.solr.collection.GetCapacityPlanDTO;
+import com.searchclient.clientwrapper.domain.dto.solr.collection.GetCollectionsResponseDTO;
 
 public interface SolrCollectionServicePort {
 
-    SolrResponseDTO create(String collectionName, String sku);
+    ResponseDTO create(String collectionName, String sku);
 
-    SolrResponseDTO delete(String collectionName);
+    ResponseDTO delete(String collectionName);
 
     //SolrResponseDTO rename(String collectionName, String collectionNewName);
 
-    SolrGetCollectionsResponseDTO getCollections();
+    GetCollectionsResponseDTO getCollections();
 
-    SolrGetCapacityPlanDTO capacityPlans();
+    GetCapacityPlanDTO capacityPlans();
 
-    SolrResponseDTO isCollectionExists(String collectionName);
+    ResponseDTO isCollectionExists(String collectionName);
 
 }

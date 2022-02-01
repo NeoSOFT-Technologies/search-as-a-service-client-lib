@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode
-public class SolrGetCollectionsResponseDTO {
+public class GetCollectionsResponseDTO {
 
     private int statusCode;
     private String message;

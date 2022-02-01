@@ -1,18 +1,18 @@
 package com.searchclient.clientwrapper.domain.port.api;
 
-import com.searchclient.clientwrapper.domain.dto.solr.SolrResponseDTO;
+import com.searchclient.clientwrapper.domain.dto.solr.ResponseDTO;
 
 public interface SolrCoreServicePort {
 
-    SolrResponseDTO create(String coreName);
+    ResponseDTO create(String coreName);
 
-    SolrResponseDTO rename(String coreName, String newName);
+    ResponseDTO rename(String coreName, String newName);
 
-    SolrResponseDTO delete(String coreName);
+    ResponseDTO delete(String coreName);
 
-    SolrResponseDTO swap(String coreOne, String coreTwo);
+    ResponseDTO swap(String coreOne, String coreTwo);
 
-    SolrResponseDTO reload(String coreName);
+    ResponseDTO reload(String coreName);
 
     String status(String coreName);
 
