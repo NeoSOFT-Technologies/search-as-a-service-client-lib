@@ -2,10 +2,12 @@ package com.searchclient.clientwrapper.domain.port.api;
 
 import com.searchclient.clientwrapper.domain.dto.solr.ManageTableResponseDTO;
 import com.searchclient.clientwrapper.domain.dto.solr.ResponseDTO;
-import com.searchclient.clientwrapper.domain.dto.solr.SolrSchemaDTO;
-import com.searchclient.clientwrapper.domain.dto.solr.collection.GetCapacityPlanDTO;
-import com.searchclient.clientwrapper.domain.dto.solr.collection.GetCollectionsResponseDTO;
 import com.searchclient.clientwrapper.domain.dto.solr.collection.ManageTableDTO;
+import com.searchclient.clientwrapper.domain.dto.solr.managetable.GetListItemsResponseDTO;
+import com.searchclient.clientwrapper.domain.dto.solr.managetable.GetManageCapacityPlanDTO;
+import com.searchclient.clientwrapper.domain.dto.solr.managetable.SchemaDTO;
+import com.searchclient.clientwrapper.domain.dto.solr.managetable.TableSchemaResponseDTO;
+
 
 public interface ManageTableServicePort {
 
@@ -17,19 +19,19 @@ public interface ManageTableServicePort {
 	ManageTableDTO create(String tableName,ManageTableDTO manageTableDTO);
 
 	// Update requests
-	ManageTableResponseDTO update(String tableName, SolrSchemaDTO solrSchemaDTO);
+	ManageTableResponseDTO update(String tableName, SchemaDTO schemaDTO);
 
 	// DELETE requests
 
 	ResponseDTO delete(String collectionName);
 
-	// Get requests
-	ManageTableResponseDTO get(String tableName);
+	// Get Schema requests
+	TableSchemaResponseDTO getTableSchemaIfPresent(String tableName);
 
-	// get Table requests
-	GetCollectionsResponseDTO getCollections();
+	// get Tables requests
+	GetListItemsResponseDTO getTables();
 
 	// get capacityPlans requests
-	GetCapacityPlanDTO capacityPlans();
+	GetManageCapacityPlanDTO capacityPlans();
 
 }

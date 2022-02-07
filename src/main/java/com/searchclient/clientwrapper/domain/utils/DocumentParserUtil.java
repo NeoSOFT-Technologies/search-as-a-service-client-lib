@@ -23,7 +23,7 @@ import lombok.Data;
 public class DocumentParserUtil {
 
 	@Autowired
-	MicroserviceHttpGateway microserviceHttpGateway;
+	MicroserviceHttpGateway microserviceHttpGateway ;
 	
 	@Autowired
 	ObjectMapper objectMapper;

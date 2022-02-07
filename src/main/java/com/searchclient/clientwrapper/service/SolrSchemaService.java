@@ -9,8 +9,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.searchclient.clientwrapper.domain.dto.solr.SolrFieldDTO;
@@ -22,6 +22,7 @@ import com.searchclient.clientwrapper.infrastructure.Enum.SolrFieldType;
 
 @Service
 @Transactional
+@Component
 public class SolrSchemaService implements SolrSchemaServicePort {
 
 	private final Logger log = LoggerFactory.getLogger(SolrSchemaService.class);
@@ -41,8 +42,7 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 	@Value("${microservice-url.schema.delete}")
 	private String deleteMicroserviceAPI;
 
-	@Autowired
-	MicroserviceHttpGateway microserviceHttpGateway;
+	MicroserviceHttpGateway microserviceHttpGateway= new MicroserviceHttpGateway();
 
 	@Override
 	public SolrSchemaResponseDTO get(String tableName) {
@@ -64,7 +64,7 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 
 			SolrFieldDTO sfd = new SolrFieldDTO();
 
-			sfd.setMultiValued(childJsonObject.getBoolean("multiValued"));
+			sfd.setMultiValue(childJsonObject.getBoolean("multiValued"));
 			sfd.setDefault_(childJsonObject.getString("default_"));
 			sfd.setIndexed(childJsonObject.getBoolean("indexed"));
 			sfd.setName(childJsonObject.getString("name"));
@@ -104,7 +104,7 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 
 			SolrFieldDTO sfd = new SolrFieldDTO();
 
-			sfd.setMultiValued(childJsonObject.getBoolean("multiValued"));
+			sfd.setMultiValue(childJsonObject.getBoolean("multiValue"));
 			sfd.setDefault_(childJsonObject.getString("default_"));
 			sfd.setIndexed(childJsonObject.getBoolean("indexed"));
 			sfd.setName(childJsonObject.getString("name"));
@@ -156,12 +156,12 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 
 			SolrFieldDTO sfd = new SolrFieldDTO();
 
-			sfd.setMultiValued(childJsonObject.getBoolean("multiValued"));
+			sfd.setMultiValue(childJsonObject.getBoolean("multiValue"));
 			sfd.setDefault_(childJsonObject.getString("default_"));
-			sfd.setIndexed(childJsonObject.getBoolean("indexed"));
+			//sfd.setIndexed(childJsonObject.getBoolean("indexed"));
 			sfd.setName(childJsonObject.getString("name"));
 			sfd.setRequired(childJsonObject.getBoolean("required"));
-			sfd.setDocValues(childJsonObject.getBoolean("docValues"));
+			//sfd.setDocValues(childJsonObject.getBoolean("docValues"));
 			sfd.setStorable(childJsonObject.getBoolean("storable"));
 			sfd.setType(SolrFieldType.fromObject(childJsonObject.get("type").toString()));
 

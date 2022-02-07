@@ -245,10 +245,16 @@ microservice-url:
     delete: /api/schema
   document:
     input: /api/documents
-
+  manage-table:
+    create: /api/v1/manage/table
+    get-collections: /api/v1/manage/table
+    get-capacityplan: /api/v1/manage/table/capacity-plans
+    get-schema: /api/v1/manage/table/schema
+    update: /api/v1/manage/table
+    delete: /api/v1/manage/table
 # Throttler configurations
 base-app-url: http://localhost:8080
-throttler-test-app-url: http://localhost:8081
+throttler-test-app-url: http://localhost:8082
 resilience4j.ratelimiter:
   instances:
     solrDataInjectionRateLimitThrottler:

@@ -13,19 +13,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.searchclient.clientwrapper.domain.dto.solr.SolrFieldDTO;
 import com.searchclient.clientwrapper.domain.dto.solr.ManageTableResponseDTO;
 import com.searchclient.clientwrapper.domain.dto.solr.ResponseDTO;
-import com.searchclient.clientwrapper.domain.dto.solr.SolrSchemaDTO;
-import com.searchclient.clientwrapper.domain.dto.solr.SolrSchemaResponseDTO;
 import com.searchclient.clientwrapper.domain.dto.solr.collection.CapacityPlanDTO;
-import com.searchclient.clientwrapper.domain.dto.solr.collection.GetCapacityPlanDTO;
 import com.searchclient.clientwrapper.domain.dto.solr.collection.ManageTableDTO;
-import com.searchclient.clientwrapper.domain.dto.solr.collection.GetCollectionsResponseDTO;
+import com.searchclient.clientwrapper.domain.dto.solr.managetable.CapacityPlanProperties;
+import com.searchclient.clientwrapper.domain.dto.solr.managetable.GetListItemsResponseDTO;
+import com.searchclient.clientwrapper.domain.dto.solr.managetable.GetManageCapacityPlanDTO;
+import com.searchclient.clientwrapper.domain.dto.solr.managetable.SchemaDTO;
+import com.searchclient.clientwrapper.domain.dto.solr.managetable.SchemaFieldDTO;
+import com.searchclient.clientwrapper.domain.dto.solr.managetable.TableSchemaResponseDTO;
 import com.searchclient.clientwrapper.domain.port.api.ManageTableServicePort;
-import com.searchclient.clientwrapper.domain.port.api.SolrCollectionServicePort;
 import com.searchclient.clientwrapper.domain.utils.MicroserviceHttpGateway;
-import com.searchclient.clientwrapper.infrastructure.Enum.SolrFieldType;
 
 @Service
 @Transactional
@@ -36,41 +35,41 @@ public class ManageTableService implements ManageTableServicePort {
 	@Value("${base-microservice-url}")
 	private String baseMicroserviceUrl;
 
-	@Value("${microservice-url.table-collection.create}")
+	@Value("${microservice-url.manage-table.create}")
 	private String createMicroserviceAPI;
 
-	@Value("${microservice-url.table-collection.delete}")
+	@Value("${microservice-url.manage-table.delete}")
 	private String deleteMicroserviceAPI;
 
-	@Value("${microservice-url.table-collection.rename}")
+	@Value("${microservice-url.manage-table.update}")
 	private String renameMicroserviceAPI;
 
-	@Value("${microservice-url.table-collection.get-collections}")
+	@Value("${microservice-url.manage-table.get-collections}")
 	private String getCollectionsMicroserviceAPI;
 
-	@Value("${microservice-url.table-collection.is-collection-exists}")
-	private String isCollectionExistsMicroserviceAPI;
+	@Value("${microservice-url.manage-table.get-schema}")
+	private String getMicroserviceAPI;
 
-	@Value("${microservice-url.table-collection.get-capacity-plans}")
+	@Value("${microservice-url.manage-table.get-capacity-plan}")
 	private String getcapacityplansMicroserviceAPI;
 
 	@Autowired
-	SolrCollectionServicePort solrCollectionServicePort;
+	CapacityPlanProperties capacityPlanProperties;
 
 	@Autowired
 	MicroserviceHttpGateway microserviceHttpGateway;
 
 	@Override
-	public GetCapacityPlanDTO capacityPlans() {
-		GetCapacityPlanDTO solrgetCapacityPlans = new GetCapacityPlanDTO();
+	public GetManageCapacityPlanDTO capacityPlans() {
+
+		GetManageCapacityPlanDTO solrgetCapacityPlans = new GetManageCapacityPlanDTO();
 
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + getcapacityplansMicroserviceAPI);
 		JSONObject jsonObject = microserviceHttpGateway.getRequest();
 
-		log.debug("Response :{}", jsonObject);
+		List<CapacityPlanProperties.Plan> capacityPlans = capacityPlanProperties.getPlans();
 
 		JSONArray jsonArray = (JSONArray) jsonObject.get("plans");
-
 		List<CapacityPlanDTO> capacityplan = new ArrayList<CapacityPlanDTO>();
 
 		for (int i = 0; i < jsonArray.length(); i++) {
@@ -81,6 +80,7 @@ public class ManageTableService implements ManageTableServicePort {
 			cpd.setReplicas(childJsonObject.getInt("replicas"));
 			cpd.setShards(childJsonObject.getInt("shards"));
 			cpd.setStorage(childJsonObject.getInt("storage"));
+
 			capacityplan.add(cpd);
 		}
 		solrgetCapacityPlans.setPlans(capacityplan);
@@ -90,9 +90,9 @@ public class ManageTableService implements ManageTableServicePort {
 	}
 
 	@Override
-	public GetCollectionsResponseDTO getCollections() {
+	public GetListItemsResponseDTO getTables() {
 
-		GetCollectionsResponseDTO solrGetCollectionsResponseDTO = new GetCollectionsResponseDTO();
+		GetListItemsResponseDTO solrGetCollectionsResponseDTO = new GetListItemsResponseDTO();
 
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + getCollectionsMicroserviceAPI);
 		JSONObject jsonObject = microserviceHttpGateway.getRequest();
@@ -100,108 +100,109 @@ public class ManageTableService implements ManageTableServicePort {
 		solrGetCollectionsResponseDTO.setMessage(jsonObject.get("message").toString());
 		solrGetCollectionsResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
 
-		List<String> collections = new ArrayList<>();
-		JSONArray jsonArray = (JSONArray) jsonObject.get("collections");
+		List<String> items = new ArrayList<>();
+		JSONArray jsonArray = (JSONArray) jsonObject.get("items");
 		for (int i = 0; i < jsonArray.length(); i++) {
-			collections.add(jsonArray.getString(i));
+			items.add(jsonArray.getString(i));
 		}
-		solrGetCollectionsResponseDTO.setCollections(collections);
+		solrGetCollectionsResponseDTO.setItems(items);
 
 		return solrGetCollectionsResponseDTO;
 
 	}
 
 	@Override
-	public ResponseDTO delete(String collectionName) {
+	public ResponseDTO delete(String tableName) {
 
-		ResponseDTO solrResponseDTO = new ResponseDTO(collectionName);
+		ResponseDTO solrResponseDTO = new ResponseDTO(tableName);
 
 		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
-		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + deleteMicroserviceAPI + "/" + collectionName);
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + deleteMicroserviceAPI + "/" + tableName);
 		JSONObject jsonObject = microserviceHttpGateway.deleteRequest();
 
-		solrResponseDTO.setMessage(jsonObject.get("message").toString());
-		solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
+
 
 		return solrResponseDTO;
 
 	}
 
 	@Override
-	public ManageTableResponseDTO update(String tableName, SolrSchemaDTO newSolrSchemaDTO) {
+	public ManageTableResponseDTO update(String tableName, SchemaDTO schemaDTO) {
 		log.debug("Update Solr Schema");
-		log.debug("Target Schema: {}", newSolrSchemaDTO);
+		log.debug("Target Schema: {}", schemaDTO);
 
-		ManageTableResponseDTO manageTableResponseDTO = new ManageTableResponseDTO(tableName, "");
+		ManageTableResponseDTO solrSchemaResponseDTO = new ManageTableResponseDTO(tableName, "");
 
-		microserviceHttpGateway.setRequestBodyDTO(newSolrSchemaDTO);
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + renameMicroserviceAPI + "/" + tableName);
+		microserviceHttpGateway.setRequestBodyDTO(schemaDTO);
 
 		JSONObject jsonObject = microserviceHttpGateway.putRequest();
 
 		log.debug("Response :{}", jsonObject);
 
-		JSONArray jsonArray = (JSONArray) jsonObject.get("attributes");
+//		JSONArray jsonArray = (JSONArray) jsonObject.get("attributes");
+//
+//		List<SchemaFieldDTO> attributes = new ArrayList<SchemaFieldDTO>();
+//
+//		for (int i = 0; i < jsonArray.length(); i++) {
+//
+//			JSONObject childJsonObject = (JSONObject) jsonArray.get(i);
+//
+//			SchemaFieldDTO sfd = new SchemaFieldDTO();
+//
+//			sfd.setMultiValue(childJsonObject.getBoolean("multiValue"));
+//			sfd.setDefault_(childJsonObject.getString("default_"));
+//			// sfd.setIndexed(childJsonObject.getBoolean("indexed"));
+//			sfd.setName(childJsonObject.getString("name"));
+//			sfd.setRequired(childJsonObject.getBoolean("required"));
+//			// sfd.setDocValues(childJsonObject.getBoolean("docValues"));
+//			sfd.setStorable(childJsonObject.getBoolean("storable"));
+//			// sfd.setType(SchemaFieldDTO.fromObject(childJsonObject.get("type").toString()));
+//
+//			attributes.add(sfd);
 
-		List<SolrFieldDTO> attributes = new ArrayList<SolrFieldDTO>();
-		for (int i = 0; i < jsonArray.length(); i++) {
+		// }
+		solrSchemaResponseDTO.setStatusCode((int) jsonObject.get("responseStatusCode"));
 
-			JSONObject childJsonObject = (JSONObject) jsonArray.get(i);
-
-			SolrFieldDTO sfd = new SolrFieldDTO();
-
-			sfd.setMultiValued(childJsonObject.getBoolean("multiValued"));
-			sfd.setDefault_(childJsonObject.getString("default_"));
-			sfd.setIndexed(childJsonObject.getBoolean("indexed"));
-			sfd.setName(childJsonObject.getString("name"));
-			sfd.setRequired(childJsonObject.getBoolean("required"));
-			sfd.setDocValues(childJsonObject.getBoolean("docValues"));
-			sfd.setStorable(childJsonObject.getBoolean("storable"));
-			sfd.setType(SolrFieldType.fromObject(childJsonObject.get("type").toString()));
-
-			attributes.add(sfd);
-
-		}
-		manageTableResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
-		manageTableResponseDTO.setAttributes(attributes);
-		return manageTableResponseDTO;
+		return solrSchemaResponseDTO;
 	}
 
 	@Override
-	public ManageTableResponseDTO get(String tableName) {
+	public TableSchemaResponseDTO getTableSchemaIfPresent(String tableName) {
 		log.debug("Get Solr Schema");
 
-		ManageTableResponseDTO manageTableResponseDTO = new ManageTableResponseDTO(tableName, "");
+		TableSchemaResponseDTO solrSchemaResponsedto = new TableSchemaResponseDTO(tableName, "");
 
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + getMicroserviceAPI + "/" + tableName);
 		JSONObject jsonObject = microserviceHttpGateway.getRequest();
 
 		log.debug("Response :{}", jsonObject);
 
 		JSONArray jsonArray = (JSONArray) jsonObject.get("attributes");
 
-		List<SolrFieldDTO> attributes = new ArrayList<SolrFieldDTO>();
+		List<SchemaFieldDTO> attributes = new ArrayList<SchemaFieldDTO>();
 		for (int i = 0; i < jsonArray.length(); i++) {
 
 			JSONObject childJsonObject = (JSONObject) jsonArray.get(i);
 
-			SolrFieldDTO sfd = new SolrFieldDTO();
+			SchemaFieldDTO sfd = new SchemaFieldDTO();
 
-			sfd.setMultiValued(childJsonObject.getBoolean("multiValued"));
+			sfd.setMultiValue(childJsonObject.getBoolean("multiValue"));
 			sfd.setDefault_(childJsonObject.getString("default_"));
-			sfd.setIndexed(childJsonObject.getBoolean("indexed"));
+			// sfd.setIndexed(childJsonObject.getBoolean("indexed"));
 			sfd.setName(childJsonObject.getString("name"));
 			sfd.setRequired(childJsonObject.getBoolean("required"));
-			sfd.setDocValues(childJsonObject.getBoolean("docValues"));
+			// sfd.setDocValues(childJsonObject.getBoolean("docValues"));
 			sfd.setStorable(childJsonObject.getBoolean("storable"));
-			sfd.setType(SolrFieldType.fromObject(childJsonObject.get("type").toString()));
+			// sfd.setType(SolrFieldType.fromObject(childJsonObject.get("type").toString()));
 
 			attributes.add(sfd);
 
 		}
-		manageTableResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
-		manageTableResponseDTO.setAttributes(attributes);
-		return manageTableResponseDTO;
+		solrSchemaResponsedto.setStatusCode((int) jsonObject.get("statusCode"));
+		solrSchemaResponsedto.setAttributes(attributes);
+		return solrSchemaResponsedto;
 	}
-	
 
 	@Override
 	public ManageTableDTO create(String tableName, ManageTableDTO manageTableDTO) {
@@ -209,11 +210,12 @@ public class ManageTableService implements ManageTableServicePort {
 		ManageTableDTO ManageTableDTO1 = new ManageTableDTO(tableName, "", manageTableDTO.getAttributes());
 
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + createMicroserviceAPI);
-		microserviceHttpGateway.setRequestBodyDTO(ManageTableDTO1);
+		microserviceHttpGateway.setRequestBodyDTO(manageTableDTO);
 
 		JSONObject jsonObject = microserviceHttpGateway.postRequest();
-		ManageTableDTO1.setResponseStatusCode((int) jsonObject.get("statusCode"));
-        return ManageTableDTO1;
+
+		ManageTableDTO1.setResponseStatusCode((int) jsonObject.get("responseStatusCode"));
+		return ManageTableDTO1;
 
 	}
 }
