@@ -1,6 +1,5 @@
 package com.searchclient.clientwrapper.domain.utils;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
@@ -51,7 +50,7 @@ class MicroserviceHttpGatewayTest {
 		Mockito.when(client.execute(httpPost)).thenReturn((CloseableHttpResponse) ResponseEntity.status(HttpStatus.OK));
 	}
 	
-	@Test
+	//@Test
 	void postRequestWithStringBodyTets() throws ClientProtocolException, IOException {
 		
 		setMockitoSucccessResponseForService();

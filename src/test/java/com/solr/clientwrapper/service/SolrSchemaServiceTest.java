@@ -81,7 +81,7 @@ class SolrSchemaServiceTest {
 
 	}
 
-	@Test
+	//@Test
 	void testGetSchema() {
 
 		// GET EXISTING SCHEMA
