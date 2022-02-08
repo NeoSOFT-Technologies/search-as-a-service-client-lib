@@ -1,6 +1,11 @@
 package com.searchclient.clientwrapper.service;
 
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -8,8 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
+import com.searchclient.clientwrapper.domain.dto.logger.CorrelationID;
 import com.searchclient.clientwrapper.domain.dto.solr.SolrResponseDTO;
 import com.searchclient.clientwrapper.domain.port.api.SolrDocumentServicePort;
 import com.searchclient.clientwrapper.domain.utils.DocumentParserUtil;
@@ -26,11 +33,31 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 	@Autowired
 	MicroserviceHttpGateway microserviceHttpGateway;
 
+    CorrelationID correlationID=new CorrelationID();
+    
+    @Autowired
+    HttpServletRequest request;
+    
+    ZonedDateTime utc = ZonedDateTime.now(ZoneOffset.UTC);
+    
+    private String servicename = "Solr_Document_Service";
+    
+    private String username = "Username";  
+
 	@Autowired
 	DocumentParserUtil documentparserUtil;
 
 	@Override
 	public SolrResponseDTO addDocuments(String collectionName, String payload, boolean isNRT) {
+		log.debug("Add Documents");
+		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
+		String correlationid = correlationID.generateUniqueCorrelationId();
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.set(CorrelationID.CORRELATION_ID_HEADER_NAME, correlationid); 	
+		String ipaddress=request.getRemoteAddr();
+		String timestamp=utc.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        log.info("--------Started Request of Service Name : {} , Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",servicename,username,correlationid,ipaddress,timestamp,nameofCurrMethod);
+
 
 		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
 
@@ -107,7 +134,7 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 		System.out.println("jsonString:::" + jsonObject);
 		solrResponseDTO.setMessage(jsonObject.get("message").toString());
 		solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
-
+		log.info("-----------Successfully Resopnse Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",username,correlationid,ipaddress,timestamp,nameofCurrMethod);
 		return solrResponseDTO;
 
 	}

@@ -1,7 +1,12 @@
 package com.searchclient.clientwrapper.service;
 
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -9,7 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+
+import com.searchclient.clientwrapper.domain.dto.logger.CorrelationID;
 import com.searchclient.clientwrapper.domain.dto.solr.SolrResponseDTO;
 import com.searchclient.clientwrapper.domain.dto.solr.collection.CapacityPlanDTO;
 import com.searchclient.clientwrapper.domain.dto.solr.collection.SolrCreateCollectionDTO;
@@ -37,12 +45,31 @@ public class SolrCollectionService implements SolrCollectionServicePort {
     
     @Autowired
     MicroserviceHttpGateway microserviceHttpGateway;
+    
+    CorrelationID correlationID=new CorrelationID();
+    
+    @Autowired
+    HttpServletRequest request;
+    
+    ZonedDateTime utc = ZonedDateTime.now(ZoneOffset.UTC);
+    
+    private String servicename = "Collection_Service";
+    
+    private String username = "Username";  
 
     @Override
     public SolrGetCapacityPlanDTO capacityPlans() {
 SolrGetCapacityPlanDTO solrgetCapacityPlans = new SolrGetCapacityPlanDTO();
 		
-		//MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+		log.debug("Capacity Plans");
+		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
+		String correlationid = correlationID.generateUniqueCorrelationId();
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.set(CorrelationID.CORRELATION_ID_HEADER_NAME, correlationid); 	
+		String ipaddress=request.getRemoteAddr();
+		String timestamp=utc.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+		log.info("--------Started Request of Service Name : {} , Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",servicename,username,correlationid,ipaddress,timestamp,nameofCurrMethod);
+
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/capacity-plans");
 		JSONObject jsonObject = microserviceHttpGateway.getRequest();
 		
@@ -63,13 +90,22 @@ SolrGetCapacityPlanDTO solrgetCapacityPlans = new SolrGetCapacityPlanDTO();
 			capacityplan.add(cpd);
 		}
 		solrgetCapacityPlans.setPlans(capacityplan);
-		
+		log.info("-----------Successfully Resopnse Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",username,correlationid,ipaddress,timestamp,nameofCurrMethod);
 		return solrgetCapacityPlans;
 
 	}
 
     @Override
     public SolrResponseDTO create(String collectionName, String sku) {
+    	
+    	log.debug("Create tables");
+        String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
+		String correlationid = correlationID.generateUniqueCorrelationId();
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.set(CorrelationID.CORRELATION_ID_HEADER_NAME, correlationid); 	
+		String ipaddress=request.getRemoteAddr();
+		String timestamp=utc.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        log.info("--------Started Request of Service Name : {} , Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",servicename,username,correlationid,ipaddress,timestamp,nameofCurrMethod);
 
         SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
 
@@ -100,12 +136,21 @@ SolrGetCapacityPlanDTO solrgetCapacityPlans = new SolrGetCapacityPlanDTO();
 
         solrResponseDTO.setMessage(jsonObject.get("message").toString());
         solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
-
+        log.info("-----------Successfully Resopnse Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",username,correlationid,ipaddress,timestamp,nameofCurrMethod);
         return solrResponseDTO;
     }
 
     @Override
     public SolrResponseDTO delete(String collectionName) {
+    	
+    	log.debug("Delete tables");
+        String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
+		String correlationid = correlationID.generateUniqueCorrelationId();
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.set(CorrelationID.CORRELATION_ID_HEADER_NAME, correlationid); 	
+		String ipaddress=request.getRemoteAddr();
+		String timestamp=utc.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        log.info("--------Started Request of Service Name : {} , Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",servicename,username,correlationid,ipaddress,timestamp,nameofCurrMethod);
 
         SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
 
@@ -116,7 +161,7 @@ SolrGetCapacityPlanDTO solrgetCapacityPlans = new SolrGetCapacityPlanDTO();
 
         solrResponseDTO.setMessage(jsonObject.get("message").toString());
         solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
-
+        log.info("-----------Successfully Resopnse Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",username,correlationid,ipaddress,timestamp,nameofCurrMethod);
         return solrResponseDTO;
 
     }
@@ -124,6 +169,16 @@ SolrGetCapacityPlanDTO solrgetCapacityPlans = new SolrGetCapacityPlanDTO();
     
     @Override
     public SolrGetCollectionsResponseDTO getCollections() {
+    	
+    	log.debug("Get all tables");
+        String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
+		String correlationid = correlationID.generateUniqueCorrelationId();
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.set(CorrelationID.CORRELATION_ID_HEADER_NAME, correlationid); 	
+		String ipaddress=request.getRemoteAddr();
+		String timestamp=utc.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        log.info("--------Started Request of Service Name : {} , Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",servicename,username,correlationid,ipaddress,timestamp,nameofCurrMethod);
+
 
         SolrGetCollectionsResponseDTO solrGetCollectionsResponseDTO = new SolrGetCollectionsResponseDTO();
 
@@ -142,13 +197,23 @@ SolrGetCapacityPlanDTO solrgetCapacityPlans = new SolrGetCapacityPlanDTO();
             collections.add(jsonArray.getString(i));
         }
         solrGetCollectionsResponseDTO.setCollections(collections);
-
+        log.info("-----------Successfully Resopnse Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",username,correlationid,ipaddress,timestamp,nameofCurrMethod);
         return solrGetCollectionsResponseDTO;
 
     }
 
     @Override
     public SolrResponseDTO isCollectionExists(String collectionName) {
+    	
+    	log.debug("isCollectionExists tables");
+        String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
+		String correlationid = correlationID.generateUniqueCorrelationId();
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.set(CorrelationID.CORRELATION_ID_HEADER_NAME, correlationid); 	
+		String ipaddress=request.getRemoteAddr();
+		String timestamp=utc.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        log.info("--------Started Request of Service Name : {} , Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",servicename,username,correlationid,ipaddress,timestamp,nameofCurrMethod);
+
 
         SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
 
@@ -159,7 +224,7 @@ SolrGetCapacityPlanDTO solrgetCapacityPlans = new SolrGetCapacityPlanDTO();
 
         solrResponseDTO.setMessage(jsonObject.get("message").toString());
         solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
-
+        log.info("-----------Successfully Resopnse Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",username,correlationid,ipaddress,timestamp,nameofCurrMethod);
         return solrResponseDTO;
 
     }

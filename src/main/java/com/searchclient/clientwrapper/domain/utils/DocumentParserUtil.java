@@ -1,10 +1,15 @@
 package com.searchclient.clientwrapper.domain.utils;
 
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,9 +17,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.searchclient.clientwrapper.domain.dto.logger.CorrelationID;
 import com.searchclient.clientwrapper.service.SolrDocumentService;
 
 import lombok.Data;
@@ -30,11 +37,29 @@ public class DocumentParserUtil {
 	
 	@Value("${base-solr-url}")
 	private String baseSolrUrl;
+	
+	private static CorrelationID correlationID=new CorrelationID();
+    
+    @Autowired
+    private static HttpServletRequest request;
+    
+    private static ZonedDateTime utc = ZonedDateTime.now(ZoneOffset.UTC);
+    
+    private static String servicename = "Document_Parser";
+    
+    private static String username = "Username";
 
 	private final Logger log = LoggerFactory.getLogger(SolrDocumentService.class);
 
 	private static boolean isNumeric(String string) {
 		Logger log = LoggerFactory.getLogger(DocumentParserUtil.class);
+		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
+		String correlationid = correlationID.generateUniqueCorrelationId();
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.set(CorrelationID.CORRELATION_ID_HEADER_NAME, correlationid); 	
+		String ipaddress=request.getRemoteAddr();
+		String timestamp=utc.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        log.info("--------Started Request of Service Name : {} , Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",servicename,username,correlationid,ipaddress,timestamp,nameofCurrMethod);
 
 		long longValue;
 
@@ -50,11 +75,19 @@ public class DocumentParserUtil {
 		} catch (NumberFormatException e) {
 			log.debug("Input String cannot be parsed to Integer.");
 		}
+		log.info("-----------Successfully Resopnse Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",username,correlationid,ipaddress,timestamp,nameofCurrMethod);
 		return false;
 	}
 
 	private static boolean isBoolean(Object object) {
 		Logger log = LoggerFactory.getLogger(DocumentParserUtil.class);
+		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
+		String correlationid = correlationID.generateUniqueCorrelationId();
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.set(CorrelationID.CORRELATION_ID_HEADER_NAME, correlationid); 	
+		String ipaddress=request.getRemoteAddr();
+		String timestamp=utc.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        log.info("--------Started Request of Service Name : {} , Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",servicename,username,correlationid,ipaddress,timestamp,nameofCurrMethod);
 
 		String objectAsString = object.toString();
 
@@ -62,19 +95,29 @@ public class DocumentParserUtil {
 
 		if (object.getClass().equals(Boolean.class) || objectAsString.equals("true") || objectAsString.equals("True")
 				|| objectAsString.equals("false") || objectAsString.equals("False")) {
+			log.info("-----------Successfully Resopnse Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",username,correlationid,ipaddress,timestamp,nameofCurrMethod);
 			return true;
 		} else if (isNumeric(objectAsString)) {
 			if (Integer.parseInt(objectAsString) == 1 || Integer.parseInt(objectAsString) == 0) {
+				log.info("-----------Successfully Resopnse Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",username,correlationid,ipaddress,timestamp,nameofCurrMethod);
 				return true;
 			}
 		}
-
+		
+		log.info("-----------Failed Resopnse Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",username, correlationid, ipaddress, timestamp, nameofCurrMethod);
 		return false;
-
 	}
 
 	public DocumentSatisfiesSchemaResponse checkIfRequiredFieldsAreAvailable(
 			Map<String, Map<String, Object>> schemaKeyValuePair, JSONObject payloadJSON) {
+		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
+		String correlationid = correlationID.generateUniqueCorrelationId();
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.set(CorrelationID.CORRELATION_ID_HEADER_NAME, correlationid); 	
+		String ipaddress=request.getRemoteAddr();
+		String timestamp=utc.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        log.info("--------Started Request of Service Name : {} , Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",servicename,username,correlationid,ipaddress,timestamp,nameofCurrMethod);
+
 		for (Map.Entry<String, Map<String, Object>> entry : schemaKeyValuePair.entrySet()) {
 			if (entry.getValue().containsKey("required")) {
 				if (entry.getValue().get("required").toString().equals("true")) {
@@ -85,7 +128,7 @@ public class DocumentParserUtil {
 				}
 			}
 		}
-
+		log.info("-----------Successfully Resopnse Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",username,correlationid,ipaddress,timestamp,nameofCurrMethod);
 		return new DocumentSatisfiesSchemaResponse(true, "All the required fields are available.");
 
 	}
@@ -93,6 +136,13 @@ public class DocumentParserUtil {
 	public DocumentSatisfiesSchemaResponse isDocumentSatisfySchema(Map<String, Map<String, Object>> schemaKeyValuePair,
 			JSONObject payloadJSON) {
 		Logger log = LoggerFactory.getLogger(DocumentParserUtil.class);
+		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
+		String correlationid = correlationID.generateUniqueCorrelationId();
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.set(CorrelationID.CORRELATION_ID_HEADER_NAME, correlationid); 	
+		String ipaddress=request.getRemoteAddr();
+		String timestamp=utc.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        log.info("--------Started Request of Service Name : {} , Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",servicename,username,correlationid,ipaddress,timestamp,nameofCurrMethod);
 
 		DocumentSatisfiesSchemaResponse checkIfRequireFieldsAreAvailableResponse = checkIfRequiredFieldsAreAvailable(
 				schemaKeyValuePair, payloadJSON);
@@ -235,7 +285,7 @@ public class DocumentParserUtil {
 				return new DocumentSatisfiesSchemaResponse(false, message);
 			}
 		}
-
+		log.info("-----------Successfully Resopnse Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",username,correlationid,ipaddress,timestamp,nameofCurrMethod);
 		return new DocumentSatisfiesSchemaResponse(true, "Success!");
 	}
 
@@ -248,6 +298,13 @@ public class DocumentParserUtil {
 		// (ATTRIBUTES)
 
 		Logger log = LoggerFactory.getLogger(DocumentParserUtil.class);
+		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
+		String correlationid = correlationID.generateUniqueCorrelationId();
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.set(CorrelationID.CORRELATION_ID_HEADER_NAME, correlationid); 	
+		String ipaddress=request.getRemoteAddr();
+		String timestamp=utc.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        log.info("--------Started Request of Service Name : {} , Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",servicename,username,correlationid,ipaddress,timestamp,nameofCurrMethod);
 
 		//MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
 		String url = baseMicroserviceUrl + "/api/schema/" + collectionName;
@@ -273,7 +330,7 @@ public class DocumentParserUtil {
 		Map<String, Map<String, Object>> schemaKeyValuePair = new HashMap<>();
 		schemaResponseFields
 				.forEach((fieldObject) -> schemaKeyValuePair.put(fieldObject.get("name").toString(), fieldObject));
-
+		log.info("-----------Successfully Resopnse Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",username,correlationid,ipaddress,timestamp,nameofCurrMethod);
 		return schemaKeyValuePair;
 	}
 

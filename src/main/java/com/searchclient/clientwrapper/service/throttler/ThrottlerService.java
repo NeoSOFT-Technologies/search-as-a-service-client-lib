@@ -1,10 +1,19 @@
 package com.searchclient.clientwrapper.service.throttler;
 
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
+import com.searchclient.clientwrapper.domain.dto.logger.CorrelationID;
 import com.searchclient.clientwrapper.domain.dto.throttler.ThrottlerMaxRequestSizeResponseDTO;
 import com.searchclient.clientwrapper.domain.dto.throttler.ThrottlerRateLimitResponseDTO;
 import com.searchclient.clientwrapper.domain.port.api.ThrottlerServicePort;
@@ -26,9 +35,26 @@ public class ThrottlerService implements ThrottlerServicePort {
     @Value("${resilience4j.maxRequestSize.maxAllowedRequestSize}")
     String maxAllowedRequestSize;
     
+    CorrelationID correlationID=new CorrelationID();
+    
+    @Autowired
+    HttpServletRequest request;
+    
+    ZonedDateTime utc = ZonedDateTime.now(ZoneOffset.UTC);
+    
+    private String servicename = "Throttler_Service";
+    
+    private String username = "Username";
 	@Override
 	public ThrottlerRateLimitResponseDTO dataInjectionRateLimiter() {
         logger.info("Max request limit is applied, no further calls are accepted");
+        String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
+		String correlationid = correlationID.generateUniqueCorrelationId();
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.set(CorrelationID.CORRELATION_ID_HEADER_NAME, correlationid); 	
+		String ipaddress=request.getRemoteAddr();
+		String timestamp=utc.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        logger.info("--------Started Request of Service Name : {} , Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",servicename,username,correlationid,ipaddress,timestamp,nameofCurrMethod);
 
         // prepare Rate Limiting Response DTO
         ThrottlerRateLimitResponseDTO rateLimitResponseDTO = new ThrottlerRateLimitResponseDTO();
@@ -39,7 +65,7 @@ public class ThrottlerService implements ThrottlerServicePort {
         rateLimitResponseDTO.setMaxRequestsAllowed(maxRequestAllowedForCurrentWindow);
         rateLimitResponseDTO.setCurrentRefreshWindow(currentRefreshWindow);
         rateLimitResponseDTO.setRequestTimeoutDuration(requestRetryWindow);
-        
+        logger.info("-----------Successfully Resopnse Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",username,correlationid,ipaddress,timestamp,nameofCurrMethod);
         return rateLimitResponseDTO;
 	}
 
@@ -51,7 +77,14 @@ public class ThrottlerService implements ThrottlerServicePort {
 		 * accepting the ThrottlerMaxRequestSizeResponseDTO as argument  
 		 */
 		logger.info("Max request size limiter is under process...");
-		
+		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
+		String correlationid = correlationID.generateUniqueCorrelationId();
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.set(CorrelationID.CORRELATION_ID_HEADER_NAME, correlationid); 	
+		String ipaddress=request.getRemoteAddr();
+		String timestamp=utc.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        logger.info("--------Started Request of Service Name : {} , Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",servicename,username,correlationid,ipaddress,timestamp,nameofCurrMethod);
+
 		if(isRequestSizeExceedingLimit(throttlerMaxRequestSizeResponseDTO)) {
 			throttlerMaxRequestSizeResponseDTO.setStatusCode(405);
 			throttlerMaxRequestSizeResponseDTO.setResponseMessage(
@@ -63,6 +96,7 @@ public class ThrottlerService implements ThrottlerServicePort {
 					"Incoming request size is under the limit, can be processed");
 		}
 		logger.info("Max request size limiting has been applied");
+		logger.info("-----------Successfully Resopnse Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",username,correlationid,ipaddress,timestamp,nameofCurrMethod);
 		return throttlerMaxRequestSizeResponseDTO;
 	}
 	
@@ -73,7 +107,14 @@ public class ThrottlerService implements ThrottlerServicePort {
 		 * accepting the raw incoming data in form of string as argument  
 		 */
 		logger.info("Max request size limiter is under process...");
-		
+		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
+		String correlationid = correlationID.generateUniqueCorrelationId();
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.set(CorrelationID.CORRELATION_ID_HEADER_NAME, correlationid); 	
+		String ipaddress=request.getRemoteAddr();
+		String timestamp=utc.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        logger.info("--------Started Request of Service Name : {} , Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",servicename,username,correlationid,ipaddress,timestamp,nameofCurrMethod);
+
     	double incomingRequestSizeInKBs = ThrottlerUtils.getSizeInkBs(incomingData);
     	ThrottlerMaxRequestSizeResponseDTO throttlerMaxRequestSizeResponseDTO
     		= new ThrottlerMaxRequestSizeResponseDTO();
@@ -92,6 +133,7 @@ public class ThrottlerService implements ThrottlerServicePort {
 					"Incoming request size is under the limit, can be processed");
 		}
 		logger.info("Max request size limiting has been applied");
+		logger.info("-----------Successfully Resopnse Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",username,correlationid,ipaddress,timestamp,nameofCurrMethod);
 		return throttlerMaxRequestSizeResponseDTO;
 	}
 

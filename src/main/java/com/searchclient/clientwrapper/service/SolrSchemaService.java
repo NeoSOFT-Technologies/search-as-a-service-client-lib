@@ -1,7 +1,12 @@
 package com.searchclient.clientwrapper.service;
 
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -9,8 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
+import com.searchclient.clientwrapper.domain.dto.logger.CorrelationID;
 import com.searchclient.clientwrapper.domain.dto.solr.SolrFieldDTO;
 import com.searchclient.clientwrapper.domain.dto.solr.SolrSchemaDTO;
 import com.searchclient.clientwrapper.domain.dto.solr.SolrSchemaResponseDTO;
@@ -30,10 +37,29 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 	
 	@Autowired
 	MicroserviceHttpGateway microserviceHttpGateway;
+	
+    CorrelationID correlationID=new CorrelationID();
+    
+    @Autowired
+    HttpServletRequest request;
+    
+    ZonedDateTime utc = ZonedDateTime.now(ZoneOffset.UTC);
+    
+    private String servicename = "Schema_Service";
+    
+    private String username = "Username";  
+
 
 	@Override
 	public SolrSchemaResponseDTO get(String tableName) {
 		log.debug("Get Solr Schema");
+		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
+		String correlationid = correlationID.generateUniqueCorrelationId();
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.set(CorrelationID.CORRELATION_ID_HEADER_NAME, correlationid); 	
+		String ipaddress=request.getRemoteAddr();
+		String timestamp=utc.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        log.info("--------Started Request of Service Name : {} , Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",servicename,username,correlationid,ipaddress,timestamp,nameofCurrMethod);
 
 		SolrSchemaResponseDTO solrSchemaResponsedto = new SolrSchemaResponseDTO(tableName, "");
 
@@ -66,6 +92,7 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 		}
 		solrSchemaResponsedto.setStatusCode((int) jsonObject.get("statusCode"));
 		solrSchemaResponsedto.setAttributes(attributes);
+		log.info("-----------Successfully Resopnse Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",username,correlationid,ipaddress,timestamp,nameofCurrMethod);
 		return solrSchemaResponsedto;
 	}
 
@@ -73,6 +100,13 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 	public SolrSchemaResponseDTO update(String tableName, SolrSchemaDTO newSolrSchemaDTO) {
 		log.debug("Update Solr Schema");
 		log.debug("Target Schema: {}", newSolrSchemaDTO);
+		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
+		String correlationid = correlationID.generateUniqueCorrelationId();
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.set(CorrelationID.CORRELATION_ID_HEADER_NAME, correlationid); 	
+		String ipaddress=request.getRemoteAddr();
+		String timestamp=utc.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        log.info("--------Started Request of Service Name : {} , Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",servicename,username,correlationid,ipaddress,timestamp,nameofCurrMethod);
 
 		SolrSchemaResponseDTO solrSchemaResponseDTO = new SolrSchemaResponseDTO(tableName, "");
 
@@ -107,12 +141,20 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 		}
 		solrSchemaResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
 		solrSchemaResponseDTO.setAttributes(attributes);
+		log.info("-----------Successfully Resopnse Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",username,correlationid,ipaddress,timestamp,nameofCurrMethod);
 		return solrSchemaResponseDTO;
 	}
 
 	@Override
 	public SolrSchemaResponseDTO create(String tableName, SolrSchemaDTO newSolrSchemaDTO) {
 		log.debug("Create Solr Schema");
+		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
+		String correlationid = correlationID.generateUniqueCorrelationId();
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.set(CorrelationID.CORRELATION_ID_HEADER_NAME, correlationid); 	
+		String ipaddress=request.getRemoteAddr();
+		String timestamp=utc.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        log.info("--------Started Request of Service Name : {} , Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",servicename,username,correlationid,ipaddress,timestamp,nameofCurrMethod);
 
 		SolrSchemaResponseDTO solrSchemaResponseDto = new SolrSchemaResponseDTO(tableName, "",
 				newSolrSchemaDTO.getAttributes());
@@ -123,13 +165,21 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 
 		JSONObject jsonObject = microserviceHttpGateway.postRequest();
 		solrSchemaResponseDto.setStatusCode((int) jsonObject.get("statusCode"));
-
+		log.info("-----------Successfully Resopnse Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",username,correlationid,ipaddress,timestamp,nameofCurrMethod);
 		return solrSchemaResponseDto;
 	}
 
 	@Override
 	public SolrSchemaResponseDTO delete(String tableName) {
 		log.debug("Delete Solr Schema");
+		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
+		String correlationid = correlationID.generateUniqueCorrelationId();
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.set(CorrelationID.CORRELATION_ID_HEADER_NAME, correlationid); 	
+		String ipaddress=request.getRemoteAddr();
+		String timestamp=utc.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        log.info("--------Started Request of Service Name : {} , Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",servicename,username,correlationid,ipaddress,timestamp,nameofCurrMethod);
+
 		SolrSchemaResponseDTO solrSchemaResponseDto = new SolrSchemaResponseDTO(tableName, "");
 
 		//MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
@@ -155,14 +205,12 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 			sfd.setDocValues(childJsonObject.getBoolean("docValues"));
 			sfd.setStorable(childJsonObject.getBoolean("storable"));
 			sfd.setType(SolrFieldType.fromObject(childJsonObject.get("type").toString()));
-
 			attributes.add(sfd);
 
 		}
 		solrSchemaResponseDto.setAttributes(attributes);
 		solrSchemaResponseDto.setStatusCode((int) jsonObject.get("statusCode"));
-
+		log.info("-----------Successfully Resopnse Username : {}, Corrlation Id : {}, IP Address : {}, TimeStamp : {}, Method name : {}",username,correlationid,ipaddress,timestamp,nameofCurrMethod);
 		return solrSchemaResponseDto;
 	}
-
 }
