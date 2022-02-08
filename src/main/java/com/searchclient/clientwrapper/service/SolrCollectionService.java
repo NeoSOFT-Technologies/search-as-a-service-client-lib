@@ -1,5 +1,6 @@
 package com.searchclient.clientwrapper.service;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,16 @@ import com.searchclient.clientwrapper.domain.dto.solr.collection.SolrGetCapacity
 import com.searchclient.clientwrapper.domain.dto.solr.collection.SolrGetCollectionsResponseDTO;
 import com.searchclient.clientwrapper.domain.port.api.SolrCollectionServicePort;
 import com.searchclient.clientwrapper.domain.utils.MicroserviceHttpGateway;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class SolrCollectionService implements SolrCollectionServicePort {
@@ -89,7 +100,9 @@ public class SolrCollectionService implements SolrCollectionServicePort {
 		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
 
 		SolrGetCapacityPlanDTO solrgetCapacityPlanDTO = solrCollectionServicePort.capacityPlans();
-		log.debug("Response :{}", solrgetCapacityPlanDTO);
+
+        log.debug("Response :{}", solrgetCapacityPlanDTO);
+
 
 		List<CapacityPlanDTO> capacityPlans = solrgetCapacityPlanDTO.getPlans();
 		CapacityPlanDTO selectedCapacityPlan = null;
@@ -175,9 +188,14 @@ public class SolrCollectionService implements SolrCollectionServicePort {
 
 	@Override
 	public JSONObject getCollectionDetails(String collectionName) {
+
 		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
 		microserviceHttpGateway
 				.setApiEndpoint(baseMicroserviceUrl + getCollectionDetailsMicroserviceAPI + "/" + collectionName);
+
+		MicroserviceHttpGateway microserviceHttpGateway =new MicroserviceHttpGateway();
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl+getCollectionDetailsMicroserviceAPI+"/" +collectionName);
+
 
 		return microserviceHttpGateway.getRequest();
 	}

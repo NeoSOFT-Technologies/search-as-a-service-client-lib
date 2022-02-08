@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import com.searchclient.clientwrapper.domain.dto.solr.SolrResponseDTO;
 import com.searchclient.clientwrapper.domain.dto.solr.collection.SolrGetCapacityPlanDTO;
 import com.searchclient.clientwrapper.domain.dto.solr.collection.SolrGetCollectionsResponseDTO;
+import org.json.JSONObject;
 
 public interface SolrCollectionServicePort {
 
@@ -21,5 +22,7 @@ public interface SolrCollectionServicePort {
 	    SolrResponseDTO isCollectionExists(String collectionName);
 
 	    JSONObject getCollectionDetails(String collectionName);
+
+    JSONObject getCollectionDetails(String collectionName);
 
 }
