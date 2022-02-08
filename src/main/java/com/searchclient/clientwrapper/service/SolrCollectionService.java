@@ -179,10 +179,11 @@ public class SolrCollectionService implements SolrCollectionServicePort {
 	@Override
 	public JSONObject getCollectionDetails(String collectionName) {
 
+
 		microserviceHttpGateway
 				.setApiEndpoint(baseMicroserviceUrl + getCollectionDetailsMicroserviceAPI + "/" + collectionName);
 
-		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl+getCollectionDetailsMicroserviceAPI+"/" +collectionName);
+
 
 
 		return microserviceHttpGateway.getRequest();
