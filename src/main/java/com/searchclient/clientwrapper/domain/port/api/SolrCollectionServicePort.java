@@ -20,6 +20,8 @@ public interface SolrCollectionServicePort {
 
 	    SolrResponseDTO isCollectionExists(String collectionName);
 
-	    JSONObject getCollectionDetails(String collectionName);
+
+
+    JSONObject getCollectionDetails(String collectionName);
 
 }
