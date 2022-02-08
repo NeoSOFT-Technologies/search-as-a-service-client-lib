@@ -1,21 +1,25 @@
 package com.searchclient.clientwrapper.domain.port.api;
 
-import com.searchclient.clientwrapper.domain.dto.solr.ResponseDTO;
-import com.searchclient.clientwrapper.domain.dto.solr.collection.GetCapacityPlanDTO;
-import com.searchclient.clientwrapper.domain.dto.solr.collection.GetCollectionsResponseDTO;
+import org.json.JSONObject;
+
+import com.searchclient.clientwrapper.domain.dto.solr.SolrResponseDTO;
+import com.searchclient.clientwrapper.domain.dto.solr.collection.SolrGetCapacityPlanDTO;
+import com.searchclient.clientwrapper.domain.dto.solr.collection.SolrGetCollectionsResponseDTO;
 
 public interface SolrCollectionServicePort {
 
-    ResponseDTO create(String collectionName, String sku);
+	  SolrResponseDTO create(String collectionName, String sku);
 
-    ResponseDTO delete(String collectionName);
+	    SolrResponseDTO delete(String collectionName);
 
-    //SolrResponseDTO rename(String collectionName, String collectionNewName);
+	    //SolrResponseDTO rename(String collectionName, String collectionNewName);
 
-    GetCollectionsResponseDTO getCollections();
+	    SolrGetCollectionsResponseDTO getCollections();
 
-    GetCapacityPlanDTO capacityPlans();
+	    SolrGetCapacityPlanDTO capacityPlans();
 
-    ResponseDTO isCollectionExists(String collectionName);
+	    SolrResponseDTO isCollectionExists(String collectionName);
+
+	    JSONObject getCollectionDetails(String collectionName);
 
 }
