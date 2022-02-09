@@ -68,10 +68,6 @@ public class SolrCoreService implements SolrCoreServicePort {
 		SolrDoubleCoreDTO solrSingleCore = new SolrDoubleCoreDTO(coreName, newName);
 		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(coreName);
 
-
-		
-	//	microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/rename");
-
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + renameMicroserviceAPI);
 
 		microserviceHttpGateway.setRequestBodyDTO(solrSingleCore);
@@ -87,16 +83,9 @@ public class SolrCoreService implements SolrCoreServicePort {
 	@Override
 	public SolrResponseDTO delete(String coreName) {
 
-
-
 		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(coreName);
 
-
-
-	//	microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/delete/" + coreName);
-
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + deleteMicroserviceAPI + "/" + coreName);
-
 
 		JSONObject jsonObject = microserviceHttpGateway.deleteRequest();
 
@@ -113,10 +102,6 @@ public class SolrCoreService implements SolrCoreServicePort {
 		log.debug("swap");
 		SolrDoubleCoreDTO solrSingleCore = new SolrDoubleCoreDTO(coreOne, coreTwo);
 		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(coreOne);
-
-
-	
-	//	microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/swap");
 
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + swapMicroserviceAPI);
 
@@ -138,12 +123,7 @@ public class SolrCoreService implements SolrCoreServicePort {
 		SolrSingleCoreDTO solrSingleCore = new SolrSingleCoreDTO(coreName);
 		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(coreName);
 
-
-	
-	//	microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/reload");
-
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + reloadMicroserviceAPI);
-
 
 		microserviceHttpGateway.setRequestBodyDTO(solrSingleCore);
 		JSONObject jsonObject = microserviceHttpGateway.postRequest();
@@ -158,10 +138,6 @@ public class SolrCoreService implements SolrCoreServicePort {
 	public String status(String coreName) {
 
 		log.debug("status");
-
-
-		
-	//	microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/status/" + coreName);
 
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + statusMicroserviceAPI + "/" + coreName);
 
