@@ -110,9 +110,6 @@ public class SolrCollectionService implements SolrCollectionServicePort {
 		}
 
 
-//        MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
-   //     microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint);
-    //    microserviceHttpGateway.setRequestBodyDTO(solrCreateCollectionDTO);
 
 		SolrCreateCollectionDTO solrCreateCollectionDTO = new SolrCreateCollectionDTO(collectionName, sku);
 
@@ -132,8 +129,7 @@ public class SolrCollectionService implements SolrCollectionServicePort {
 	public SolrResponseDTO delete(String collectionName) {
 
 
-        //MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
-    //    microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/" + collectionName);
+
 
 		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
 
@@ -183,8 +179,7 @@ public class SolrCollectionService implements SolrCollectionServicePort {
 
 		JSONObject jsonObject = microserviceHttpGateway.getRequest();
 
-       // MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
-   //     microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/isTableExists/" + collectionName);
+
 
 		solrResponseDTO.setMessage(jsonObject.get("message").toString());
 		solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
