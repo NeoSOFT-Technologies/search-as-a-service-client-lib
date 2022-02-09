@@ -140,28 +140,7 @@ public class ManageTableService implements ManageTableServicePort {
 
 		log.debug("Response :{}", jsonObject);
 
-//		JSONArray jsonArray = (JSONArray) jsonObject.get("attributes");
-//
-//		List<SchemaFieldDTO> attributes = new ArrayList<SchemaFieldDTO>();
-//
-//		for (int i = 0; i < jsonArray.length(); i++) {
-//
-//			JSONObject childJsonObject = (JSONObject) jsonArray.get(i);
-//
-//			SchemaFieldDTO sfd = new SchemaFieldDTO();
-//
-//			sfd.setMultiValue(childJsonObject.getBoolean("multiValue"));
-//			sfd.setDefault_(childJsonObject.getString("default_"));
-//			// sfd.setIndexed(childJsonObject.getBoolean("indexed"));
-//			sfd.setName(childJsonObject.getString("name"));
-//			sfd.setRequired(childJsonObject.getBoolean("required"));
-//			// sfd.setDocValues(childJsonObject.getBoolean("docValues"));
-//			sfd.setStorable(childJsonObject.getBoolean("storable"));
-//			// sfd.setType(SchemaFieldDTO.fromObject(childJsonObject.get("type").toString()));
-//
-//			attributes.add(sfd);
 
-		// }
 		solrSchemaResponseDTO.setStatusCode((int) jsonObject.get("responseStatusCode"));
 
 		return solrSchemaResponseDTO;
@@ -189,12 +168,12 @@ public class ManageTableService implements ManageTableServicePort {
 
 			sfd.setMultiValue(childJsonObject.getBoolean("multiValue"));
 			sfd.setDefault_(childJsonObject.getString("default_"));
-			// sfd.setIndexed(childJsonObject.getBoolean("indexed"));
+		
 			sfd.setName(childJsonObject.getString("name"));
 			sfd.setRequired(childJsonObject.getBoolean("required"));
-			// sfd.setDocValues(childJsonObject.getBoolean("docValues"));
+		
 			sfd.setStorable(childJsonObject.getBoolean("storable"));
-			// sfd.setType(SolrFieldType.fromObject(childJsonObject.get("type").toString()));
+
 
 			attributes.add(sfd);
 

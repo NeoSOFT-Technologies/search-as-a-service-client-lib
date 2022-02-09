@@ -86,10 +86,7 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 
 		}
 
-		// IF THE FLOW HAS REACHED HERE, IT MEANS THE INPUT JSON DOCUMENT SATISFIES THE
-		// SCHEMA.
-		// MicroserviceHttpGateway microserviceHttpGateway = new
-		// MicroserviceHttpGateway();
+		
 
 		String url = baseMicroserviceUrl + "/api/documents/" + collectionName;
 

@@ -53,7 +53,7 @@ public class SolrCoreService implements SolrCoreServicePort {
 		SolrDoubleCoreDTO solrSingleCore = new SolrDoubleCoreDTO(coreName, newName);
 		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(coreName);
 
-		//MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+		
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/rename");
 		microserviceHttpGateway.setRequestBodyDTO(solrSingleCore);
 
@@ -68,11 +68,11 @@ public class SolrCoreService implements SolrCoreServicePort {
 	@Override
 	public SolrResponseDTO delete(String coreName) {
 
-		log.debug("delete" + coreName);
+
 
 		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(coreName);
 
-		//MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/delete/" + coreName);
 
 		JSONObject jsonObject = microserviceHttpGateway.deleteRequest();
@@ -91,7 +91,7 @@ public class SolrCoreService implements SolrCoreServicePort {
 		SolrDoubleCoreDTO solrSingleCore = new SolrDoubleCoreDTO(coreOne, coreTwo);
 		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(coreOne);
 
-		//MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+	
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/swap");
 		microserviceHttpGateway.setRequestBodyDTO(solrSingleCore);
 
@@ -111,7 +111,7 @@ public class SolrCoreService implements SolrCoreServicePort {
 		SolrSingleCoreDTO solrSingleCore = new SolrSingleCoreDTO(coreName);
 		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(coreName);
 
-		//MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+	
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/reload");
 
 		microserviceHttpGateway.setRequestBodyDTO(solrSingleCore);
@@ -128,8 +128,7 @@ public class SolrCoreService implements SolrCoreServicePort {
 
 		log.debug("status");
 
-		//CoreAdminResponse coreAdminResponse = null;
-		//MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+		
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/status/" + coreName);
 		String jsonObject = microserviceHttpGateway.stringRequest();
 

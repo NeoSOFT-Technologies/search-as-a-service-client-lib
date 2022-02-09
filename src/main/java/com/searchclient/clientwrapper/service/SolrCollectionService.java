@@ -42,7 +42,7 @@ public class SolrCollectionService implements SolrCollectionServicePort {
     public SolrGetCapacityPlanDTO capacityPlans() {
 SolrGetCapacityPlanDTO solrgetCapacityPlans = new SolrGetCapacityPlanDTO();
 		
-		//MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+	
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/capacity-plans");
 		JSONObject jsonObject = microserviceHttpGateway.getRequest();
 		
@@ -92,7 +92,6 @@ SolrGetCapacityPlanDTO solrgetCapacityPlans = new SolrGetCapacityPlanDTO();
 
         SolrCreateCollectionDTO solrCreateCollectionDTO = new SolrCreateCollectionDTO(collectionName, sku);
 
-//        MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
         microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint);
         microserviceHttpGateway.setRequestBodyDTO(solrCreateCollectionDTO);
 
@@ -109,7 +108,7 @@ SolrGetCapacityPlanDTO solrgetCapacityPlans = new SolrGetCapacityPlanDTO();
 
         SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
 
-        //MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+
         microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/" + collectionName);
 
         JSONObject jsonObject = microserviceHttpGateway.deleteRequest();
@@ -127,7 +126,7 @@ SolrGetCapacityPlanDTO solrgetCapacityPlans = new SolrGetCapacityPlanDTO();
 
         SolrGetCollectionsResponseDTO solrGetCollectionsResponseDTO = new SolrGetCollectionsResponseDTO();
 
-       // MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+
         microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint);
 
         JSONObject jsonObject = microserviceHttpGateway.getRequest();
@@ -152,7 +151,7 @@ SolrGetCapacityPlanDTO solrgetCapacityPlans = new SolrGetCapacityPlanDTO();
 
         SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
 
-       // MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+    
         microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/isTableExists/" + collectionName);
 
         JSONObject jsonObject = microserviceHttpGateway.getRequest();
