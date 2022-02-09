@@ -134,7 +134,7 @@ public class SolrCollectionService implements SolrCollectionServicePort {
 		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
 
 
-		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+	
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + deleteMicroserviceAPI + "/" + collectionName);
 		JSONObject jsonObject = microserviceHttpGateway.deleteRequest();
 
@@ -191,7 +191,7 @@ public class SolrCollectionService implements SolrCollectionServicePort {
 
 	@Override
 	public JSONObject getCollectionDetails(String collectionName) {
-		MicroserviceHttpGateway microserviceHttpGateway =new MicroserviceHttpGateway();
+	
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl+getCollectionDetailsMicroserviceAPI+"/" +collectionName);
 
 		return microserviceHttpGateway.getRequest();

@@ -39,7 +39,7 @@ public class MicroserviceHttpGateway {
 		try {
 
 			String objJackson = requestBodyDTO.toString();
-			System.out.println("GATEWAY OBJ-JACKSON - "+objJackson);
+
 			StringEntity entity = new StringEntity(objJackson);
 
 			
@@ -89,7 +89,7 @@ public class MicroserviceHttpGateway {
 
 			String objJackson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(requestBodyDTO);
 	
-			System.out.println("GATEWAY OBJ-JACKSON - "+objJackson);
+
 			StringEntity entity = new StringEntity((String) objJackson);
 
 			http.setEntity(entity);
@@ -218,7 +218,7 @@ public class MicroserviceHttpGateway {
 			http.setHeader("Content-type", "application/json");
 
 			CloseableHttpResponse response = client.execute(http);
-			System.out.println("response:::::"+response);
+		
 			HttpEntity entityResponse = response.getEntity();
 			String result = EntityUtils.toString(entityResponse);
 			log.debug("RESPONSE: " + result);

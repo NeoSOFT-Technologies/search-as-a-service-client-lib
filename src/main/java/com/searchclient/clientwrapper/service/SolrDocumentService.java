@@ -104,7 +104,7 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 		String jsonString = microserviceHttpGateway.postRequestWithStringBody();
 
 		JSONObject jsonObject = new JSONObject(jsonString);
-		System.out.println("jsonString:::" + jsonObject);
+	
 		solrResponseDTO.setMessage(jsonObject.get("message").toString());
 		solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
 

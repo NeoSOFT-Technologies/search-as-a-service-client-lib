@@ -73,7 +73,7 @@ public class SolrCoreService implements SolrCoreServicePort {
 		microserviceHttpGateway.setRequestBodyDTO(solrSingleCore);
 
 		JSONObject jsonObject = microserviceHttpGateway.putRequest();
-		System.out.println("jsonobject" + jsonObject);
+	
 		solrResponseDTO.setMessage(jsonObject.get("message").toString());
 		solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
 
@@ -109,7 +109,7 @@ public class SolrCoreService implements SolrCoreServicePort {
 
 		JSONObject jsonObject = microserviceHttpGateway.putRequest();
 
-		System.out.println("jsonobject" + jsonObject);
+
 		solrResponseDTO.setMessage(jsonObject.get("message").toString());
 		solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
 

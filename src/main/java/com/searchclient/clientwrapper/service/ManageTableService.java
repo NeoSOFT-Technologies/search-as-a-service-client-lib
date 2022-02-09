@@ -116,7 +116,7 @@ public class ManageTableService implements ManageTableServicePort {
 
 		ResponseDTO solrResponseDTO = new ResponseDTO(tableName);
 
-		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + deleteMicroserviceAPI + "/" + tableName);
 		JSONObject jsonObject = microserviceHttpGateway.deleteRequest();
 
