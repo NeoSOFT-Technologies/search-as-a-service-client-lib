@@ -21,6 +21,9 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 	@Value("${base-microservice-url}")
 	private String baseMicroserviceUrl;
 
+	@Value("${microservice-url.document.input}")
+	private String inputDocumentMicroserviceAPI;
+
 	private final Logger log = LoggerFactory.getLogger(SolrDocumentService.class);
 
 	@Autowired
@@ -88,7 +91,7 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 
 		
 
-		String url = baseMicroserviceUrl + "/api/documents/" + collectionName;
+		String url = baseMicroserviceUrl + inputDocumentMicroserviceAPI + "/" + collectionName;
 
 		if (isNRT) {
 			url += "?isNRT=true";
