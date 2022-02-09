@@ -54,16 +54,7 @@ public class SolrCollectionService implements SolrCollectionServicePort {
     @Autowired
     MicroserviceHttpGateway microserviceHttpGateway;
 
-    @Override
-    public SolrGetCapacityPlanDTO capacityPlans() {
-SolrGetCapacityPlanDTO solrgetCapacityPlans = new SolrGetCapacityPlanDTO();
-		
-		//MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
-		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/capacity-plans");
 
-
-	@Autowired
-	MicroserviceHttpGateway microserviceHttpGateway;
 
 	@Override
 	public SolrGetCapacityPlanDTO capacityPlans() {
@@ -120,8 +111,8 @@ SolrGetCapacityPlanDTO solrgetCapacityPlans = new SolrGetCapacityPlanDTO();
 
 
 //        MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
-        microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint);
-        microserviceHttpGateway.setRequestBodyDTO(solrCreateCollectionDTO);
+   //     microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint);
+    //    microserviceHttpGateway.setRequestBodyDTO(solrCreateCollectionDTO);
 
 		SolrCreateCollectionDTO solrCreateCollectionDTO = new SolrCreateCollectionDTO(collectionName, sku);
 
@@ -142,7 +133,7 @@ SolrGetCapacityPlanDTO solrgetCapacityPlans = new SolrGetCapacityPlanDTO();
 
 
         //MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
-        microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/" + collectionName);
+    //    microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/" + collectionName);
 
 		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
 
@@ -165,7 +156,7 @@ SolrGetCapacityPlanDTO solrgetCapacityPlans = new SolrGetCapacityPlanDTO();
 
 
        // MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
-        microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint);
+  //      microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint);
 
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + getCollectionsMicroserviceAPI);
 		JSONObject jsonObject = microserviceHttpGateway.getRequest();
@@ -195,7 +186,7 @@ SolrGetCapacityPlanDTO solrgetCapacityPlans = new SolrGetCapacityPlanDTO();
 		JSONObject jsonObject = microserviceHttpGateway.getRequest();
 
        // MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
-        microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/isTableExists/" + collectionName);
+   //     microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/isTableExists/" + collectionName);
 
 		solrResponseDTO.setMessage(jsonObject.get("message").toString());
 		solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));

@@ -49,7 +49,7 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 
 
 		
-		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/" + tableName);
+	//	microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/" + tableName);
 
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + getMicroserviceAPI + "/" + tableName);
 
@@ -92,7 +92,7 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 
 
 	
-		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/" + tableName);
+	//	microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/" + tableName);
 
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + updateMicroserviceAPI + "/" + tableName);
 
@@ -137,7 +137,7 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 
 
 
-		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint);
+	//	microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint);
 
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + createMicroserviceAPI);
 
@@ -156,7 +156,7 @@ public class SolrSchemaService implements SolrSchemaServicePort {
 
 
 
-		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/" + tableName);
+//		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/" + tableName);
 
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + deleteMicroserviceAPI + "/" + tableName);
 

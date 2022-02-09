@@ -70,7 +70,7 @@ public class SolrCoreService implements SolrCoreServicePort {
 
 
 		
-		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/rename");
+	//	microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/rename");
 
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + renameMicroserviceAPI);
 
@@ -93,7 +93,7 @@ public class SolrCoreService implements SolrCoreServicePort {
 
 
 
-		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/delete/" + coreName);
+	//	microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/delete/" + coreName);
 
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + deleteMicroserviceAPI + "/" + coreName);
 
@@ -116,7 +116,7 @@ public class SolrCoreService implements SolrCoreServicePort {
 
 
 	
-		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/swap");
+	//	microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/swap");
 
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + swapMicroserviceAPI);
 
@@ -140,7 +140,7 @@ public class SolrCoreService implements SolrCoreServicePort {
 
 
 	
-		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/reload");
+	//	microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/reload");
 
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + reloadMicroserviceAPI);
 
@@ -161,7 +161,7 @@ public class SolrCoreService implements SolrCoreServicePort {
 
 
 		
-		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/status/" + coreName);
+	//	microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint + "/status/" + coreName);
 
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + statusMicroserviceAPI + "/" + coreName);
 
