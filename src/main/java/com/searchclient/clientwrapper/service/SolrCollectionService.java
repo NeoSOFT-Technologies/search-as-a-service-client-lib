@@ -155,8 +155,6 @@ public class SolrCollectionService implements SolrCollectionServicePort {
 		SolrGetCollectionsResponseDTO solrGetCollectionsResponseDTO = new SolrGetCollectionsResponseDTO();
 
 
-       // MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
-  //      microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + apiEndpoint);
 
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + getCollectionsMicroserviceAPI);
 		JSONObject jsonObject = microserviceHttpGateway.getRequest();
