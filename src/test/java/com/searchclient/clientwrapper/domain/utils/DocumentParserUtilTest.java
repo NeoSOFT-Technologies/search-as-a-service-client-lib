@@ -19,9 +19,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.searchclient.clientwrapper.domain.dto.solr.SolrFieldDTO;
+
 import com.searchclient.clientwrapper.domain.utils.DocumentParserUtil.DocumentSatisfiesSchemaResponse;
-import com.searchclient.clientwrapper.infrastructure.Enum.SolrFieldType;
+
 
 @ExtendWith(MockitoExtension.class)
 @ExtendWith(SpringExtension.class)

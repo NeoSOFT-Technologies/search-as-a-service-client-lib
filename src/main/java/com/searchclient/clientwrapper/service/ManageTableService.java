@@ -50,7 +50,7 @@ public class ManageTableService implements ManageTableServicePort {
 	@Value("${microservice-url.manage-table.get-schema}")
 	private String getMicroserviceAPI;
 
-	@Value("${microservice-url.manage-table.get-capacity-plan}")
+	@Value("${microservice-url.manage-table.get-capacityplan}")
 	private String getcapacityplansMicroserviceAPI;
 
 	@Autowired

@@ -2,7 +2,7 @@ package com.searchclient.clientwrapper.managetable;
 
 import java.util.List;
 
-import com.searchclient.clientwrapper.domain.dto.solr.SolrFieldDTO;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

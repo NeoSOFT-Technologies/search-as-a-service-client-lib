@@ -89,8 +89,6 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 
 		}
 
-		
-
 		String url = baseMicroserviceUrl + inputDocumentMicroserviceAPI + "/" + collectionName;
 
 		if (isNRT) {
@@ -104,7 +102,7 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 		String jsonString = microserviceHttpGateway.postRequestWithStringBody();
 
 		JSONObject jsonObject = new JSONObject(jsonString);
-	
+
 		solrResponseDTO.setMessage(jsonObject.get("message").toString());
 		solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
 
