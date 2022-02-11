@@ -257,7 +257,6 @@ public class DocumentParserUtil {
 		JSONObject jsonObject = microserviceHttpGateway.getRequest();
 
 		JSONArray jsonArrayOfAttributesFields = (JSONArray) jsonObject.get("attributes");
-
 		ObjectMapper objectMapper = new ObjectMapper();
 
 		List<Map<String, Object>> schemaResponseFields = jsonArrayOfAttributesFields.toList().stream()
