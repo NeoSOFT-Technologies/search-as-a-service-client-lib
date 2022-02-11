@@ -258,12 +258,6 @@ public class DocumentParserUtil {
 
 		JSONArray jsonArrayOfAttributesFields = (JSONArray) jsonObject.get("attributes");
 
-<<<<<<< HEAD
-=======
-		System.out.println("jsonArrayOfAttributesFields");
-		System.out.println(jsonArrayOfAttributesFields);
-		
->>>>>>> main
 		ObjectMapper objectMapper = new ObjectMapper();
 
 		List<Map<String, Object>> schemaResponseFields = jsonArrayOfAttributesFields.toList().stream()
