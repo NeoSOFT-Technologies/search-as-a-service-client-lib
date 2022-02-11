@@ -1,15 +1,5 @@
 package com.searchclient.clientwrapper.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 import com.searchclient.clientwrapper.domain.dto.solr.SolrResponseDTO;
 import com.searchclient.clientwrapper.domain.dto.solr.collection.CapacityPlanDTO;
 import com.searchclient.clientwrapper.domain.dto.solr.collection.SolrCreateCollectionDTO;
@@ -17,6 +7,16 @@ import com.searchclient.clientwrapper.domain.dto.solr.collection.SolrGetCapacity
 import com.searchclient.clientwrapper.domain.dto.solr.collection.SolrGetCollectionsResponseDTO;
 import com.searchclient.clientwrapper.domain.port.api.SolrCollectionServicePort;
 import com.searchclient.clientwrapper.domain.utils.MicroserviceHttpGateway;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class SolrCollectionService implements SolrCollectionServicePort {
@@ -43,6 +43,9 @@ public class SolrCollectionService implements SolrCollectionServicePort {
 
 	@Value("${microservice-url.table-collection.get-capacity-plans}")
 	private String getcapacityplansMicroserviceAPI;
+
+	@Value("${microservice-url.table-collection.get-collection-details}")
+	private String getCollectionDetailsMicroserviceAPI;
 
 	@Autowired
 	SolrCollectionServicePort solrCollectionServicePort;
@@ -120,7 +123,6 @@ public class SolrCollectionService implements SolrCollectionServicePort {
 
 		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
 
-		MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + deleteMicroserviceAPI + "/" + collectionName);
 		JSONObject jsonObject = microserviceHttpGateway.deleteRequest();
 
@@ -167,6 +169,14 @@ public class SolrCollectionService implements SolrCollectionServicePort {
 
 		return solrResponseDTO;
 
+	}
+
+	@Override
+	public JSONObject getCollectionDetails(String collectionName) {
+		MicroserviceHttpGateway microserviceHttpGateway =new MicroserviceHttpGateway();
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl+getCollectionDetailsMicroserviceAPI+"/" +collectionName);
+
+		return microserviceHttpGateway.getRequest();
 	}
 
 }
