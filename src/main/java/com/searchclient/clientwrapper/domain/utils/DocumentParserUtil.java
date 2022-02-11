@@ -1,11 +1,8 @@
 package com.searchclient.clientwrapper.domain.utils;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.searchclient.clientwrapper.service.SolrDocumentService;
+import lombok.Data;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -14,10 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.searchclient.clientwrapper.service.SolrDocumentService;
-
-import lombok.Data;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class DocumentParserUtil {
@@ -259,6 +257,7 @@ public class DocumentParserUtil {
 		JSONObject jsonObject = microserviceHttpGateway.getRequest();
 
 		JSONArray jsonArrayOfAttributesFields = (JSONArray) jsonObject.get("attributes");
+
 
 		ObjectMapper objectMapper = new ObjectMapper();
 
