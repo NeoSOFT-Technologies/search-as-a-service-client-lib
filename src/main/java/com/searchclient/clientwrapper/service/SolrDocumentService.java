@@ -51,7 +51,7 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 	
 	@Override
 	public SolrResponseDTO addDocuments(String collectionName, String payload, int clientid) {
-		String s = collectionName;
+		
 		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
 		Map<String, Map<String, Object>> schemaKeyValuePair = documentparserUtil
 				.getSchemaOfCollections(baseMicroserviceUrl, collectionName, clientid);
