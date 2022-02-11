@@ -1,6 +1,5 @@
 //package com.searchclient.clientwrapper.domain.utils;
 //
-//import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 //import static org.junit.jupiter.api.Assertions.assertEquals;
 //
 //import java.io.IOException;
@@ -10,7 +9,6 @@
 //import org.apache.http.client.methods.HttpPost;
 //import org.apache.http.impl.client.CloseableHttpClient;
 //import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
 //import org.junit.jupiter.api.extension.ExtendWith;
 //import org.mockito.InjectMocks;
 //import org.mockito.Mockito;
@@ -51,7 +49,7 @@
 //		Mockito.when(client.execute(httpPost)).thenReturn((CloseableHttpResponse) ResponseEntity.status(HttpStatus.OK));
 //	}
 //	
-//	@Test
+////	@Test
 //	void postRequestWithStringBodyTets() throws ClientProtocolException, IOException {
 //		
 //		setMockitoSucccessResponseForService();

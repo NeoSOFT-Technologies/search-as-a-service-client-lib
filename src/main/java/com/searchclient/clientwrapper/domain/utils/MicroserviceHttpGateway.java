@@ -13,12 +13,14 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Data;
 
 @Data
+@Service
 public class MicroserviceHttpGateway {
 
 	private final Logger log = LoggerFactory.getLogger(MicroserviceHttpGateway.class);
@@ -39,10 +41,10 @@ public class MicroserviceHttpGateway {
 		try {
 
 			String objJackson = requestBodyDTO.toString();
-			System.out.println("GATEWAY OBJ-JACKSON - "+objJackson);
+
 			StringEntity entity = new StringEntity(objJackson);
 
-			//StringEntity entity = new StringEntity((String) requestBodyDTO);
+			
 
 			http.setEntity(entity);
 			http.setHeader("Accept", "application/json");
@@ -75,7 +77,7 @@ public class MicroserviceHttpGateway {
 		log.debug("API Endpoint -" + apiEndpoint);
 		log.debug("REQUEST BODY -"+ requestBodyDTO);
 
-		//System.out.println("Gateway postRequest"+requestBodyDTO);
+
 
 		JSONObject jsonObject = null;
 
@@ -88,8 +90,8 @@ public class MicroserviceHttpGateway {
 		try {
 
 			String objJackson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(requestBodyDTO);
-			//String objJackson = requestBodyDTO.toString();
-			System.out.println("GATEWAY OBJ-JACKSON - "+objJackson);
+	
+
 			StringEntity entity = new StringEntity((String) objJackson);
 
 			http.setEntity(entity);
@@ -218,7 +220,7 @@ public class MicroserviceHttpGateway {
 			http.setHeader("Content-type", "application/json");
 
 			CloseableHttpResponse response = client.execute(http);
-			System.out.println("response:::::"+response);
+		
 			HttpEntity entityResponse = response.getEntity();
 			String result = EntityUtils.toString(entityResponse);
 			log.debug("RESPONSE: " + result);

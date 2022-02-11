@@ -11,6 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.searchclient.clientwrapper.domain.service.SolrDocumentService;
+
+import lombok.Data;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -110,7 +114,7 @@ public class DocumentParserUtil {
 			Object payloadJsonObjectValue = payloadJSON.get(payloadJsonObjectKey);
 
 			log.debug(payloadJsonObjectKey + "=" + payloadJsonObjectValue);
-			// log.debug(schemaKeyValuePair.get(payloadJsonObjectKey).toString());
+
 
 			if (schemaKeyValuePair.containsKey(payloadJsonObjectKey)) {
 
@@ -139,7 +143,7 @@ public class DocumentParserUtil {
 							}
 						}
 
-						// log.debug(fieldTypeDefinedInSchema);
+
 
 						switch (fieldTypeDefinedInSchema) {
 						case "string":
@@ -247,7 +251,7 @@ public class DocumentParserUtil {
 
 		Logger log = LoggerFactory.getLogger(DocumentParserUtil.class);
 
-		//MicroserviceHttpGateway microserviceHttpGateway = new MicroserviceHttpGateway();
+
 		String url = baseMicroserviceUrl + "/api/schema/" + collectionName;
 
 		microserviceHttpGateway.setApiEndpoint(url);

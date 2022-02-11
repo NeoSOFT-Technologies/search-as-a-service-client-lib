@@ -1,6 +1,4 @@
-package com.searchclient.clientwrapper.domain.dto.solr;
-
-import com.searchclient.clientwrapper.infrastructure.Enum.SolrFieldType;
+package com.searchclient.clientwrapper.managetable;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,15 +9,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class SolrFieldDTO {
+public class SchemaFieldDTO {
 
 	String name;
-	SolrFieldType type;
+	String type;
 	String default_;
 	boolean isRequired;
-	boolean isIndexed;
+	boolean isFilterable;
 	boolean isStorable;
-	boolean isMultiValued;
-	boolean isDocValues;
-	
+	boolean isMultiValue;
+	boolean isSortable;
+
 }

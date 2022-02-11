@@ -1,4 +1,4 @@
-package com.searchclient.clientwrapper.service;
+package com.searchclient.clientwrapper.domain.service;
 
 import java.util.Map;
 
@@ -89,11 +89,6 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 
 		}
 
-		// IF THE FLOW HAS REACHED HERE, IT MEANS THE INPUT JSON DOCUMENT SATISFIES THE
-		// SCHEMA.
-		// MicroserviceHttpGateway microserviceHttpGateway = new
-		// MicroserviceHttpGateway();
-
 		String url = baseMicroserviceUrl + inputDocumentMicroserviceAPI + "/" + collectionName;
 
 		if (isNRT) {
@@ -107,7 +102,7 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 		String jsonString = microserviceHttpGateway.postRequestWithStringBody();
 
 		JSONObject jsonObject = new JSONObject(jsonString);
-		System.out.println("jsonString:::" + jsonObject);
+
 		solrResponseDTO.setMessage(jsonObject.get("message").toString());
 		solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
 
