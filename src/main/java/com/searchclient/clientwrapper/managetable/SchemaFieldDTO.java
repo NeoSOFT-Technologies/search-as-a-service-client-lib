@@ -1,7 +1,5 @@
 package com.searchclient.clientwrapper.managetable;
 
-import com.searchclient.clientwrapper.infrastructure.Enum.SchemaFieldType;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class SchemaFieldDTO {
 
 	String name;
-	SchemaFieldType type;
+	String type;
 	String default_;
 	boolean isRequired;
 	boolean isFilterable;
