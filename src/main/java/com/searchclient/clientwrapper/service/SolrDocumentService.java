@@ -31,24 +31,7 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 
 	@Autowired
 	DocumentParserUtil documentparserUtil;
-	
-	private SolrResponseDTO extracted(SolrResponseDTO solrResponseDTO, String message) {
-		log.debug(message);
-		solrResponseDTO.setMessage(message);
-		solrResponseDTO.setStatusCode(400);
-		return solrResponseDTO;
-	}
 
-	private SolrResponseDTO documentscemanotparse(SolrResponseDTO solrResponseDTO,
-			DocumentParserUtil.DocumentSatisfiesSchemaResponse documentSatisfiesSchemaResponse) {
-		// ERROR IN A DOCUMENT STRUCTURE
-		solrResponseDTO.setMessage(documentSatisfiesSchemaResponse.getMessage());
-		solrResponseDTO.setMessage("The JSON input document in the array doesn't satisfy the Schema. Error: "
-				+ documentSatisfiesSchemaResponse.getMessage());
-		solrResponseDTO.setStatusCode(400);
-		return solrResponseDTO;
-	}
-	
 	@Override
 	public SolrResponseDTO addDocuments(String collectionName, String payload, int clientid) {
 		
@@ -59,7 +42,10 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 		if (schemaKeyValuePair == null) {
 
 			String message = "Unable to get the Schema. Please check the collection name again!";
-			return extracted(solrResponseDTO, message);
+			log.debug(message);
+			solrResponseDTO.setMessage(message);
+			solrResponseDTO.setStatusCode(400);
+			return solrResponseDTO;
 		}
 		JSONArray payloadJSONArray = null;
 		try {
@@ -74,7 +60,10 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 				log.debug(e1.toString());
 
 				String message = "Invalid input JSON array of document.";
-				return extracted(solrResponseDTO, message);
+				log.debug(message);
+				solrResponseDTO.setMessage(message);
+				solrResponseDTO.setStatusCode(400);
+				return solrResponseDTO;
 			}
 		}
 
@@ -88,14 +77,18 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 
 			if (!documentSatisfiesSchemaResponse.isObjectSatisfiesSchema()) {
 
-				return documentscemanotparse(solrResponseDTO, documentSatisfiesSchemaResponse);
+				// ERROR IN A DOCUMENT STRUCTURE
+				solrResponseDTO.setMessage(documentSatisfiesSchemaResponse.getMessage());
+				solrResponseDTO.setMessage("The JSON input document in the array doesn't satisfy the Schema. Error: "
+						+ documentSatisfiesSchemaResponse.getMessage());
+				solrResponseDTO.setStatusCode(400);
+				return solrResponseDTO;
+
 			}
+
 		}
 
-		// IF THE FLOW HAS REACHED HERE, IT MEANS THE INPUT JSON DOCUMENT SATISFIES THE
-		// SCHEMA.
-		// MicroserviceHttpGateway microserviceHttpGateway = new
-		// MicroserviceHttpGateway();
+
 
 		String url = baseMicroserviceUrl + inputDocumentMicroserviceAPI + "/ingest-nrt/" + clientid + "/" + collectionName;
 
@@ -104,15 +97,13 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 		String jsonString = microserviceHttpGateway.postRequestWithStringBody();
 
 		JSONObject jsonObject = new JSONObject(jsonString);
+
 		solrResponseDTO.setMessage(jsonObject.get("responseMessage").toString());
 		solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
+
 		return solrResponseDTO;
 
 	}
-
-
-
-
 
 	@Override
 	public SolrResponseDTO addDocument(String collectionName, String payload, int clientid) {
@@ -125,7 +116,10 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 		if (schemaKeyValuePair == null) {
 
 			String message = "Unable to get the Schema. Please check the collection name again!";
-			return extracted(solrResponseDTO, message);
+			log.debug(message);
+			solrResponseDTO.setMessage(message);
+			solrResponseDTO.setStatusCode(400);
+			return solrResponseDTO;
 		}
 		JSONArray payloadJSONArray = null;
 		try {
@@ -140,7 +134,10 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 				log.debug(e1.toString());
 
 				String message = "Invalid input JSON array of document.";
-				return extracted(solrResponseDTO, message);
+				log.debug(message);
+				solrResponseDTO.setMessage(message);
+				solrResponseDTO.setStatusCode(400);
+				return solrResponseDTO;
 			}
 		}
 
@@ -154,12 +151,17 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 
 			if (!documentSatisfiesSchemaResponse.isObjectSatisfiesSchema()) {
 
-				return documentscemanotparse(solrResponseDTO, documentSatisfiesSchemaResponse);
+				// ERROR IN A DOCUMENT STRUCTURE
+				solrResponseDTO.setMessage(documentSatisfiesSchemaResponse.getMessage());
+				solrResponseDTO.setMessage("The JSON input document in the array doesn't satisfy the Schema. Error: "
+						+ documentSatisfiesSchemaResponse.getMessage());
+				solrResponseDTO.setStatusCode(400);
+				return solrResponseDTO;
 
 			}
 
 		}
-	
+
 		String url = baseMicroserviceUrl + inputDocumentMicroserviceAPI + "/ingest/" + clientid + "/" + collectionName;
 
 		microserviceHttpGateway.setApiEndpoint(url);
