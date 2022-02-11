@@ -1,7 +1,7 @@
 package com.searchclient.clientwrapper.domain.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.searchclient.clientwrapper.service.SolrDocumentService;
+import com.searchclient.clientwrapper.domain.service.SolrDocumentService;
 import lombok.Data;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -11,10 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.searchclient.clientwrapper.domain.service.SolrDocumentService;
-
-import lombok.Data;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
