@@ -1,4 +1,4 @@
-package com.searchclient.clientwrapper.service;
+package com.searchclient.clientwrapper.domain.service;
 
 import java.util.ArrayList;
 import java.util.List;

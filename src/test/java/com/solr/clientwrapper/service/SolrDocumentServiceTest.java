@@ -20,10 +20,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.searchclient.clientwrapper.domain.dto.solr.SolrResponseDTO;
+import com.searchclient.clientwrapper.domain.service.SolrDocumentService;
 import com.searchclient.clientwrapper.domain.utils.DocumentParserUtil;
 import com.searchclient.clientwrapper.domain.utils.DocumentParserUtil.DocumentSatisfiesSchemaResponse;
 import com.searchclient.clientwrapper.domain.utils.MicroserviceHttpGateway;
-import com.searchclient.clientwrapper.service.SolrDocumentService;
 
 @ExtendWith(MockitoExtension.class)
 @ExtendWith(SpringExtension.class)

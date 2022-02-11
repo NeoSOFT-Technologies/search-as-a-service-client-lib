@@ -1,5 +1,7 @@
 package com.searchclient.clientwrapper.domain.port.api;
 
+import org.springframework.stereotype.Service;
+
 import com.searchclient.clientwrapper.domain.dto.solr.ManageTableResponseDTO;
 import com.searchclient.clientwrapper.domain.dto.solr.ResponseDTO;
 import com.searchclient.clientwrapper.domain.dto.solr.collection.ManageTableDTO;
@@ -8,7 +10,7 @@ import com.searchclient.clientwrapper.managetable.GetManageCapacityPlanDTO;
 import com.searchclient.clientwrapper.managetable.SchemaDTO;
 import com.searchclient.clientwrapper.managetable.TableSchemaResponseDTO;
 
-
+@Service
 public interface ManageTableServicePort {
 
 	/*

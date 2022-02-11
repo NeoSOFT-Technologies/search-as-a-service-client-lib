@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.searchclient.clientwrapper.service.SolrDocumentService;
+import com.searchclient.clientwrapper.domain.service.SolrDocumentService;
 
 import lombok.Data;
 
