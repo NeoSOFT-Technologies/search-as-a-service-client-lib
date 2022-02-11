@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.searchclient.clientwrapper.domain.dto.solr.ResponseDTO;
 import com.searchclient.clientwrapper.domain.dto.solr.SolrResponseDTO;
 import com.searchclient.clientwrapper.domain.utils.DocumentParserUtil;
 import com.searchclient.clientwrapper.domain.utils.DocumentParserUtil.DocumentSatisfiesSchemaResponse;
@@ -33,11 +34,15 @@ public class SolrDocumentServiceTest {
 
 	@Value("${base-microservice-url}")
 	private String baseMicroserviceUrl;
-	String collectionName = "demo1";
+	String collectionName = "demo";
+	int clientid = 1;
 	String payload = "[\r\n" + "  {\r\n" + "    \"id\" : \"18\",\r\n" + "    \"color\" : \"ravi\"\r\n" + "  }\r\n"
 			+ "]";
 	Map<String, Map<String, Object>> schemaKeyValuePair = new HashMap();
 
+	Map<String, Map<String, Object>> schemaKeyValuePair1 = new HashMap();
+	
+	
 	Map<String, Object> map = new HashMap();
 	Map<String, Object> map2 = new HashMap();
 	@InjectMocks
@@ -61,56 +66,76 @@ public class SolrDocumentServiceTest {
 		map2.put("name", "id");
 		map2.put("type", "string");
 		map2.put("multivalued", false);
-		map.put("required", true);
+		map2.put("required", true);
 
 	}
 
-	public void setMockitoSuccessResponseForService() {
-		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
-		solrResponseDTO.setStatusCode(200);
-		solrResponseDTO.setMessage("Testing");
-
-		schemaKeyValuePair.put("id", map2);
-		schemaKeyValuePair.put("color", map);
-		JsonObject = new JSONObject(solrResponseDTO);
-		String jsonString = JsonObject.toString();
-
-		DocumentSatisfiesSchemaResponse doc = new DocumentSatisfiesSchemaResponse(true, "Success!");
-
-		Mockito.when(documentParser.getSchemaOfCollection(baseMicroserviceUrl, collectionName))
-				.thenReturn(schemaKeyValuePair);
-
-		Mockito.when(documentParser.isDocumentSatisfySchema(Mockito.any(), Mockito.any())).thenReturn(doc);
-		Mockito.when(microserviceHttpGateway.postRequestWithStringBody()).thenReturn(jsonString);
-
-	}
-
-	public void setMockitoBadResponseForService() {
-		SolrResponseDTO solrResponseDTO = new SolrResponseDTO(collectionName);
-		solrResponseDTO.setStatusCode(400);
-		solrResponseDTO.setMessage("Testing");
-		JsonObject = new JSONObject(solrResponseDTO);
-		String jsonString = JsonObject.toString();
-
-		Mockito.when(documentParser.getSchemaOfCollection(baseMicroserviceUrl, collectionName))
-				.thenReturn(schemaKeyValuePair);
-		DocumentSatisfiesSchemaResponse doc = new DocumentSatisfiesSchemaResponse(false, "Success!");
-		Mockito.when(documentParser.isDocumentSatisfySchema(Mockito.any(), Mockito.any())).thenReturn(doc);
-		Mockito.when(microserviceHttpGateway.postRequestWithStringBody()).thenReturn(jsonString);
-	}
-
-	@Test
-	void testadDocuments() {
-
-		int statusCode = 200;
-
-		setMockitoSuccessResponseForService();
-		SolrResponseDTO solrresponseDto = solrDocumentService.addDocuments(collectionName, payload, true);
-		assertEquals(statusCode, solrresponseDto.getStatusCode());
-
-		setMockitoBadResponseForService();
-		SolrResponseDTO solrResponseDto = solrDocumentService.addDocuments(collectionName, payload, false);
-		assertNotEquals(statusCode, solrResponseDto.getStatusCode());
-
-	}
+	
+	  public void setMockitoSuccessResponseForService()
+	  { 
+		  ResponseDTO solrResponseDTO = new ResponseDTO(collectionName);
+	  solrResponseDTO.setStatusCode(200);
+	  solrResponseDTO.setResponseMessage("Testing");
+	  
+	  schemaKeyValuePair.put("id", map2); 
+	  schemaKeyValuePair.put("color", map);
+	  JsonObject = new JSONObject(solrResponseDTO); 
+	  String jsonString = JsonObject.toString();
+	  
+	  DocumentSatisfiesSchemaResponse doc = new	  DocumentSatisfiesSchemaResponse(true, "Success!");
+	  
+	  Mockito.when(documentParser.getSchemaOfCollections(baseMicroserviceUrl, collectionName, clientid)) .thenReturn(schemaKeyValuePair);
+	  
+	  Mockito.when(documentParser.isDocumentSatisfySchema(Mockito.any(),
+	  Mockito.any())).thenReturn(doc);
+	  Mockito.when(microserviceHttpGateway.postRequestWithStringBody()).thenReturn(
+	  jsonString);
+	  
+	  }
+	  
+	  public void setMockitoBadResponseForService() { SolrResponseDTO
+	  solrResponseDTO = new SolrResponseDTO(collectionName);
+	  solrResponseDTO.setStatusCode(400); 
+	  solrResponseDTO.setMessage("Testing");
+	  JsonObject = new JSONObject(solrResponseDTO); 
+	  String jsonString =  JsonObject.toString();
+	  
+	  Mockito.when(documentParser.getSchemaOfCollections(baseMicroserviceUrl,
+	  collectionName,clientid)) .thenReturn(schemaKeyValuePair1);
+	  DocumentSatisfiesSchemaResponse doc = new
+	  DocumentSatisfiesSchemaResponse(false, "Success!");
+	  Mockito.when(documentParser.isDocumentSatisfySchema(Mockito.any(),
+	  Mockito.any())).thenReturn(doc);	 
+	  Mockito.when(microserviceHttpGateway.postRequestWithStringBody()).thenReturn(
+	  jsonString);
+	  }
+	 
+	
+	  @Test 
+	  void testadDocuments() {
+	  
+	  int statusCode = 200;
+	  
+	  setMockitoSuccessResponseForService(); 
+	  SolrResponseDTO solrresponseDto =
+	  solrDocumentService.addDocuments(collectionName, payload, clientid);
+	  assertEquals(statusCode, solrresponseDto.getStatusCode());
+	  
+		
+	  setMockitoBadResponseForService(); SolrResponseDTO solrResponseDto =
+	  solrDocumentService.addDocuments(collectionName, payload, clientid);
+	  assertNotEquals(statusCode, solrResponseDto.getStatusCode());
+	  
+	  setMockitoSuccessResponseForService(); 
+	  SolrResponseDTO solrrsponseDto =
+	  solrDocumentService.addDocument(collectionName, payload, clientid);
+	  assertEquals(statusCode, solrrsponseDto.getStatusCode());
+		 
+		  
+	  setMockitoBadResponseForService();
+	  SolrResponseDTO ResponseDto =
+			  solrDocumentService.addDocument(collectionName, payload, clientid);
+			  assertNotEquals(statusCode, ResponseDto.getStatusCode());
+	  }
+	 
 }

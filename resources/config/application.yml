@@ -244,7 +244,7 @@ microservice-url:
     create: /api/schema
     delete: /api/schema
   document:
-    input: /api/documents
+    input: /api-versioned/v1
 
 # Throttler configurations
 base-app-url: http://localhost:8080
