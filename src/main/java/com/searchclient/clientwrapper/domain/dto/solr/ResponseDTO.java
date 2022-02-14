@@ -15,7 +15,7 @@ public class ResponseDTO {
 
     private int statusCode;
     private String name;
-    private String message;
+    private String responseMessage;
 
     public ResponseDTO(String name) {
         this.name = name;
