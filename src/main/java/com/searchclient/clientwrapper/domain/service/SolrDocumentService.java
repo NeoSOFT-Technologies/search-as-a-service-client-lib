@@ -31,6 +31,25 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 
 	@Autowired
 	DocumentParserUtil documentparserUtil;
+	
+	private ResponseDTO extracted(ResponseDTO solrResponseDTO, String message) {
+		log.debug(message);
+		solrResponseDTO.setResponseMessage(message);
+		solrResponseDTO.setStatusCode(400);
+		return solrResponseDTO;
+	}
+	
+	private void extracted(String payload, ResponseDTO solrResponseDTO, String url) {
+		microserviceHttpGateway.setApiEndpoint(url);
+		microserviceHttpGateway.setRequestBodyDTO(payload);
+		String jsonString = microserviceHttpGateway.postRequestWithStringBody();
+
+		JSONObject jsonObject = new JSONObject(jsonString);
+
+		solrResponseDTO.setResponseMessage(jsonObject.get("responseMessage").toString());
+		solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
+	}
+
 
 	@Override
 	public ResponseDTO addDocuments(String collectionName, String payload, int clientid) {
@@ -42,10 +61,7 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 		if (schemaKeyValuePair == null) {
 
 			String message = "Unable to get the Schema. Please check the collection name again!";
-			log.debug(message);
-			solrResponseDTO.setResponseMessage(message);
-			solrResponseDTO.setStatusCode(400);
-			return solrResponseDTO;
+			return extracted(solrResponseDTO, message);
 		}
 		JSONArray payloadJSONArray = null;
 		try {
@@ -60,10 +76,7 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 				log.debug(e1.toString());
 
 				String message = "Invalid input JSON array of document.";
-				log.debug(message);
-				solrResponseDTO.setResponseMessage(message);
-				solrResponseDTO.setStatusCode(400);
-				return solrResponseDTO;
+				return extracted(solrResponseDTO, message);
 			}
 		}
 
@@ -90,18 +103,14 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 
 		String url = baseMicroserviceUrl + inputDocumentMicroserviceAPI + "/ingest-nrt/" + clientid + "/" + collectionName;
 
-		microserviceHttpGateway.setApiEndpoint(url);
-		microserviceHttpGateway.setRequestBodyDTO(payload);
-		String jsonString = microserviceHttpGateway.postRequestWithStringBody();
-
-		JSONObject jsonObject = new JSONObject(jsonString);
-
-		solrResponseDTO.setResponseMessage(jsonObject.get("responseMessage").toString());
-		solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
+		extracted(payload, solrResponseDTO, url);
 
 		return solrResponseDTO;
 
 	}
+
+	
+
 
 	@Override
 	public ResponseDTO addDocument(String collectionName, String payload, int clientid) {
@@ -112,10 +121,7 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 		if (schemaKeyValuePair == null) {
 
 			String message = "Unable to get the Schema. Please check the collection name again!";
-			log.debug(message);
-			solrResponseDTO.setResponseMessage(message);
-			solrResponseDTO.setStatusCode(400);
-			return solrResponseDTO;
+			return extracted(solrResponseDTO, message);
 		}
 		JSONArray payloadJSONArray = null;
 		try {
@@ -130,10 +136,7 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 				log.debug(e1.toString());
 
 				String message = "Invalid input JSON array of document.";
-				log.debug(message);
-				solrResponseDTO.setResponseMessage(message);
-				solrResponseDTO.setStatusCode(400);
-				return solrResponseDTO;
+				return extracted(solrResponseDTO, message);
 			}
 		}
 
@@ -162,14 +165,7 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 
 		String url = baseMicroserviceUrl + inputDocumentMicroserviceAPI + "/ingest/" + clientid + "/" + collectionName;
 
-		microserviceHttpGateway.setApiEndpoint(url);
-		microserviceHttpGateway.setRequestBodyDTO(payload);
-		String jsonString = microserviceHttpGateway.postRequestWithStringBody();
-
-		JSONObject jsonObject = new JSONObject(jsonString);
-
-		solrResponseDTO.setResponseMessage(jsonObject.get("responseMessage").toString());
-		solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
+		extracted(payload, solrResponseDTO, url);
 		return solrResponseDTO;
 	}
 
