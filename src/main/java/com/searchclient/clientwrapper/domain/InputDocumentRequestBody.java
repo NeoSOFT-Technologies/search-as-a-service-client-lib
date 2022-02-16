@@ -1,4 +1,4 @@
-package com.searchclient.clientwrapper.domain.dto.solr.document;
+package com.searchclient.clientwrapper.domain;
 
 
 import lombok.AllArgsConstructor;
@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class InputDocumentRequestBodyDTO {
+public class InputDocumentRequestBody {
 
 	private String tableName;
 	private String isNRT;
     private Object payload;
     
-	public InputDocumentRequestBodyDTO(Object payload) {
+	public InputDocumentRequestBody(Object payload) {
 		this.payload = payload;
 	}
 

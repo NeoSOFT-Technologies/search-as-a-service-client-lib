@@ -1,10 +1,12 @@
-package com.searchclient.clientwrapper.managetable;
+package com.searchclient.clientwrapper.domain;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
 
@@ -13,6 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @Service
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CapacityPlanProperties {
 
 	private List<Plan> plans;

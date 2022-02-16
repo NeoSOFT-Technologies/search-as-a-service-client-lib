@@ -255,7 +255,7 @@ public class DocumentParserUtil {
 
 		JSONObject jsonObject = microserviceHttpGateway.getRequest();
 
-		JSONArray jsonArrayOfAttributesFields = (JSONArray) jsonObject.get("attributes");
+		JSONArray jsonArrayOfAttributesFields = (JSONArray) jsonObject.get("columns");
 
 		System.out.println("jsonArrayOfAttributesFields");
 		System.out.println(jsonArrayOfAttributesFields);

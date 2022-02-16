@@ -1,4 +1,4 @@
-package com.searchclient.clientwrapper.managetable;
+package com.searchclient.clientwrapper.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class SchemaFieldDTO {
+public class SchemaField {
 
 	String name;
 	String type;
