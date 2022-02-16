@@ -71,7 +71,7 @@ public class MicroserviceHttpGateway {
 
 	}
 
-	public JSONObject postRequest() {
+	public String postRequest() {
 
 		log.debug("Post Request Method Called in MicroserviceHttpGateway");
 		log.debug("API Endpoint -" + apiEndpoint);
@@ -79,7 +79,7 @@ public class MicroserviceHttpGateway {
 
 
 
-		JSONObject jsonObject = null;
+		String result = null;
 
 		CloseableHttpClient client = HttpClients.createDefault();
 		HttpPost http = new HttpPost(apiEndpoint);
@@ -102,11 +102,10 @@ public class MicroserviceHttpGateway {
 
 			CloseableHttpResponse response = client.execute(http);
 			HttpEntity entityResponse = response.getEntity();
-			String result = EntityUtils.toString(entityResponse);
+			 result = EntityUtils.toString(entityResponse);
 
 			log.debug("RESPONSE: " + result);
 
-			jsonObject = new JSONObject(result);
 
 			client.close();
 
@@ -117,15 +116,15 @@ public class MicroserviceHttpGateway {
 
 		}
 
-		return jsonObject;
+		return result;
 
 	}
 
-	public JSONObject putRequest() {
+	public String putRequest() {
 		log.debug("Put Request Method Called in MicroserviceHttpGateway");
 		log.debug("API Endpoint -" + apiEndpoint);
 
-		JSONObject jsonObject = null;
+		String result = "";
 
 		CloseableHttpClient client = HttpClients.createDefault();
 		HttpPut http = new HttpPut(apiEndpoint);
@@ -144,10 +143,9 @@ public class MicroserviceHttpGateway {
 
 			CloseableHttpResponse response = client.execute(http);
 			HttpEntity entityResponse = response.getEntity();
-			String result = EntityUtils.toString(entityResponse);
+			 result = EntityUtils.toString(entityResponse);
 			log.debug("RESPONSE: " + result);
 
-			jsonObject = new JSONObject(result);
 
 			client.close();
 
@@ -158,15 +156,15 @@ public class MicroserviceHttpGateway {
 
 		}
 
-		return jsonObject;
+		return result;
 
 	}
 
-	public JSONObject deleteRequest() {
+	public String deleteRequest() {
 		log.debug("Delete Request Method Called in MicroserviceHttpGateway");
 		log.debug("API Endpoint -" + apiEndpoint);
 
-		JSONObject jsonObject = null;
+		String result = "";
 
 		CloseableHttpClient client = HttpClients.createDefault();
 		HttpDelete http = new HttpDelete(apiEndpoint);
@@ -183,10 +181,9 @@ public class MicroserviceHttpGateway {
 
 			CloseableHttpResponse response = client.execute(http);
 			HttpEntity entityResponse = response.getEntity();
-			String result = EntityUtils.toString(entityResponse);
+			 result = EntityUtils.toString(entityResponse);
 			log.debug("RESPONSE: " + result);
 
-			jsonObject = new JSONObject(result);
 
 			client.close();
 
@@ -197,7 +194,7 @@ public class MicroserviceHttpGateway {
 
 		}
 
-		return jsonObject;
+		return result;
 
 
 	}
@@ -239,14 +236,16 @@ public class MicroserviceHttpGateway {
 		return jsonObject;
 
 	}
+	
+	public String getRequestV2() {
 
-    public String stringRequest(){ 
+        String result = "";
 
         CloseableHttpClient client = HttpClients.createDefault();
         HttpGet http = new HttpGet(apiEndpoint);
 
         ObjectMapper objectMapper = new ObjectMapper();
-        String result = null;
+
         try {
 
             String objJackson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(requestBodyDTO);
@@ -256,11 +255,11 @@ public class MicroserviceHttpGateway {
             http.setHeader("Content-type", "application/json");
 
             CloseableHttpResponse response = client.execute(http);
+        
             HttpEntity entityResponse = response.getEntity();
-            result = EntityUtils.toString(entityResponse);
-            log.debug("RESPONSE: "+ result);
+             result = EntityUtils.toString(entityResponse);
+            log.debug("RESPONSE: " + result);
 
-           
 
             client.close();
 
@@ -274,5 +273,7 @@ public class MicroserviceHttpGateway {
         return result;
 
     }
+
+
 
 }

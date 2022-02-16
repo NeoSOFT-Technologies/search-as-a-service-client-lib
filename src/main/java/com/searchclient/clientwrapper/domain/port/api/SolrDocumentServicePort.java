@@ -1,9 +1,8 @@
 package com.searchclient.clientwrapper.domain.port.api;
 
-import com.searchclient.clientwrapper.domain.dto.solr.SolrResponseDTO;
+import com.searchclient.clientwrapper.domain.IngestionResponse;
 
 public interface SolrDocumentServicePort {
-
-	SolrResponseDTO addDocuments(String collectionName, String payload, boolean isNRT);
+IngestionResponse addDocuments(String collectionName, String payload, boolean isNRT);
    
 }
