@@ -244,7 +244,8 @@ microservice-url:
     create: /api/schema
     delete: /api/schema
   document:
-    input: /api/documents
+    input: /api/v1/ingest-nrt
+    inputbatch: /api/v1/ingest
   manage-table:
     create: /api/v1/manage/table
     get-collections: /api/v1/manage/table
