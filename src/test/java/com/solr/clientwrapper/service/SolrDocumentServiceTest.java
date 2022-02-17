@@ -77,8 +77,8 @@ public class SolrDocumentServiceTest {
 
 		DocumentSatisfiesSchemaResponse doc = new DocumentSatisfiesSchemaResponse(true, "Success!");
 
-		Mockito.when(documentParser.getSchemaOfCollection(baseMicroserviceUrl, collectionName))
-				.thenReturn(schemaKeyValuePair);
+//		Mockito.when(documentParser.getSchemaOfCollection(baseMicroserviceUrl, collectionName))
+//				.thenReturn(schemaKeyValuePair);
 
 		Mockito.when(documentParser.isDocumentSatisfySchema(Mockito.any(), Mockito.any())).thenReturn(doc);
 		Mockito.when(microserviceHttpGateway.postRequestWithStringBody()).thenReturn(jsonString);
@@ -92,8 +92,8 @@ public class SolrDocumentServiceTest {
 		JsonObject = new JSONObject(solrResponseDTO);
 		String jsonString = JsonObject.toString();
 
-		Mockito.when(documentParser.getSchemaOfCollection(baseMicroserviceUrl, collectionName))
-				.thenReturn(schemaKeyValuePair);
+//		Mockito.when(documentParser.getSchemaOfCollection(baseMicroserviceUrl, collectionName))
+//				.thenReturn(schemaKeyValuePair);
 		DocumentSatisfiesSchemaResponse doc = new DocumentSatisfiesSchemaResponse(false, "Success!");
 		Mockito.when(documentParser.isDocumentSatisfySchema(Mockito.any(), Mockito.any())).thenReturn(doc);
 		Mockito.when(microserviceHttpGateway.postRequestWithStringBody()).thenReturn(jsonString);
