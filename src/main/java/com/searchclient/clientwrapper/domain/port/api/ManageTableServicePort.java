@@ -32,5 +32,8 @@ public interface ManageTableServicePort {
     Response create(int clientId, ManageTableCreate manageTableDTO);
  // Update requests
     Response update(String tableName, int clientId, ManageTableUpdate tableSchema);
+    
+    //UNDO TABLE DELET requests
+    Response restoreTable(int clientId, String tableName);
 
 }
