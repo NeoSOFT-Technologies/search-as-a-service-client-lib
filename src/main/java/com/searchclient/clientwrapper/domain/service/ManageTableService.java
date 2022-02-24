@@ -34,6 +34,9 @@ public class ManageTableService implements ManageTableServicePort {
 
     @Value("${microservice-url.manage-table.delete}")
     private String deleteMicroserviceAPI;
+    
+    @Value("${microservice-url.manage-table.restore}")
+    private String restoreMicroserviceAPI;
 
     @Value("${microservice-url.manage-table.update}")
     private String renameMicroserviceAPI;
@@ -174,4 +177,19 @@ public class ManageTableService implements ManageTableServicePort {
 
         return response;
     }
+
+	@Override
+	public Response restoreTable(int clientId, String tableName) {
+		 Response response = new Response();
+
+	        microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + restoreMicroserviceAPI +"/"+clientId+ "/" + tableName);
+	        String jsonObject = microserviceHttpGateway.putRequest();
+	        try {
+	            response = objectMapper.readValue(jsonObject, Response.class);
+	        } catch (IOException e) {
+	            log.error(e.getMessage());
+	        }
+
+	        return response;
+	}
 }

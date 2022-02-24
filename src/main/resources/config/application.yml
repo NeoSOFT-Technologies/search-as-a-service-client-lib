@@ -253,6 +253,7 @@ microservice-url:
     get-schema: /api/v1/manage/table/schema
     update: /api/v1/manage/table
     delete: /api/v1/manage/table
+    restore: /api/v1/manage/table
 # Throttler configurations
 base-app-url: http://localhost:8080
 throttler-test-app-url: http://localhost:8082
