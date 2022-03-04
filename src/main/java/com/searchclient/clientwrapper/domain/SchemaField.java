@@ -19,5 +19,6 @@ public class SchemaField {
 	boolean isStorable;
 	boolean isMultiValue;
 	boolean isSortable;
+	boolean isPartialSearch;
 
 }
