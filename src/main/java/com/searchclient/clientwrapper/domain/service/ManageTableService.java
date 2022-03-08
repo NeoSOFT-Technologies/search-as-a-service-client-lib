@@ -1,15 +1,11 @@
 package com.searchclient.clientwrapper.domain.service;
 
 import java.io.IOException;
-
-import javax.transaction.Transactional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.searchclient.clientwrapper.domain.CapacityPlanProperties;
@@ -21,7 +17,6 @@ import com.searchclient.clientwrapper.domain.port.api.ManageTableServicePort;
 import com.searchclient.clientwrapper.domain.utils.MicroserviceHttpGateway;
 
 @Service
-@Transactional
 public class ManageTableService implements ManageTableServicePort {
 
     private final Logger log = LoggerFactory.getLogger(ManageTableService.class);

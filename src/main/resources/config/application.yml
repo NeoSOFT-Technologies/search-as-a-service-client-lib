@@ -220,7 +220,7 @@ capacity-plan:
       shards: 5
       storage: 2
 
-base-microservice-url: http://localhost:8080
+base-microservice-url: http://localhost:8081
 
 #URL Path to the Microservice Endpoints
 microservice-url:
@@ -253,7 +253,7 @@ microservice-url:
     get-schema: /api/v1/manage/table/schema
     update: /api/v1/manage/table
     delete: /api/v1/manage/table
-    restore: /api/v1/manage/table
+    restore: /api/v1/manage/table/restore
 # Throttler configurations
 base-app-url: http://localhost:8080
 throttler-test-app-url: http://localhost:8082
