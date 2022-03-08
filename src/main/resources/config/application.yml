@@ -220,7 +220,7 @@ capacity-plan:
       shards: 5
       storage: 2
 
-base-microservice-url: http://localhost:8080
+base-microservice-url: http://localhost:8081
 
 #URL Path to the Microservice Endpoints
 microservice-url:
