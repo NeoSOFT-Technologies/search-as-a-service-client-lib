@@ -1,11 +1,13 @@
 package com.searchclient.clientwrapper.domain.utils;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -16,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.searchclient.clientwrapper.domain.error.MicroserviceConnectionException;
 
 import lombok.Data;
 
@@ -61,7 +64,7 @@ public class MicroserviceHttpGateway {
 			client.close();
 
 		} catch (Exception e) {
-
+			handleException(e);
 			e.printStackTrace();
 			log.error(e.toString());
 
@@ -79,7 +82,7 @@ public class MicroserviceHttpGateway {
 
 
 
-		String result = null;
+		String result = "{}";
 
 		CloseableHttpClient client = HttpClients.createDefault();
 		HttpPost http = new HttpPost(apiEndpoint);
@@ -110,7 +113,7 @@ public class MicroserviceHttpGateway {
 			client.close();
 
 		} catch (Exception e) {
-
+			handleException(e);
 			e.printStackTrace();
 			log.error(e.toString());
 
@@ -124,7 +127,7 @@ public class MicroserviceHttpGateway {
 		log.debug("Put Request Method Called in MicroserviceHttpGateway");
 		log.debug("API Endpoint -" + apiEndpoint);
 
-		String result = "";
+		String result = "{}";
 
 		CloseableHttpClient client = HttpClients.createDefault();
 		HttpPut http = new HttpPut(apiEndpoint);
@@ -150,7 +153,7 @@ public class MicroserviceHttpGateway {
 			client.close();
 
 		} catch (Exception e) {
-
+			handleException(e);
 			e.printStackTrace();
 			log.error(e.toString());
 
@@ -164,7 +167,7 @@ public class MicroserviceHttpGateway {
 		log.debug("Delete Request Method Called in MicroserviceHttpGateway");
 		log.debug("API Endpoint -" + apiEndpoint);
 
-		String result = "";
+		String result = "{}";
 
 		CloseableHttpClient client = HttpClients.createDefault();
 		HttpDelete http = new HttpDelete(apiEndpoint);
@@ -188,7 +191,7 @@ public class MicroserviceHttpGateway {
 			client.close();
 
 		} catch (Exception e) {
-
+			handleException(e);
 			e.printStackTrace();
 			log.error(e.toString());
 
@@ -227,7 +230,7 @@ public class MicroserviceHttpGateway {
 			client.close();
 
 		} catch (Exception e) {
-
+			handleException(e);
 			e.printStackTrace();
 			log.error(e.toString());
 
@@ -239,7 +242,7 @@ public class MicroserviceHttpGateway {
 	
 	public String getRequestV2() {
 
-        String result = "";
+        String result = "{}";
 
         CloseableHttpClient client = HttpClients.createDefault();
         HttpGet http = new HttpGet(apiEndpoint);
@@ -264,7 +267,7 @@ public class MicroserviceHttpGateway {
             client.close();
 
         } catch (Exception e) {
-
+        	handleException(e);
             e.printStackTrace();
             log.error(e.toString());
 
@@ -274,6 +277,10 @@ public class MicroserviceHttpGateway {
 
     }
 
-
+	private void handleException(Exception exception) {
+		if(exception instanceof HttpHostConnectException) {
+			throw new MicroserviceConnectionException(HttpStatus.SC_SERVICE_UNAVAILABLE,"Unable to connect Microservice");
+		}
+	}
 
 }

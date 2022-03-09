@@ -59,6 +59,9 @@ spring:
       host: http://localhost:8983/solr/
       repositories:
         enabled: false
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
   profiles:
     # The commented value for `active` can be replaced with valid Spring profiles to load.
     # Otherwise, it will be filled in by gradle when building the JAR file
