@@ -36,7 +36,13 @@ task clientLibraryCustomJar(type: Jar) {
 	manifest {
 		//attributes 'Main-Class': 'com.solr.clientwrapper.BasicSampleApp'
 	}
-	baseName = 'clientlib'
+	//baseName = 'clientlib'
+	archivesBaseName = 'clientlib'
+	if (project.hasProperty('projVersion')) {
+	  project.version = project.projVersion
+	} else {
+	  project.version = ''
+	}
 	from {
 		configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
 	}
