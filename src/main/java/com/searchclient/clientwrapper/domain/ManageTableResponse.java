@@ -15,10 +15,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ManageTableResponse  {
 
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	public static class TableSchemav2Data {
         private String tableName;
         private List<SchemaField> columns;
