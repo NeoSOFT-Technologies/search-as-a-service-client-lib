@@ -125,4 +125,9 @@ public class RestControllerAdvice {
 	public ResponseEntity<RestApiError> handleMicroserviceConnectionException(MicroserviceConnectionException exception){
 		return frameRestApiException(new RestApiError(HttpStatus.SERVICE_UNAVAILABLE, exception.getExceptionMessage()));
 	}
+	
+	@ExceptionHandler(JwtAuthenticationFailureException.class)
+	public ResponseEntity<RestApiError> handleJwtAuthenticationFailureException(JwtAuthenticationFailureException exception){
+		return frameRestApiException(new RestApiError(HttpStatus.FORBIDDEN, exception.getExceptionMessage()));
+	}
 }

@@ -15,9 +15,11 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.searchclient.clientwrapper.domain.error.JwtAuthenticationFailureException;
 import com.searchclient.clientwrapper.domain.error.MicroserviceConnectionException;
 
 import lombok.Data;
@@ -30,14 +32,15 @@ public class MicroserviceHttpGateway {
 
 	private String apiEndpoint;
 	private Object requestBodyDTO;
+	//@Autowired DocumentParserUtil documentParserUtil;
 
-	public String postRequestWithStringBody() {
+	public String postRequestWithStringBody(String jwtToken) {
 
 		String jsonObject = null;
 		log.debug("Post Request String Method Called in MicroserviceHttpGateway");
 		log.debug("API Endpoint - "+apiEndpoint);
 		log.debug("Request Body - "+requestBodyDTO);
-
+		isTokenNullOrValid(jwtToken);
 		CloseableHttpClient client = HttpClients.createDefault();
 		HttpPost http = new HttpPost(apiEndpoint);
 
@@ -52,7 +55,7 @@ public class MicroserviceHttpGateway {
 			http.setEntity(entity);
 			http.setHeader("Accept", "application/json");
 			http.setHeader("Content-type", "application/json");
-
+			http.setHeader("Authorization", jwtToken);
 			CloseableHttpResponse response = client.execute(http);
 			HttpEntity entityResponse = response.getEntity();
 			String result = EntityUtils.toString(entityResponse);
@@ -74,12 +77,12 @@ public class MicroserviceHttpGateway {
 
 	}
 
-	public String postRequest() {
+	public String postRequest(String jwtToken) {
 
 		log.debug("Post Request Method Called in MicroserviceHttpGateway");
 		log.debug("API Endpoint -" + apiEndpoint);
 		log.debug("REQUEST BODY -"+ requestBodyDTO);
-
+		isTokenNullOrValid(jwtToken);
 
 
 		String result = "{}";
@@ -100,7 +103,7 @@ public class MicroserviceHttpGateway {
 			http.setEntity(entity);
 			http.setHeader("Accept", "application/json");
 			http.setHeader("Content-type", "application/json");
-
+			http.setHeader("Authorization", jwtToken);
 			log.debug("Sending POST request");
 
 			CloseableHttpResponse response = client.execute(http);
@@ -123,10 +126,10 @@ public class MicroserviceHttpGateway {
 
 	}
 
-	public String putRequest() {
+	public String putRequest(String jwtToken) {
 		log.debug("Put Request Method Called in MicroserviceHttpGateway");
 		log.debug("API Endpoint -" + apiEndpoint);
-
+		isTokenNullOrValid(jwtToken);
 		String result = "{}";
 
 		CloseableHttpClient client = HttpClients.createDefault();
@@ -142,6 +145,7 @@ public class MicroserviceHttpGateway {
 			http.setEntity(entity);
 			http.setHeader("Accept", "application/json");
 			http.setHeader("Content-type", "application/json");
+			http.setHeader("Authorization", jwtToken);
 			log.debug("Sending DELETE request");
 
 			CloseableHttpResponse response = client.execute(http);
@@ -163,10 +167,10 @@ public class MicroserviceHttpGateway {
 
 	}
 
-	public String deleteRequest() {
+	public String deleteRequest(String jwtToken) {
 		log.debug("Delete Request Method Called in MicroserviceHttpGateway");
 		log.debug("API Endpoint -" + apiEndpoint);
-
+		isTokenNullOrValid(jwtToken);
 		String result = "{}";
 
 		CloseableHttpClient client = HttpClients.createDefault();
@@ -181,7 +185,7 @@ public class MicroserviceHttpGateway {
 
 			http.setHeader("Accept", "application/json");
 			http.setHeader("Content-type", "application/json");
-
+			http.setHeader("Authorization", jwtToken);
 			CloseableHttpResponse response = client.execute(http);
 			HttpEntity entityResponse = response.getEntity();
 			 result = EntityUtils.toString(entityResponse);
@@ -202,10 +206,10 @@ public class MicroserviceHttpGateway {
 
 	}
 
-	public JSONObject getRequest() {
+	public JSONObject getRequest(String jwtToken) {
 
 		JSONObject jsonObject = null;
-
+		isTokenNullOrValid(jwtToken);
 		CloseableHttpClient client = HttpClients.createDefault();
 		HttpGet http = new HttpGet(apiEndpoint);
 
@@ -218,7 +222,7 @@ public class MicroserviceHttpGateway {
 
 			http.setHeader("Accept", "application/json");
 			http.setHeader("Content-type", "application/json");
-
+			http.setHeader("Authorization", jwtToken);
 			CloseableHttpResponse response = client.execute(http);
 		
 			HttpEntity entityResponse = response.getEntity();
@@ -240,10 +244,10 @@ public class MicroserviceHttpGateway {
 
 	}
 	
-	public String getRequestV2() {
+	public String getRequestV2(String jwtToken) {
 
         String result = "{}";
-
+        isTokenNullOrValid(jwtToken);
         CloseableHttpClient client = HttpClients.createDefault();
         HttpGet http = new HttpGet(apiEndpoint);
 
@@ -256,7 +260,7 @@ public class MicroserviceHttpGateway {
 
             http.setHeader("Accept", "application/json");
             http.setHeader("Content-type", "application/json");
-
+            http.setHeader("Authorization", jwtToken);
             CloseableHttpResponse response = client.execute(http);
         
             HttpEntity entityResponse = response.getEntity();
@@ -283,4 +287,8 @@ public class MicroserviceHttpGateway {
 		}
 	}
 
+	public void isTokenNullOrValid(String jwtToken) {
+    	if((null == jwtToken || jwtToken.isEmpty() || jwtToken.isBlank() || !jwtToken.startsWith("Bearer "))?true:false)
+    		throw new JwtAuthenticationFailureException(HttpStatus.SC_FORBIDDEN,"Provide valid token");
+    }
 }

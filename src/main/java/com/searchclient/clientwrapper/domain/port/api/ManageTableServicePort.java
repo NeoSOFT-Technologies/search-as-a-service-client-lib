@@ -2,6 +2,7 @@ package com.searchclient.clientwrapper.domain.port.api;
 
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.searchclient.clientwrapper.domain.CapacityPlanProperties;
 import com.searchclient.clientwrapper.domain.ManageTableCreate;
 import com.searchclient.clientwrapper.domain.Response;
@@ -20,20 +21,20 @@ public interface ManageTableServicePort {
 
 	// DELETE requests
 
-	Response delete(int clientId,String tableName);
+	Response delete(int clientId,String tableName, String jwtToken);
 // get Tables requests
-	Response getTables(int clientId);
+	Response getTables(int clientId, String jwtToken);
 
 	// get capacityPlans requests
-	CapacityPlanProperties capacityPlans();
+	CapacityPlanProperties capacityPlans(String jwtToken);
 
-    ManageTableResponse getTable(String tableName, int clientId);
+    ManageTableResponse getTable(String tableName, int clientId, String jwtToken);
     // Create request
-    Response create(int clientId, ManageTableCreate manageTableDTO);
+    Response create(int clientId, ManageTableCreate manageTableDTO, String jwtToken);
  // Update requests
-    Response update(String tableName, int clientId, ManageTableUpdate tableSchema);
+    Response update(String tableName, int clientId, ManageTableUpdate tableSchema, String jwtToken);
     
     //UNDO TABLE DELET requests
-    Response restoreTable(int clientId, String tableName);
+    Response restoreTable(int clientId, String tableName, String jwtToken);
 
 }

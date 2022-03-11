@@ -34,11 +34,11 @@ public class SolrDocumentService implements SolrDocumentServicePort {
     DocumentParserUtil documentparserUtil;
 
     @Override
-    public IngestionResponse addNRTDocuments(String tableName, String payload,int clientId) {
+    public IngestionResponse addNRTDocuments(String tableName, String payload,int clientId, String jwtToken) {
 
         IngestionResponse solrResponseDTO = new IngestionResponse();
 
-        Map<String, Map<String, Object>> schemaKeyValuePair = documentparserUtil.getSchemaOfCollection(baseMicroserviceUrl, tableName,clientId);
+        Map<String, Map<String, Object>> schemaKeyValuePair = documentparserUtil.getSchemaOfCollection(baseMicroserviceUrl, tableName,clientId, jwtToken);
 
         if (schemaKeyValuePair == null) {
 
@@ -54,7 +54,7 @@ public class SolrDocumentService implements SolrDocumentServicePort {
         }
         String url = baseMicroserviceUrl + inputDocumentMicroserviceAPI +"/"+clientId+ "/" + tableName;
 
-        JSONObject jsonObject = uploadData(tableName, payload, clientId,url);
+        JSONObject jsonObject = uploadData(tableName, payload, clientId,url,jwtToken);
 
         solrResponseDTO.setMessage(jsonObject.get("message").toString());
         solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
@@ -63,15 +63,15 @@ public class SolrDocumentService implements SolrDocumentServicePort {
 
     }
 
-    private JSONObject uploadData(String collectionName, String payload, int clientId,String url) {
+    private JSONObject uploadData(String collectionName, String payload, int clientId,String url, String jwtToken) {
 
        
         System.out.println("calling url "+url);
 
         microserviceHttpGateway.setApiEndpoint(url);
         microserviceHttpGateway.setRequestBodyDTO(payload);
-        String jsonString = microserviceHttpGateway.postRequestWithStringBody();
-
+        String jsonString = microserviceHttpGateway.postRequestWithStringBody(jwtToken);
+        documentparserUtil.isJwtAuthenticationError(jsonString);
         return new JSONObject(jsonString);
     }
 
@@ -115,11 +115,11 @@ public class SolrDocumentService implements SolrDocumentServicePort {
     }
 
     @Override
-    public IngestionResponse addDocument(String tableName, String payload, int clientId) {
+    public IngestionResponse addDocument(String tableName, String payload, int clientId, String jwtToken) {
 
         IngestionResponse solrResponseDTO = new IngestionResponse();
 
-        Map<String, Map<String, Object>> schemaKeyValuePair = documentparserUtil.getSchemaOfCollection(baseMicroserviceUrl, tableName,clientId);
+        Map<String, Map<String, Object>> schemaKeyValuePair = documentparserUtil.getSchemaOfCollection(baseMicroserviceUrl, tableName,clientId, jwtToken);
 
         if (schemaKeyValuePair == null) {
 
@@ -134,7 +134,7 @@ public class SolrDocumentService implements SolrDocumentServicePort {
             return solrResponseDTO;
         }
         String url = baseMicroserviceUrl + inputDocumentBatchMicroserviceAPI +"/"+clientId+ "/" + tableName;
-        JSONObject jsonObject = uploadData(tableName, payload, clientId,url);
+        JSONObject jsonObject = uploadData(tableName, payload, clientId,url, jwtToken);
 
         solrResponseDTO.setMessage(jsonObject.get("message").toString());
         solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
