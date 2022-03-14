@@ -228,13 +228,13 @@ public class DocumentParserUtilTest {
     public void setMockitoSuccessResponseForService() {
         JSONObject jsonobject = new JSONObject(json2);
 		doc = new DocumentSatisfiesSchemaResponse(true, "Successful!");
-		Mockito.when(microserviceHttpgateway.getRequest()).thenReturn(jsonobject);
+		Mockito.when(microserviceHttpgateway.getRequest(Mockito.anyString())).thenReturn(jsonobject);
 	}
     
     public void setMockitoBadResponseForService() {
     	JSONObject jsonObject = new JSONObject(json2);
     	doc = new DocumentSatisfiesSchemaResponse(false, "Successful!");
-		Mockito.when(microserviceHttpgateway.getRequest()).thenReturn(jsonObject);
+		Mockito.when(microserviceHttpgateway.getRequest(Mockito.anyString())).thenReturn(jsonObject);
     }
 	
 	@Test

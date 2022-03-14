@@ -53,7 +53,7 @@ class MicroserviceHttpGatewayTest {
 	void postRequestWithStringBodyTets() throws ClientProtocolException, IOException {
 		
 		setMockitoSucccessResponseForService();
-		 String response = microserviceHttpGateway.postRequestWithStringBody();
+		 String response = microserviceHttpGateway.postRequestWithStringBody(Mockito.anyString());
 		assertEquals(response1,response.toString());
 	}
 }

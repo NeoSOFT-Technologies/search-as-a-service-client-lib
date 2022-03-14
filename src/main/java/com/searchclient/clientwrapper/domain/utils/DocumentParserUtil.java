@@ -1,8 +1,11 @@
 package com.searchclient.clientwrapper.domain.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.searchclient.clientwrapper.domain.error.JwtAuthenticationFailureException;
 import com.searchclient.clientwrapper.domain.service.SolrDocumentService;
 import lombok.Data;
+
+import org.apache.http.HttpStatus;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -229,7 +232,7 @@ public class DocumentParserUtil {
         return new DocumentSatisfiesSchemaResponse(true, "Success!");
     }
 
-    public Map<String, Map<String, Object>> getSchemaOfCollection(String baseMicroserviceUrl, String collectionName, int clientid) {
+    public Map<String, Map<String, Object>> getSchemaOfCollection(String baseMicroserviceUrl, String collectionName, int clientid, String jwtToken) {
 
         // THIS METHOD HITS THE GET SCHEMA METHOD OF THE MICROSERVICE AND GETS
         // THE
@@ -244,7 +247,7 @@ public class DocumentParserUtil {
         microserviceHttpGateway.setApiEndpoint(url);
         microserviceHttpGateway.setRequestBodyDTO(null);
 
-        JSONObject jsonObject = microserviceHttpGateway.getRequest();
+        JSONObject jsonObject = microserviceHttpGateway.getRequest(jwtToken);
         JSONObject data= (JSONObject) jsonObject.get("data");
         JSONArray jsonArrayOfAttributesFields = (JSONArray) data.get("columns");
 
@@ -276,5 +279,10 @@ public class DocumentParserUtil {
             this.message = message;
         }
     }
-
+    
+    public void isJwtAuthenticationError(String jsonString) {
+    	JSONObject obj = new JSONObject(jsonString);
+    	if((obj.has("Unauthorized"))?obj.getString("Unauthorized").contains("Invalid token"):false)
+    		throw new JwtAuthenticationFailureException(HttpStatus.SC_FORBIDDEN,"Invalid Token");
+    }
 }

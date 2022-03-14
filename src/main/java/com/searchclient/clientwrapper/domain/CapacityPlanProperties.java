@@ -18,6 +18,9 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CapacityPlanProperties {
 
+	private int statusCode;
+	private String message;
+	private String timestamp;
 	private List<Plan> plans;
 
 	@Getter

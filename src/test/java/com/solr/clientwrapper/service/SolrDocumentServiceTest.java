@@ -81,7 +81,7 @@ public class SolrDocumentServiceTest {
 //				.thenReturn(schemaKeyValuePair);
 
 		Mockito.when(documentParser.isDocumentSatisfySchema(Mockito.any(), Mockito.any())).thenReturn(doc);
-		Mockito.when(microserviceHttpGateway.postRequestWithStringBody()).thenReturn(jsonString);
+		Mockito.when(microserviceHttpGateway.postRequestWithStringBody(Mockito.anyString())).thenReturn(jsonString);
 
 	}
 
@@ -96,7 +96,7 @@ public class SolrDocumentServiceTest {
 //				.thenReturn(schemaKeyValuePair);
 		DocumentSatisfiesSchemaResponse doc = new DocumentSatisfiesSchemaResponse(false, "Success!");
 		Mockito.when(documentParser.isDocumentSatisfySchema(Mockito.any(), Mockito.any())).thenReturn(doc);
-		Mockito.when(microserviceHttpGateway.postRequestWithStringBody()).thenReturn(jsonString);
+		Mockito.when(microserviceHttpGateway.postRequestWithStringBody(Mockito.anyString())).thenReturn(jsonString);
 	}
 
 //	@Test
