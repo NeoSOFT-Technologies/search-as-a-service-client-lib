@@ -1,4 +1,4 @@
-package com.solr.clientwrapper.service;
+package com.searchclient.clientwrapper.domain.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -19,15 +19,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.searchclient.clientwrapper.domain.IngestionResponse;
 import com.searchclient.clientwrapper.domain.Response;
-import com.searchclient.clientwrapper.domain.service.SolrDocumentService;
 import com.searchclient.clientwrapper.domain.utils.DocumentParserUtil;
 import com.searchclient.clientwrapper.domain.utils.DocumentParserUtil.DocumentSatisfiesSchemaResponse;
 import com.searchclient.clientwrapper.domain.utils.MicroserviceHttpGateway;
 
 @ExtendWith(MockitoExtension.class)
 @ExtendWith(SpringExtension.class)
-public class SolrDocumentServiceTest {
+class SolrDocumentServiceTest extends SolrDocumentService {
 
 	Logger logger = LoggerFactory.getLogger(SolrDocumentServiceTest.class);
 
@@ -40,11 +40,13 @@ public class SolrDocumentServiceTest {
 
 	Map<String, Object> map = new HashMap();
 	Map<String, Object> map2 = new HashMap();
+
 	@InjectMocks
 	SolrDocumentService solrDocumentService;
 
 	@MockBean
 	MicroserviceHttpGateway microserviceHttpGateway;
+
 	@MockBean
 	DocumentParserUtil documentParser;
 
@@ -77,40 +79,53 @@ public class SolrDocumentServiceTest {
 
 		DocumentSatisfiesSchemaResponse doc = new DocumentSatisfiesSchemaResponse(true, "Success!");
 
-//		Mockito.when(documentParser.getSchemaOfCollection(baseMicroserviceUrl, collectionName))
-//				.thenReturn(schemaKeyValuePair);
-
 		Mockito.when(documentParser.isDocumentSatisfySchema(Mockito.any(), Mockito.any())).thenReturn(doc);
 		Mockito.when(microserviceHttpGateway.postRequestWithStringBody(Mockito.anyString())).thenReturn(jsonString);
 
 	}
 
 	public void setMockitoBadResponseForService() {
-	    Response solrResponseDTO = new Response();
+		Response solrResponseDTO = new Response();
 		solrResponseDTO.setStatusCode(400);
 		solrResponseDTO.setMessage("Testing");
 		JsonObject = new JSONObject(solrResponseDTO);
 		String jsonString = JsonObject.toString();
 
-//		Mockito.when(documentParser.getSchemaOfCollection(baseMicroserviceUrl, collectionName))
-//				.thenReturn(schemaKeyValuePair);
 		DocumentSatisfiesSchemaResponse doc = new DocumentSatisfiesSchemaResponse(false, "Success!");
 		Mockito.when(documentParser.isDocumentSatisfySchema(Mockito.any(), Mockito.any())).thenReturn(doc);
 		Mockito.when(microserviceHttpGateway.postRequestWithStringBody(Mockito.anyString())).thenReturn(jsonString);
 	}
 
-//	@Test
+	@Test
 	void testadDocuments() {
 
-//		int statusCode = 200;
-//
-//		setMockitoSuccessResponseForService();
-//		SolrResponseDTO solrresponseDto = solrDocumentService.addDocuments(collectionName, payload, true);
-//		assertEquals(statusCode, solrresponseDto.getStatusCode());
-//
-//		setMockitoBadResponseForService();
-//		SolrResponseDTO solrResponseDto = solrDocumentService.addDocuments(collectionName, payload, false);
-//		assertNotEquals(statusCode, solrResponseDto.getStatusCode());
+		int statusCode = 200;
+
+		setMockitoSuccessResponseForService();
+		solrDocumentService.addDocument(collectionName, payload, statusCode, baseMicroserviceUrl);
+		assertEquals(statusCode, solrDocumentService
+				.addDocument(collectionName, payload, statusCode, baseMicroserviceUrl).getStatusCode());
+
+		setMockitoBadResponseForService();
+		IngestionResponse rsp = solrDocumentService.addDocument(collectionName, payload, statusCode, "");
+		assertNotEquals(statusCode, rsp.getStatusCode());
+
+	}
+
+	@Test
+	void addNRTDocuments() {
+
+		int statusCode = 200;
+
+		setMockitoSuccessResponseForService();
+
+		assertEquals(statusCode, solrDocumentService
+				.addNRTDocuments(collectionName, payload, statusCode, baseMicroserviceUrl).getStatusCode());
+
+		setMockitoBadResponseForService();
+
+		assertNotEquals(statusCode,
+				solrDocumentService.addNRTDocuments(collectionName, payload, statusCode, "").getStatusCode());
 
 	}
 }

@@ -15,7 +15,6 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -224,7 +223,7 @@ public class MicroserviceHttpGateway {
 			http.setHeader("Content-type", "application/json");
 			http.setHeader("Authorization", jwtToken);
 			CloseableHttpResponse response = client.execute(http);
-		
+		System.out.println("DDDDDDDDDDDDDDDDDDD"+response);
 			HttpEntity entityResponse = response.getEntity();
 			String result = EntityUtils.toString(entityResponse);
 			log.debug("RESPONSE: " + result);

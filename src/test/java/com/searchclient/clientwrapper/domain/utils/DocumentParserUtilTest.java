@@ -1,10 +1,13 @@
 package com.searchclient.clientwrapper.domain.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.searchclient.clientwrapper.domain.error.BadRequestOccurredException;
 import com.searchclient.clientwrapper.domain.utils.DocumentParserUtil.DocumentSatisfiesSchemaResponse;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
@@ -25,6 +28,14 @@ public class DocumentParserUtilTest {
 	
 	@InjectMocks
 	DocumentParserUtil documentParserUtil;
+	 @Mock
+	    private ObjectMapper objectMapper;
+	
+	String baseMicroserviceUrl="http://localhost:8983/solr";
+	
+	 String collectionName="Demo";
+			 int clientid=10;
+			 String jwtToken="sdodsadpasdasd";
 	
 	@MockBean
 	MicroserviceHttpGateway microserviceHttpgateway;
@@ -128,111 +139,19 @@ public class DocumentParserUtilTest {
             "}";
 
     JSONObject payloadJSON  = new JSONObject(inputString);
-
-
-   String json2 = "{\r\n"
-        + "\"name\":\"default-config\",\"attributes\":\r\n"
-        + "[\r\n"
-        + "{\r\n"
-        + "\"indexed\":true,\r\n"
-        + "\"name\":\"color\",\r\n"
-        + "\"default_\":\"Mnagesh\",\r\n"
-        + "\"storable\":true,\r\n"
-        + "\"docValues\":false,\r\n"
-        + "\"type\":\"string\",\r\n"
-        + "\"multiValued\":false,\r\n"
-        + "\"required\":false\r\n"
-        + "},{\r\n"
-        + "\"indexed\":true,\r\n"
-        + "\"name\":\"id\",\r\n"
-        + "\"default_\":\"mydefault\",\r\n"
-        + "\"storable\":true,\r\n"
-        + "\"docValues\":false,\r\n"
-        + "\"type\":\"string\",\r\n"
-        + "\"multiValued\":false,\r\n"
-        + "\"required\":true\r\n"
-        + "}],\r\n"
-        + "\"tableName\":\"demo1\",\r\n"
-        + "\"statusCode\":200\r\n"
-        + "}";
-
-//   String jsonResponseForGetSchema="{\n" +
-//           "  \"tableName\": \"karthikTable\",\n" +
-//           "  \"name\": \"default-config\",\n" +
-//           "  \"attributes\": [\n" +
-//           "    {\n" +
-//           "      \"name\": \"_nest_path_\",\n" +
-//           "      \"type\": \"_nest_path_\",\n" +
-//           "      \"default_\": \"mydefault\",\n" +
-//           "      \"sortable\": false,\n" +
-//           "      \"multiValue\": false,\n" +
-//           "      \"storable\": true,\n" +
-//           "      \"filterable\": false,\n" +
-//           "      \"required\": false\n" +
-//           "    },\n" +
-//           "    {\n" +
-//           "      \"name\": \"_root_\",\n" +
-//           "      \"type\": \"string\",\n" +
-//           "      \"default_\": \"mydefault\",\n" +
-//           "      \"sortable\": false,\n" +
-//           "      \"multiValue\": false,\n" +
-//           "      \"storable\": false,\n" +
-//           "      \"filterable\": true,\n" +
-//           "      \"required\": false\n" +
-//           "    },\n" +
-//           "    {\n" +
-//           "      \"name\": \"_text_\",\n" +
-//           "      \"type\": \"text_general\",\n" +
-//           "      \"default_\": \"mydefault\",\n" +
-//           "      \"sortable\": false,\n" +
-//           "      \"multiValue\": true,\n" +
-//           "      \"storable\": false,\n" +
-//           "      \"filterable\": true,\n" +
-//           "      \"required\": false\n" +
-//           "    },\n" +
-//           "    {\n" +
-//           "      \"name\": \"_version_\",\n" +
-//           "      \"type\": \"plong\",\n" +
-//           "      \"default_\": \"mydefault\",\n" +
-//           "      \"sortable\": false,\n" +
-//           "      \"multiValue\": false,\n" +
-//           "      \"storable\": false,\n" +
-//           "      \"filterable\": false,\n" +
-//           "      \"required\": false\n" +
-//           "    },\n" +
-//           "    {\n" +
-//           "      \"name\": \"firstnameww\",\n" +
-//           "      \"type\": \"string\",\n" +
-//           "      \"default_\": \"mydefault\",\n" +
-//           "      \"sortable\": false,\n" +
-//           "      \"multiValue\": false,\n" +
-//           "      \"storable\": true,\n" +
-//           "      \"filterable\": true,\n" +
-//           "      \"required\": false\n" +
-//           "    },\n" +
-//           "    {\n" +
-//           "      \"name\": \"id\",\n" +
-//           "      \"type\": \"string\",\n" +
-//           "      \"default_\": \"mydefault\",\n" +
-//           "      \"sortable\": false,\n" +
-//           "      \"multiValue\": false,\n" +
-//           "      \"storable\": true,\n" +
-//           "      \"filterable\": true,\n" +
-//           "      \"required\": true\n" +
-//           "    }\n" +
-//           "  ],\n" +
-//           "  \"statusCode\": 200,\n" +
-//           "  \"message\": null\n" +
-//           "}";
-
+    
+    String json3="{\"data\":{\"tableName\":\"Demo\",\"columns\":[{\"name\":\"filterable\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"id\",\"type\":\"string\",\"required\":true,\"multiValue\":false,\"sortable\":false,\"storable\":true,\"filterable\":true,\"partialSearch\":false},{\"name\":\"multiValue\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"name\",\"type\":\"string\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"partialSearch\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"required\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"sortable\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"storable\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"type\",\"type\":\"string\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false}]}}"; 
+    
+    
+   
     public void setMockitoSuccessResponseForService() {
-        JSONObject jsonobject = new JSONObject(json2);
+        JSONObject jsonobject = new JSONObject(json3);
 		doc = new DocumentSatisfiesSchemaResponse(true, "Successful!");
 		Mockito.when(microserviceHttpgateway.getRequest(Mockito.anyString())).thenReturn(jsonobject);
 	}
     
     public void setMockitoBadResponseForService() {
-    	JSONObject jsonObject = new JSONObject(json2);
+    	JSONObject jsonObject = new JSONObject(json3);
     	doc = new DocumentSatisfiesSchemaResponse(false, "Successful!");
 		Mockito.when(microserviceHttpgateway.getRequest(Mockito.anyString())).thenReturn(jsonObject);
     }
@@ -263,11 +182,19 @@ public class DocumentParserUtilTest {
 	
 	}
 	
-//	@Test
-//	void getSchemaofCollectionTest() {
-//         Mockito.when(microserviceHttpgateway.getRequest()).thenReturn(new JSONObject(jsonResponseForGetSchema));
-//		 Map<String, Map<String, Object>> map = documentParserUtil.getSchemaOfCollection("url", "demo1");
-//		 assertEquals(new JSONObject(jsonResponseForGetSchema), new JSONObject(map));
-//	}
+	@Test
+	void getSchemaofCollectionTest() {
+		setMockitoSuccessResponseForService();
+       //  Mockito.when(microserviceHttpgateway.getRequest()).thenReturn(new JSONObject(jsonResponseForGetSchema));
+
+		 try {
+
+			 documentParserUtil.getSchemaOfCollection(baseMicroserviceUrl, collectionName, clientid, jwtToken);
+			
+			} catch (BadRequestOccurredException e) {
+				assertEquals(400, e.getExceptionCode());
+			}
+	}
+
 
 }
