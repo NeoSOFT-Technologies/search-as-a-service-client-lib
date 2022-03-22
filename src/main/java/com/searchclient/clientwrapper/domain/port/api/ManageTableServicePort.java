@@ -2,12 +2,11 @@ package com.searchclient.clientwrapper.domain.port.api;
 
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.searchclient.clientwrapper.domain.CapacityPlanProperties;
 import com.searchclient.clientwrapper.domain.ManageTableCreate;
-import com.searchclient.clientwrapper.domain.Response;
-import com.searchclient.clientwrapper.domain.ManageTableUpdate;
 import com.searchclient.clientwrapper.domain.ManageTableResponse;
+import com.searchclient.clientwrapper.domain.ManageTableUpdate;
+import com.searchclient.clientwrapper.domain.Response;
 
 @Service
 public interface ManageTableServicePort {

@@ -117,5 +117,6 @@ dependencies {
 	 //sonar
 	implementation group: 'com.google.code.gson', name: 'gson', version: '2.9.0'
 	 
-	 
+	 	// https://mvnrepository.com/artifact/joda-time/joda-time
+	implementation group: 'joda-time', name: 'joda-time', version: '2.10.13'
 }
