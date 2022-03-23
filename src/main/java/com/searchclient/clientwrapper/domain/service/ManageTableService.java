@@ -64,6 +64,17 @@ public class ManageTableService implements ManageTableServicePort {
 	private String username = "Username";
 
 	LoggersDTO loggersDTO = new LoggersDTO();
+	
+	
+	private void Logger(String timestamp ,String nameofCurrMethod) {
+		
+		loggersDTO = LoggerUtils.getRequestLoggingInfo(username, servicename, nameofCurrMethod, timestamp);
+
+		LoggerUtils.printlogger(loggersDTO, true, false);
+
+		
+		
+	}
 
 	@Override
 	public CapacityPlanProperties capacityPlans(String jwtToken) {
@@ -74,10 +85,8 @@ public class ManageTableService implements ManageTableServicePort {
 
 		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
 
-		loggersDTO = LoggerUtils.getRequestLoggingInfo(username, servicename, nameofCurrMethod, timestamp);
-
-		LoggerUtils.printlogger(loggersDTO, true, false);
-
+		Logger(timestamp, nameofCurrMethod);
+		
 		CapacityPlanProperties solrgetCapacityPlans = new CapacityPlanProperties();
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + getcapacityplansMicroserviceAPI);
 		String jsonObject = microserviceHttpGateway.getRequestV2(jwtToken);
@@ -106,8 +115,7 @@ public class ManageTableService implements ManageTableServicePort {
 		String timestamp = LoggerUtils.utcTime().toString();
 		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
 
-		loggersDTO = LoggerUtils.getRequestLoggingInfo(username, servicename, nameofCurrMethod, timestamp);
-		LoggerUtils.printlogger(loggersDTO, true, false);
+		Logger(timestamp, nameofCurrMethod);
 
 		Response response = new Response();
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + getCollectionsMicroserviceAPI + "/" + clientId);
@@ -135,9 +143,7 @@ public class ManageTableService implements ManageTableServicePort {
 		String timestamp = LoggerUtils.utcTime().toString();
 		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
 
-		loggersDTO = LoggerUtils.getRequestLoggingInfo(username, servicename, nameofCurrMethod, timestamp);
-		LoggerUtils.printlogger(loggersDTO, true, false);
-
+	Logger(timestamp, nameofCurrMethod);
 		timestamp = LoggerUtils.utcTime().toString();
 		loggersDTO.setTimestamp(timestamp);
 
@@ -165,9 +171,7 @@ public class ManageTableService implements ManageTableServicePort {
 		String timestamp = LoggerUtils.utcTime().toString();
 		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
 
-		loggersDTO = LoggerUtils.getRequestLoggingInfo(username, servicename, nameofCurrMethod, timestamp);
-		LoggerUtils.printlogger(loggersDTO, true, false);
-
+	Logger(timestamp, nameofCurrMethod);
 		timestamp = LoggerUtils.utcTime().toString();
 		loggersDTO.setTimestamp(timestamp);
 
@@ -195,8 +199,7 @@ public class ManageTableService implements ManageTableServicePort {
 		String timestamp = LoggerUtils.utcTime().toString();
 		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
 
-		loggersDTO = LoggerUtils.getRequestLoggingInfo(username, servicename, nameofCurrMethod, timestamp);
-		LoggerUtils.printlogger(loggersDTO, true, false);
+	Logger(timestamp, nameofCurrMethod);
 
 		timestamp = LoggerUtils.utcTime().toString();
 		loggersDTO.setTimestamp(timestamp);
@@ -261,8 +264,7 @@ public class ManageTableService implements ManageTableServicePort {
 		String timestamp = LoggerUtils.utcTime().toString();
 		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
 
-		loggersDTO = LoggerUtils.getRequestLoggingInfo(username, servicename, nameofCurrMethod, timestamp);
-		LoggerUtils.printlogger(loggersDTO, true, false);
+		Logger(timestamp, nameofCurrMethod);
 
 		timestamp = LoggerUtils.utcTime().toString();
 		loggersDTO.setTimestamp(timestamp);
