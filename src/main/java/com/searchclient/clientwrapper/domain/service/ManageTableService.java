@@ -66,7 +66,7 @@ public class ManageTableService implements ManageTableServicePort {
 	LoggersDTO loggersDTO = new LoggersDTO();
 	
 	
-	private void Logger(String timestamp ,String nameofCurrMethod) {
+	private void intprintLogger(String timestamp ,String nameofCurrMethod) {
 		
 		loggersDTO = LoggerUtils.getRequestLoggingInfo(username, servicename, nameofCurrMethod, timestamp);
 
@@ -85,7 +85,7 @@ public class ManageTableService implements ManageTableServicePort {
 
 		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
 
-		Logger(timestamp, nameofCurrMethod);
+		intprintLogger(timestamp, nameofCurrMethod);
 		
 		CapacityPlanProperties solrgetCapacityPlans = new CapacityPlanProperties();
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + getcapacityplansMicroserviceAPI);
@@ -115,7 +115,7 @@ public class ManageTableService implements ManageTableServicePort {
 		String timestamp = LoggerUtils.utcTime().toString();
 		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
 
-		Logger(timestamp, nameofCurrMethod);
+		intprintLogger(timestamp, nameofCurrMethod);
 
 		Response response = new Response();
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + getCollectionsMicroserviceAPI + "/" + clientId);
@@ -143,7 +143,7 @@ public class ManageTableService implements ManageTableServicePort {
 		String timestamp = LoggerUtils.utcTime().toString();
 		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
 
-	Logger(timestamp, nameofCurrMethod);
+		intprintLogger(timestamp, nameofCurrMethod);
 		timestamp = LoggerUtils.utcTime().toString();
 		loggersDTO.setTimestamp(timestamp);
 
@@ -171,7 +171,7 @@ public class ManageTableService implements ManageTableServicePort {
 		String timestamp = LoggerUtils.utcTime().toString();
 		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
 
-	Logger(timestamp, nameofCurrMethod);
+		intprintLogger(timestamp, nameofCurrMethod);
 		timestamp = LoggerUtils.utcTime().toString();
 		loggersDTO.setTimestamp(timestamp);
 
@@ -199,7 +199,7 @@ public class ManageTableService implements ManageTableServicePort {
 		String timestamp = LoggerUtils.utcTime().toString();
 		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
 
-	Logger(timestamp, nameofCurrMethod);
+		intprintLogger(timestamp, nameofCurrMethod);
 
 		timestamp = LoggerUtils.utcTime().toString();
 		loggersDTO.setTimestamp(timestamp);
@@ -230,7 +230,7 @@ public class ManageTableService implements ManageTableServicePort {
 		String timestamp = LoggerUtils.utcTime().toString();
 		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
 
-		Logger(timestamp, nameofCurrMethod);
+		intprintLogger(timestamp, nameofCurrMethod);
 
 		timestamp = LoggerUtils.utcTime().toString();
 		loggersDTO.setTimestamp(timestamp);
@@ -263,7 +263,7 @@ public class ManageTableService implements ManageTableServicePort {
 		String timestamp = LoggerUtils.utcTime().toString();
 		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
 
-		Logger(timestamp, nameofCurrMethod);
+		intprintLogger(timestamp, nameofCurrMethod);
 
 		timestamp = LoggerUtils.utcTime().toString();
 		loggersDTO.setTimestamp(timestamp);
