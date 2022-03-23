@@ -230,8 +230,7 @@ public class ManageTableService implements ManageTableServicePort {
 		String timestamp = LoggerUtils.utcTime().toString();
 		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
 
-		loggersDTO = LoggerUtils.getRequestLoggingInfo(username, servicename, nameofCurrMethod, timestamp);
-		LoggerUtils.printlogger(loggersDTO, true, false);
+		Logger(timestamp, nameofCurrMethod);
 
 		timestamp = LoggerUtils.utcTime().toString();
 		loggersDTO.setTimestamp(timestamp);
