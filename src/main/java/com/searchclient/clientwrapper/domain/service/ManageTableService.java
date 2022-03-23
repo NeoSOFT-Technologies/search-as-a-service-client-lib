@@ -24,7 +24,6 @@ import com.searchclient.clientwrapper.dto.logger.LoggersDTO;
 @Service
 public class ManageTableService implements ManageTableServicePort {
 	private final Logger logger = LoggerFactory.getLogger(ManageTableService.class);
-	private final Logger log = LoggerFactory.getLogger(ManageTableService.class);
 
 	@Value("${base-microservice-url}")
 	private String baseMicroserviceUrl;
@@ -90,7 +89,7 @@ public class ManageTableService implements ManageTableServicePort {
 			LoggerUtils.printlogger(loggersDTO, false, false);
 			return solrgetCapacityPlans;
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			logger.error(e.getMessage());
 			timestamp = LoggerUtils.utcTime().toString();
 			loggersDTO.setTimestamp(timestamp);
 			LoggerUtils.printlogger(loggersDTO, false, true);
@@ -121,7 +120,7 @@ public class ManageTableService implements ManageTableServicePort {
 			LoggerUtils.printlogger(loggersDTO, false, false);
 			return response;
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			logger.error(e.getMessage());
 			LoggerUtils.printlogger(loggersDTO, false, true);
 			return response;
 		}
@@ -132,7 +131,7 @@ public class ManageTableService implements ManageTableServicePort {
 	public ManageTableResponse getTable(String tableName, int clientId, String jwtToken) {
 
 		logger.debug("get Table ");
-		LoggersDTO loggersDTO = new LoggersDTO();
+
 		String timestamp = LoggerUtils.utcTime().toString();
 		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
 
@@ -152,7 +151,7 @@ public class ManageTableService implements ManageTableServicePort {
 			LoggerUtils.printlogger(loggersDTO, false, false);
 			return response;
 		} catch (IOException e) {
-			log.error(e.getMessage());
+			logger.error(e.getMessage());
 			LoggerUtils.printlogger(loggersDTO, false, true);
 			return response;
 		}
@@ -182,7 +181,7 @@ public class ManageTableService implements ManageTableServicePort {
 			LoggerUtils.printlogger(loggersDTO, false, false);
 			return response;
 		} catch (IOException e) {
-			log.error(e.getMessage());
+			logger.error(e.getMessage());
 			LoggerUtils.printlogger(loggersDTO, false, true);
 			return response;
 		}
@@ -192,7 +191,7 @@ public class ManageTableService implements ManageTableServicePort {
 	@Override
 	public Response create(int clientId, ManageTableCreate manageTableDTO, String jwtToken) {
 		logger.debug("create Table ");
-		LoggersDTO loggersDTO = new LoggersDTO();
+
 		String timestamp = LoggerUtils.utcTime().toString();
 		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
 
@@ -214,7 +213,7 @@ public class ManageTableService implements ManageTableServicePort {
 			return response;
 
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			logger.error(e.getMessage());
 			LoggerUtils.printlogger(loggersDTO, false, true);
 			return response;
 		}
@@ -224,7 +223,7 @@ public class ManageTableService implements ManageTableServicePort {
 	@Override
 	public Response update(String tableName, int clientId, ManageTableUpdate tableSchema, String jwtToken) {
 		logger.debug("update Table ");
-		LoggersDTO loggersDTO = new LoggersDTO();
+
 		String timestamp = LoggerUtils.utcTime().toString();
 		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
 
@@ -247,7 +246,7 @@ public class ManageTableService implements ManageTableServicePort {
 			LoggerUtils.printlogger(loggersDTO, false, false);
 			return response;
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			logger.error(e.getMessage());
 			LoggerUtils.printlogger(loggersDTO, false, true);
 			return response;
 		}
@@ -279,7 +278,7 @@ public class ManageTableService implements ManageTableServicePort {
 			LoggerUtils.printlogger(loggersDTO, false, false);
 			return response;
 		} catch (IOException e) {
-			log.error(e.getMessage());
+			logger.error(e.getMessage());
 			LoggerUtils.printlogger(loggersDTO, false, true);
 			return response;
 		}
