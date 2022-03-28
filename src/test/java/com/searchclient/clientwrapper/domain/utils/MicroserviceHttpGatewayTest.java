@@ -5,55 +5,144 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.IOException;
 
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import com.searchclient.clientwrapper.domain.error.BadRequestOccurredException;
+
 @ExtendWith(MockitoExtension.class)
 @ExtendWith(SpringExtension.class)
 class MicroserviceHttpGatewayTest {
-	
+
 	private final Logger log = LoggerFactory.getLogger(MicroserviceHttpGatewayTest.class);
 
-	@MockBean
-	CloseableHttpClient client;
-	
+	@Mock
+	CloseableHttpClient client = HttpClientBuilder.create().build();
+
 	@InjectMocks
 	MicroserviceHttpGateway microserviceHttpGateway;
-	
+
 	String apiEndPoint = "demo";
-	
+
+	String jwtToken = "Bearer sadasdasdasdasd";
+
 	String requestBodyDTO = "string";
-	
+
 	String response1 = "OK";
-	
+
+//	@MockBean
 	HttpPost httpPost;
+
 	@BeforeEach
 	void setUp() {
 		microserviceHttpGateway.setApiEndpoint(apiEndPoint);
 		microserviceHttpGateway.setRequestBodyDTO(requestBodyDTO);
 
 	}
-	
+
 	public void setMockitoSucccessResponseForService() throws ClientProtocolException, IOException {
-		Mockito.when(client.execute(httpPost)).thenReturn((CloseableHttpResponse) ResponseEntity.status(HttpStatus.OK));
+
+		CloseableHttpClient mockHttpClient = Mockito.mock(CloseableHttpClient.class);
+		HttpPost mockHttpPost = Mockito.mock(HttpPost.class);
+		// Mockito.when(client.execute(mockHttpPost)).thenReturn((CloseableHttpResponse)
+		// ResponseEntity.status(HttpStatus.OK));
 	}
-	
-//	@Test
+
+	@Test
 	void postRequestWithStringBodyTets() throws ClientProtocolException, IOException {
-		
-		setMockitoSucccessResponseForService();
-		 String response = microserviceHttpGateway.postRequestWithStringBody(Mockito.anyString());
-		assertEquals(response1,response.toString());
+
+		try {
+
+			microserviceHttpGateway.postRequestWithStringBody(jwtToken);
+
+		} catch (BadRequestOccurredException e) {
+			assertEquals(400, e.getExceptionCode());
+		}
+		// assertEquals(response1, response.toString());
+	}
+
+	@Test
+	void postRequestWithStringBody() throws ClientProtocolException, IOException {
+
+		try {
+
+			microserviceHttpGateway.postRequestWithStringBody(jwtToken);
+
+		} catch (BadRequestOccurredException e) {
+			assertEquals(400, e.getExceptionCode());
+		}
+	}
+
+	@Test
+	void postRequest() {
+
+		try {
+
+			microserviceHttpGateway.postRequest(jwtToken);
+
+		} catch (BadRequestOccurredException e) {
+			assertEquals(400, e.getExceptionCode());
+		}
+	}
+
+	@Test
+	void putRequest() throws ClientProtocolException, IOException {
+
+		try {
+
+			microserviceHttpGateway.putRequest(jwtToken);
+
+		} catch (BadRequestOccurredException e) {
+			assertEquals(400, e.getExceptionCode());
+		}
+	}
+
+	@Test
+	void deleteRequest() {
+
+		try {
+
+			microserviceHttpGateway.deleteRequest(jwtToken);
+
+		} catch (BadRequestOccurredException e) {
+			assertEquals(400, e.getExceptionCode());
+		}
+	}
+
+	@Test
+	void getRequest() throws ClientProtocolException, IOException {
+
+		try {
+
+			microserviceHttpGateway.getRequest(jwtToken);
+
+		} catch (BadRequestOccurredException e) {
+			assertEquals(400, e.getExceptionCode());
+		}
+
+	}
+
+	@Test
+	void getRequestV2() throws ClientProtocolException, IOException {
+
+		try {
+
+			microserviceHttpGateway.getRequestV2(jwtToken);
+
+		} catch (BadRequestOccurredException e) {
+			assertEquals(400, e.getExceptionCode());
+		}
 	}
 }
