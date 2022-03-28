@@ -1,6 +1,6 @@
 package com.searchclient.clientwrapper.domain.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,16 +11,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.searchclient.clientwrapper.domain.CapacityPlanProperties;
 import com.searchclient.clientwrapper.domain.ManageTableCreate;
-import com.searchclient.clientwrapper.domain.ManageTableResponse;
 import com.searchclient.clientwrapper.domain.ManageTableUpdate;
-import com.searchclient.clientwrapper.domain.Response;
 import com.searchclient.clientwrapper.domain.SchemaField;
 import com.searchclient.clientwrapper.domain.error.BadRequestOccurredException;
 import com.searchclient.clientwrapper.domain.utils.DocumentParserUtil;
