@@ -18,19 +18,16 @@ import lombok.NoArgsConstructor;
 public class ManageTableCreate {
     private String tableName;
     private String sku;
-    private String schemaName;
     private List<SchemaField> columns;
 	
 	public ManageTableCreate(ManageTableCreate manageTableDTO) {
 		this.tableName = manageTableDTO.getTableName();
 		this.sku = manageTableDTO.getSku();
-		this.schemaName=manageTableDTO.getSchemaName();
 		this.columns=manageTableDTO.getColumns();	
 	}
 	
-	public ManageTableCreate(String tableName, String schemaName, List<SchemaField> attributes) {
-		this.tableName = tableName;
-		this.schemaName = schemaName;
+	public ManageTableCreate(String tableName, List<SchemaField> attributes) {
+		this.tableName = tableName;;
 		this.columns = columns;
 	}
 

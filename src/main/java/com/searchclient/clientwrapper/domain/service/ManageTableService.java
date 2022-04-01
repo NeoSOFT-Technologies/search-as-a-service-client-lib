@@ -108,7 +108,7 @@ public class ManageTableService implements ManageTableServicePort {
 	}
 
 	@Override
-	public Response getTables(int clientId, String jwtToken) {
+	public Response getTables(int tenantId, String jwtToken) {
 
 		logger.debug("get Tables");
 
@@ -118,7 +118,7 @@ public class ManageTableService implements ManageTableServicePort {
 		intprintLogger(timestamp, nameofCurrMethod);
 
 		Response response = new Response();
-		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + getCollectionsMicroserviceAPI + "/" + clientId);
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + getCollectionsMicroserviceAPI + "/" + tenantId);
 		String jsonObject = microserviceHttpGateway.getRequestV2(jwtToken);
 		docParserUtil.isJwtAuthenticationError(jsonObject);
 		timestamp = LoggerUtils.utcTime().toString();
@@ -136,7 +136,7 @@ public class ManageTableService implements ManageTableServicePort {
 	}
 
 	@Override
-	public ManageTableResponse getTable(String tableName, int clientId, String jwtToken) {
+	public ManageTableResponse getTable(String tableName, int tenantId, String jwtToken) {
 
 		logger.debug("get Table ");
 
@@ -149,7 +149,7 @@ public class ManageTableService implements ManageTableServicePort {
 
 		ManageTableResponse response = new ManageTableResponse();
 		microserviceHttpGateway
-				.setApiEndpoint(baseMicroserviceUrl + getCollectionsMicroserviceAPI + "/" + clientId + "/" + tableName);
+				.setApiEndpoint(baseMicroserviceUrl + getCollectionsMicroserviceAPI + "/" + tenantId + "/" + tableName);
 		String jsonObject = microserviceHttpGateway.getRequestV2(jwtToken);
 		docParserUtil.isJwtAuthenticationError(jsonObject);
 		try {
@@ -165,7 +165,7 @@ public class ManageTableService implements ManageTableServicePort {
 	}
 
 	@Override
-	public Response delete(int clientId, String tableName, String jwtToken) {
+	public Response delete(int tenantId, String tableName, String jwtToken) {
 		logger.debug("Delete Table ");
 
 		String timestamp = LoggerUtils.utcTime().toString();
@@ -177,7 +177,7 @@ public class ManageTableService implements ManageTableServicePort {
 
 		Response response = new Response();
 		microserviceHttpGateway
-				.setApiEndpoint(baseMicroserviceUrl + deleteMicroserviceAPI + "/" + clientId + "/" + tableName);
+				.setApiEndpoint(baseMicroserviceUrl + deleteMicroserviceAPI + "/" + tenantId + "/" + tableName);
 		String jsonObject = microserviceHttpGateway.deleteRequest(jwtToken);
 		docParserUtil.isJwtAuthenticationError(jsonObject);
 		try {
@@ -193,7 +193,7 @@ public class ManageTableService implements ManageTableServicePort {
 	}
 
 	@Override
-	public Response create(int clientId, ManageTableCreate manageTableDTO, String jwtToken) {
+	public Response create(int tenantId, ManageTableCreate manageTableDTO, String jwtToken) {
 		logger.debug("create Table ");
 
 		String timestamp = LoggerUtils.utcTime().toString();
@@ -205,7 +205,7 @@ public class ManageTableService implements ManageTableServicePort {
 		loggersDTO.setTimestamp(timestamp);
 		Response response = new Response();
 
-		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + createMicroserviceAPI + "/" + clientId);
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + createMicroserviceAPI + "/" + tenantId);
 		microserviceHttpGateway.setRequestBodyDTO(manageTableDTO);
 
 		String jsonObject = microserviceHttpGateway.postRequest(jwtToken);
@@ -224,7 +224,7 @@ public class ManageTableService implements ManageTableServicePort {
 	}
 
 	@Override
-	public Response update(String tableName, int clientId, ManageTableUpdate tableSchema, String jwtToken) {
+	public Response update(String tableName, int tenantId, ManageTableUpdate tableSchema, String jwtToken) {
 		logger.debug("update Table ");
 
 		String timestamp = LoggerUtils.utcTime().toString();
@@ -238,7 +238,7 @@ public class ManageTableService implements ManageTableServicePort {
 		Response response = new Response();
 
 		microserviceHttpGateway
-				.setApiEndpoint(baseMicroserviceUrl + renameMicroserviceAPI + "/" + clientId + "/" + tableName);
+				.setApiEndpoint(baseMicroserviceUrl + renameMicroserviceAPI + "/" + tenantId + "/" + tableName);
 		microserviceHttpGateway.setRequestBodyDTO(tableSchema);
 
 		String jsonObject = microserviceHttpGateway.putRequest(jwtToken);
@@ -256,7 +256,7 @@ public class ManageTableService implements ManageTableServicePort {
 	}
 
 	@Override
-	public Response restoreTable(int clientId, String tableName, String jwtToken) {
+	public Response restoreTable(int tenantId, String tableName, String jwtToken) {
 
 		logger.debug("restore Table ");
 
@@ -271,7 +271,7 @@ public class ManageTableService implements ManageTableServicePort {
 		Response response = new Response();
 
 		microserviceHttpGateway
-				.setApiEndpoint(baseMicroserviceUrl + restoreMicroserviceAPI + "/" + clientId + "/" + tableName);
+				.setApiEndpoint(baseMicroserviceUrl + restoreMicroserviceAPI + "/" + tenantId + "/" + tableName);
 		String jsonObject = microserviceHttpGateway.putRequest(jwtToken);
 		docParserUtil.isJwtAuthenticationError(jsonObject);
 		try {

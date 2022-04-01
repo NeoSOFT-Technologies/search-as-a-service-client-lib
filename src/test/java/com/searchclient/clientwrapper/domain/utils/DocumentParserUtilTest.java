@@ -34,7 +34,7 @@ public class DocumentParserUtilTest {
 	String baseMicroserviceUrl="http://localhost:8983/solr";
 	
 	 String collectionName="Demo";
-			 int clientid=10;
+			 int tenantid=10;
 			 String jwtToken="sdodsadpasdasd";
 	
 	@MockBean
@@ -189,7 +189,7 @@ public class DocumentParserUtilTest {
 
 		 try {
 
-			 documentParserUtil.getSchemaOfCollection(baseMicroserviceUrl, collectionName, clientid, jwtToken);
+			 documentParserUtil.getSchemaOfCollection(baseMicroserviceUrl, collectionName, tenantid, jwtToken);
 			
 			} catch (BadRequestOccurredException e) {
 				assertEquals(400, e.getExceptionCode());

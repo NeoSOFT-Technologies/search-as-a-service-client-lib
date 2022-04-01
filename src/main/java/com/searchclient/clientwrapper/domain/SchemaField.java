@@ -15,7 +15,7 @@ public class SchemaField {
 
 	String name;
 	String type;
-	String default_;
+	
 	boolean isRequired;
 	boolean isFilterable;
 	boolean isStorable;

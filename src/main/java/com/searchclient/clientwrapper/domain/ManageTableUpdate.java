@@ -22,22 +22,18 @@ public class ManageTableUpdate {
 
 	@JsonIgnore
 	private String tableName;
-	@JsonIgnore
-	private String schemaName;
 	private List<SchemaField> columns;
 	@JsonIgnore
 	private Map<Object, Object> tableDetails;
 
 	public ManageTableUpdate(ManageTableUpdate schemaDTO) {
 		this.tableName = schemaDTO.getTableName();
-		this.schemaName = schemaDTO.getSchemaName();
 		this.columns=schemaDTO.getColumns();
 	
 	}
 	
-	public ManageTableUpdate(String tableName, String schemaName, List<SchemaField> attributes) {
+	public ManageTableUpdate(String tableName, List<SchemaField> attributes) {
 		this.tableName = tableName;
-		this.schemaName = schemaName;
 		this.columns = attributes;
 	}
 	

@@ -42,7 +42,7 @@ class ManageTableServiceTest extends ManageTableService {
     
    String jwtToken="jwtToken";
 	
-   int clientId=10;
+   int tenantId=10;
    
    String schemaName="B";
    
@@ -53,7 +53,7 @@ class ManageTableServiceTest extends ManageTableService {
 	SchemaField schemaField = new SchemaField();
 	
 	public void setMockitoSuccessResponseForService() {
-	          schemaField.setDefault_("");
+	     
 			schemaField.setFilterable(true);
 			schemaField.setMultiValue(true);
 			schemaField.setName("ok");
@@ -93,7 +93,7 @@ class ManageTableServiceTest extends ManageTableService {
 
 		try {
 
-			manageTableService.getTables(clientId, jwtToken);
+			manageTableService.getTables(tenantId, jwtToken);
 			} catch (BadRequestOccurredException e) {
 				assertEquals(400, e.getExceptionCode());
 			}
@@ -106,7 +106,7 @@ class ManageTableServiceTest extends ManageTableService {
 		
 		try {
 
-			manageTableService.getTable(tableName, clientId, jwtToken);
+			manageTableService.getTable(tableName, tenantId, jwtToken);
 			} catch (BadRequestOccurredException e) {
 				assertEquals(400, e.getExceptionCode());
 			}
@@ -118,7 +118,7 @@ class ManageTableServiceTest extends ManageTableService {
 	
 		try {
 
-			manageTableService.delete(clientId, tableName, jwtToken);
+			manageTableService.delete(tenantId, tableName, jwtToken);
 			
 			} catch (BadRequestOccurredException e) {
 				assertEquals(400, e.getExceptionCode());
@@ -127,8 +127,7 @@ class ManageTableServiceTest extends ManageTableService {
 //
 	@Test
 	void testCreate() {
-		
-		manageTableCreate.setSchemaName(jwtToken);
+
 		manageTableCreate.setSku(jwtToken);
 		manageTableCreate.setTableName(jwtToken);
 		manageTableCreate.setColumns(list);;
@@ -138,7 +137,7 @@ class ManageTableServiceTest extends ManageTableService {
 	
 	try {
 
-		 manageTableService.create(clientId, manageTableCreate, jwtToken);
+		 manageTableService.create(tenantId, manageTableCreate, jwtToken);
 		
 		} catch (BadRequestOccurredException e) {
 			assertEquals(400, e.getExceptionCode());
@@ -149,7 +148,6 @@ class ManageTableServiceTest extends ManageTableService {
 	void testUpdate() {
 		
 		manageTableUpdate.setColumns(list);
-		manageTableUpdate.setSchemaName(schemaName);
 		manageTableUpdate.setTableDetails(null);
 		manageTableUpdate.setTableName("Demo");
 		
@@ -157,7 +155,7 @@ class ManageTableServiceTest extends ManageTableService {
 		
 	try {
 
-		manageTableService.update(schemaName, clientId, manageTableUpdate, jwtToken);
+		manageTableService.update(schemaName, tenantId, manageTableUpdate, jwtToken);
 		
 		} catch (BadRequestOccurredException e) {
 			assertEquals(400, e.getExceptionCode());
@@ -170,7 +168,7 @@ class ManageTableServiceTest extends ManageTableService {
 		
 	try {
 
-		manageTableService.restoreTable(clientId, schemaName, jwtToken);
+		manageTableService.restoreTable(tenantId, schemaName, jwtToken);
 		
 		} catch (BadRequestOccurredException e) {
 			assertEquals(400, e.getExceptionCode());

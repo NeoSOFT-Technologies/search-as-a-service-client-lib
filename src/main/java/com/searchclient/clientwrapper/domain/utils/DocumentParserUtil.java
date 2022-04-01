@@ -2,7 +2,7 @@ package com.searchclient.clientwrapper.domain.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.searchclient.clientwrapper.domain.error.JwtAuthenticationFailureException;
-import com.searchclient.clientwrapper.domain.service.SolrDocumentService;
+import com.searchclient.clientwrapper.domain.service.InputDocumentService;
 import lombok.Data;
 
 import org.apache.http.HttpStatus;
@@ -30,9 +30,9 @@ public class DocumentParserUtil {
     ObjectMapper objectMapper;
 
     @Value("${base-solr-url}")
-    private String baseSolrUrl;
+    private String baseSearchUrl;
 
-    private final Logger log = LoggerFactory.getLogger(SolrDocumentService.class);
+    private final Logger log = LoggerFactory.getLogger(InputDocumentService.class);
 
     private static boolean isNumeric(String string) {
         Logger log = LoggerFactory.getLogger(DocumentParserUtil.class);
@@ -232,7 +232,7 @@ public class DocumentParserUtil {
         return new DocumentSatisfiesSchemaResponse(true, "Success!");
     }
 
-    public Map<String, Map<String, Object>> getSchemaOfCollection(String baseMicroserviceUrl, String collectionName, int clientid, String jwtToken) {
+    public Map<String, Map<String, Object>> getSchemaOfCollection(String baseMicroserviceUrl, String collectionName, int tenantid, String jwtToken) {
 
         // THIS METHOD HITS THE GET SCHEMA METHOD OF THE MICROSERVICE AND GETS
         // THE
@@ -242,7 +242,7 @@ public class DocumentParserUtil {
 
         Logger log = LoggerFactory.getLogger(DocumentParserUtil.class);
 
-        String url = baseMicroserviceUrl + "/api/v1/manage/table/" + clientid + "/" + collectionName;
+        String url = baseMicroserviceUrl + "/api/v1/manage/table/" + tenantid + "/" + collectionName;
         System.out.println("calling url " + url);
         microserviceHttpGateway.setApiEndpoint(url);
         microserviceHttpGateway.setRequestBodyDTO(null);
