@@ -20,20 +20,20 @@ public interface ManageTableServicePort {
 
 	// DELETE requests
 
-	Response delete(int clientId,String tableName, String jwtToken);
+	Response delete(int tenantId,String tableName, String jwtToken);
 // get Tables requests
-	Response getTables(int clientId, String jwtToken);
+	Response getTables(int tenantId, String jwtToken);
 
 	// get capacityPlans requests
 	CapacityPlanProperties capacityPlans(String jwtToken);
 
-    ManageTableResponse getTable(String tableName, int clientId, String jwtToken);
+    ManageTableResponse getTable(String tableName, int tenantId, String jwtToken);
     // Create request
-    Response create(int clientId, ManageTableCreate manageTableDTO, String jwtToken);
+    Response create(int tenantId, ManageTableCreate manageTableDTO, String jwtToken);
  // Update requests
-    Response update(String tableName, int clientId, ManageTableUpdate tableSchema, String jwtToken);
+    Response update(String tableName, int tenantId, ManageTableUpdate tableSchema, String jwtToken);
     
     //UNDO TABLE DELET requests
-    Response restoreTable(int clientId, String tableName, String jwtToken);
+    Response restoreTable(int tenantId, String tableName, String jwtToken);
 
 }

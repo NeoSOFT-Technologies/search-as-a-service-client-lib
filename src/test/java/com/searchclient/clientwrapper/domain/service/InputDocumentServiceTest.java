@@ -27,9 +27,9 @@ import com.searchclient.clientwrapper.domain.utils.MicroserviceHttpGateway;
 
 @ExtendWith(MockitoExtension.class)
 @ExtendWith(SpringExtension.class)
-class SolrDocumentServiceTest extends SolrDocumentService {
+class InputDocumentServiceTest extends InputDocumentService {
 
-	Logger logger = LoggerFactory.getLogger(SolrDocumentServiceTest.class);
+	Logger logger = LoggerFactory.getLogger(InputDocumentServiceTest.class);
 
 	@Value("${base-microservice-url}")
 	private String baseMicroserviceUrl;
@@ -42,7 +42,7 @@ class SolrDocumentServiceTest extends SolrDocumentService {
 	Map<String, Object> map2 = new HashMap();
 
 	@InjectMocks
-	SolrDocumentService solrDocumentService;
+	InputDocumentService inputDocumentService;
 
 	@MockBean
 	MicroserviceHttpGateway microserviceHttpGateway;
@@ -68,13 +68,13 @@ class SolrDocumentServiceTest extends SolrDocumentService {
 	}
 
 	public void setMockitoSuccessResponseForService() {
-		Response solrResponseDTO = new Response();
-		solrResponseDTO.setStatusCode(200);
-		solrResponseDTO.setMessage("Testing");
+		Response documentUploadResponseDTO = new Response();
+		documentUploadResponseDTO.setStatusCode(200);
+		documentUploadResponseDTO.setMessage("Testing");
 
 		schemaKeyValuePair.put("id", map2);
 		schemaKeyValuePair.put("color", map);
-		JsonObject = new JSONObject(solrResponseDTO);
+		JsonObject = new JSONObject(documentUploadResponseDTO);
 		String jsonString = JsonObject.toString();
 
 		DocumentSatisfiesSchemaResponse doc = new DocumentSatisfiesSchemaResponse(true, "Success!");
@@ -85,10 +85,10 @@ class SolrDocumentServiceTest extends SolrDocumentService {
 	}
 
 	public void setMockitoBadResponseForService() {
-		Response solrResponseDTO = new Response();
-		solrResponseDTO.setStatusCode(400);
-		solrResponseDTO.setMessage("Testing");
-		JsonObject = new JSONObject(solrResponseDTO);
+		Response documentUploadResponseDTO = new Response();
+		documentUploadResponseDTO.setStatusCode(400);
+		documentUploadResponseDTO.setMessage("Testing");
+		JsonObject = new JSONObject(documentUploadResponseDTO);
 		String jsonString = JsonObject.toString();
 
 		DocumentSatisfiesSchemaResponse doc = new DocumentSatisfiesSchemaResponse(false, "Success!");
@@ -102,12 +102,12 @@ class SolrDocumentServiceTest extends SolrDocumentService {
 		int statusCode = 200;
 
 		setMockitoSuccessResponseForService();
-		solrDocumentService.addDocument(collectionName, payload, statusCode, baseMicroserviceUrl);
-		assertEquals(statusCode, solrDocumentService
+		inputDocumentService.addDocument(collectionName, payload, statusCode, baseMicroserviceUrl);
+		assertEquals(statusCode, inputDocumentService
 				.addDocument(collectionName, payload, statusCode, baseMicroserviceUrl).getStatusCode());
 
 		setMockitoBadResponseForService();
-		IngestionResponse rsp = solrDocumentService.addDocument(collectionName, payload, statusCode, "");
+		IngestionResponse rsp = inputDocumentService.addDocument(collectionName, payload, statusCode, "");
 		assertNotEquals(statusCode, rsp.getStatusCode());
 
 	}
@@ -119,13 +119,13 @@ class SolrDocumentServiceTest extends SolrDocumentService {
 
 		setMockitoSuccessResponseForService();
 
-		assertEquals(statusCode, solrDocumentService
+		assertEquals(statusCode, inputDocumentService
 				.addNRTDocuments(collectionName, payload, statusCode, baseMicroserviceUrl).getStatusCode());
 
 		setMockitoBadResponseForService();
 
 		assertNotEquals(statusCode,
-				solrDocumentService.addNRTDocuments(collectionName, payload, statusCode, "").getStatusCode());
+				inputDocumentService.addNRTDocuments(collectionName, payload, statusCode, "").getStatusCode());
 
 	}
 }

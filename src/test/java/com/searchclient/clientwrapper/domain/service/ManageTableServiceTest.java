@@ -53,7 +53,6 @@ class ManageTableServiceTest extends ManageTableService {
 	SchemaField schemaField = new SchemaField();
 	
 	public void setMockitoSuccessResponseForService() {
-	          schemaField.setDefault_("");
 			schemaField.setFilterable(true);
 			schemaField.setMultiValue(true);
 			schemaField.setName("ok");

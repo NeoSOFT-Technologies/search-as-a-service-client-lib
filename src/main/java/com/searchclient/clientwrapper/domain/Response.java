@@ -18,10 +18,8 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Response {
     private int statusCode;
-    
     private String name;
     private String message;
     private String timestamp;
-
     private List<String> data;
 }
