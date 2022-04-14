@@ -9,14 +9,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 import com.searchclient.clientwrapper.domain.IngestionResponse;
-import com.searchclient.clientwrapper.domain.port.api.SolrDocumentServicePort;
+import com.searchclient.clientwrapper.domain.port.api.InputDocumentServicePort;
 import com.searchclient.clientwrapper.domain.utils.DocumentParserUtil;
 import com.searchclient.clientwrapper.domain.utils.MicroserviceHttpGateway;
 
 @Service
-public class SolrDocumentService implements SolrDocumentServicePort {
+public class InputDocumentService implements InputDocumentServicePort {
 
     @Value("${base-microservice-url}")
     private String baseMicroserviceUrl;
@@ -25,8 +24,8 @@ public class SolrDocumentService implements SolrDocumentServicePort {
     private String inputDocumentMicroserviceAPI;
     @Value("${microservice-url.document.inputbatch}")
     private String inputDocumentBatchMicroserviceAPI;
-    private final Logger log = LoggerFactory.getLogger(SolrDocumentService.class);
-
+    private final Logger log = LoggerFactory.getLogger(InputDocumentService.class);
+    private static final String TENANT_ID_REQUEST_PARAM = "?tenantId=";
     @Autowired
     MicroserviceHttpGateway microserviceHttpGateway;
 
@@ -34,39 +33,40 @@ public class SolrDocumentService implements SolrDocumentServicePort {
     DocumentParserUtil documentparserUtil;
 
     @Override
-    public IngestionResponse addNRTDocuments(String tableName, String payload,int clientId, String jwtToken) {
+    public IngestionResponse addNRTDocuments(String tableName, String payload,int tenantId, String jwtToken) {
 
-        IngestionResponse solrResponseDTO = new IngestionResponse();
+        IngestionResponse ingestionResponseDTO = new IngestionResponse();
 
-        Map<String, Map<String, Object>> schemaKeyValuePair = documentparserUtil.getSchemaOfCollection(baseMicroserviceUrl, tableName,clientId, jwtToken);
+        Map<String, Map<String, Object>> schemaKeyValuePair = documentparserUtil.getSchemaOfCollection(baseMicroserviceUrl, tableName,tenantId, jwtToken);
 
         if (schemaKeyValuePair == null) {
 
-            generateResponse(solrResponseDTO, "Unable to get the Schema. Please check the collection name again!");
-            return solrResponseDTO;
+            generateResponse(ingestionResponseDTO, "Unable to get the Schema. Please check the collection name again!");
+            return ingestionResponseDTO;
         }
 
         String message = verify(payload, schemaKeyValuePair);
 
         if (!message.equalsIgnoreCase("")) {
-            generateResponse(solrResponseDTO, message);
-            return solrResponseDTO;
+            generateResponse(ingestionResponseDTO, message);
+            return ingestionResponseDTO;
         }
-        String url = baseMicroserviceUrl + inputDocumentMicroserviceAPI +"/"+clientId+ "/" + tableName;
+        String url = baseMicroserviceUrl + inputDocumentMicroserviceAPI  + "/" +tableName
+				+TENANT_ID_REQUEST_PARAM + tenantId;
 
-        JSONObject jsonObject = uploadData(tableName, payload, clientId,url,jwtToken);
+        JSONObject jsonObject = uploadData(tableName, payload, tenantId,url,jwtToken);
 
-        solrResponseDTO.setMessage(jsonObject.get("message").toString());
-        solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
+        ingestionResponseDTO.setMessage(jsonObject.get("message").toString());
+        ingestionResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
 
-        return solrResponseDTO;
+        return ingestionResponseDTO;
 
     }
 
-    private JSONObject uploadData(String collectionName, String payload, int clientId,String url, String jwtToken) {
+    private JSONObject uploadData(String collectionName, String payload, int tenantId,String url, String jwtToken) {
 
        
-        System.out.println("calling url "+url);
+        log.debug("calling url: {} ",url);
 
         microserviceHttpGateway.setApiEndpoint(url);
         microserviceHttpGateway.setRequestBodyDTO(payload);
@@ -75,10 +75,10 @@ public class SolrDocumentService implements SolrDocumentServicePort {
         return new JSONObject(jsonString);
     }
 
-    private void generateResponse(IngestionResponse solrResponseDTO, String message) {
+    private void generateResponse(IngestionResponse ingestionResponseDTO, String message) {
         log.debug(message);
-        solrResponseDTO.setMessage(message);
-        solrResponseDTO.setStatusCode(400);
+        ingestionResponseDTO.setMessage(message);
+        ingestionResponseDTO.setStatusCode(400);
     }
 
     private String verify(String payload, Map<String, Map<String, Object>> schemaKeyValuePair) {
@@ -115,31 +115,32 @@ public class SolrDocumentService implements SolrDocumentServicePort {
     }
 
     @Override
-    public IngestionResponse addDocument(String tableName, String payload, int clientId, String jwtToken) {
+    public IngestionResponse addDocument(String tableName, String payload, int tenantId, String jwtToken) {
 
-        IngestionResponse solrResponseDTO = new IngestionResponse();
+        IngestionResponse ingestionResponseDTO = new IngestionResponse();
 
-        Map<String, Map<String, Object>> schemaKeyValuePair = documentparserUtil.getSchemaOfCollection(baseMicroserviceUrl, tableName,clientId, jwtToken);
+        Map<String, Map<String, Object>> schemaKeyValuePair = documentparserUtil.getSchemaOfCollection(baseMicroserviceUrl, tableName,tenantId, jwtToken);
 
         if (schemaKeyValuePair == null) {
 
-            generateResponse(solrResponseDTO, "Unable to get the Schema. Please check the collection name again!");
-            return solrResponseDTO;
+            generateResponse(ingestionResponseDTO, "Unable to get the Schema. Please check the collection name again!");
+            return ingestionResponseDTO;
         }
 
         String message = verify(payload, schemaKeyValuePair);
 
         if (!message.equalsIgnoreCase("")) {
-            generateResponse(solrResponseDTO, message);
-            return solrResponseDTO;
+            generateResponse(ingestionResponseDTO, message);
+            return ingestionResponseDTO;
         }
-        String url = baseMicroserviceUrl + inputDocumentBatchMicroserviceAPI +"/"+clientId+ "/" + tableName;
-        JSONObject jsonObject = uploadData(tableName, payload, clientId,url, jwtToken);
+        String url = baseMicroserviceUrl + inputDocumentBatchMicroserviceAPI  + "/" +tableName
+				+TENANT_ID_REQUEST_PARAM + tenantId;
+        JSONObject jsonObject = uploadData(tableName, payload, tenantId,url, jwtToken);
 
-        solrResponseDTO.setMessage(jsonObject.get("message").toString());
-        solrResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
+        ingestionResponseDTO.setMessage(jsonObject.get("message").toString());
+        ingestionResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
 
-        return solrResponseDTO;
+        return ingestionResponseDTO;
 
     }
 }

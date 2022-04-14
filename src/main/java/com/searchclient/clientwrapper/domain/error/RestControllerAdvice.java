@@ -87,7 +87,6 @@ public class RestControllerAdvice {
 			fieldName = ex.getPropertyName();
 			return frameRestApiException(new RestApiError(HttpStatus.BAD_REQUEST, "Unrecognized Field : "+fieldName));
 		}else if(exception.getCause() instanceof InvalidFormatException) {
-			//String targetType = "";
 			InvalidFormatException ex = (InvalidFormatException)exception.getCause();
 			if (ex.getPath() != null && !ex.getPath().isEmpty()) {
 		        JsonMappingException.Reference path = ex.getPath().get(ex.getPath().size() - 1);
@@ -95,7 +94,6 @@ public class RestControllerAdvice {
 		    }
 			String value = (null != ex.getValue())?ex.getValue().toString():"";
 			return frameRestApiException(new RestApiError(HttpStatus.BAD_REQUEST, "Value for field : "+fieldName+" is not expected as : "+value));
-			//targetType = ex.getTargetType().getName();
 		}else if(exception.getCause() instanceof JsonMappingException) {
 			JsonMappingException ex = (JsonMappingException)exception.getCause();
 			if(ex.getCause() instanceof BadRequestOccurredException) {
@@ -106,7 +104,6 @@ public class RestControllerAdvice {
 		}else {
 			return frameRestApiException(new RestApiError(HttpStatus.BAD_REQUEST, "Provide valid JSON Input"));
 		}
-		//return frameRestApiException(new RestApiError(HttpStatus.BAD_REQUEST, "Unrecognized Field : "+fieldName));
 	}
 	
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -114,7 +111,6 @@ public class RestControllerAdvice {
 		String fieldName = "";
 		String requiredType = "";
 		if(exception.getCause() instanceof NumberFormatException) {
-			//NumberFormatException ex = (NumberFormatException)exception.getCause();
 			fieldName = exception.getName();
 			if(null != exception.getRequiredType() && null != exception.getRequiredType().getName())
 				requiredType = exception.getRequiredType().getName();

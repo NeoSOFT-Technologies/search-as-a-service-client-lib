@@ -2,9 +2,8 @@ package com.searchclient.clientwrapper.domain.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.searchclient.clientwrapper.domain.error.JwtAuthenticationFailureException;
-import com.searchclient.clientwrapper.domain.service.SolrDocumentService;
+import com.searchclient.clientwrapper.domain.service.InputDocumentService;
 import lombok.Data;
-
 import org.apache.http.HttpStatus;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -30,10 +28,10 @@ public class DocumentParserUtil {
     ObjectMapper objectMapper;
 
     @Value("${base-solr-url}")
-    private String baseSolrUrl;
+    private String baseSearchUrl;
 
-    private final Logger log = LoggerFactory.getLogger(SolrDocumentService.class);
-
+    private final Logger log = LoggerFactory.getLogger(DocumentParserUtil.class);
+	private static final String TENANT_ID_REQUEST_PARAM = "?tenantId=";
     private static boolean isNumeric(String string) {
         Logger log = LoggerFactory.getLogger(DocumentParserUtil.class);
 
@@ -59,7 +57,7 @@ public class DocumentParserUtil {
 
         String objectAsString = object.toString();
 
-        log.debug(String.format("isBoolean Check: %s , Object as String: %s ", object, objectAsString));
+        log.debug("isBoolean Check: {} , Object as String: {} ", object, objectAsString);
 
         if (object.getClass().equals(Boolean.class) || objectAsString.equals("true") || objectAsString.equals("True") || objectAsString.equals("false") || objectAsString.equals("False")) {
             return true;
@@ -107,7 +105,7 @@ public class DocumentParserUtil {
             String payloadJsonObjectKey = itr.next();
             Object payloadJsonObjectValue = payloadJSON.get(payloadJsonObjectKey);
 
-            log.debug(payloadJsonObjectKey + "=" + payloadJsonObjectValue);
+            log.debug("{} = {}",payloadJsonObjectKey, payloadJsonObjectValue);
 
             if (schemaKeyValuePair.containsKey(payloadJsonObjectKey)) {
 
@@ -232,7 +230,7 @@ public class DocumentParserUtil {
         return new DocumentSatisfiesSchemaResponse(true, "Success!");
     }
 
-    public Map<String, Map<String, Object>> getSchemaOfCollection(String baseMicroserviceUrl, String collectionName, int clientid, String jwtToken) {
+    public Map<String, Map<String, Object>> getSchemaOfCollection(String baseMicroserviceUrl, String collectionName, int tenantId, String jwtToken) {
 
         // THIS METHOD HITS THE GET SCHEMA METHOD OF THE MICROSERVICE AND GETS
         // THE
@@ -242,8 +240,8 @@ public class DocumentParserUtil {
 
         Logger log = LoggerFactory.getLogger(DocumentParserUtil.class);
 
-        String url = baseMicroserviceUrl + "/api/v1/manage/table/" + clientid + "/" + collectionName;
-        System.out.println("calling url " + url);
+        String url = baseMicroserviceUrl + "/api/v1/manage/table/" +  collectionName + TENANT_ID_REQUEST_PARAM + tenantId;
+        log.debug("calling url {} ",url);
         microserviceHttpGateway.setApiEndpoint(url);
         microserviceHttpGateway.setRequestBodyDTO(null);
 
@@ -251,16 +249,14 @@ public class DocumentParserUtil {
         JSONObject data= (JSONObject) jsonObject.get("data");
 
         JSONArray jsonArrayOfAttributesFields = (JSONArray) data.get("columns");
-
-        System.out.println("jsonArrayOfAttributesFields");
-        System.out.println(jsonArrayOfAttributesFields);
-
+        log.debug("jsonArrayOfAttributesFields : {}", jsonArrayOfAttributesFields);
+     
         ObjectMapper objectMapper = new ObjectMapper();
 
         List<Map<String, Object>> schemaResponseFields = jsonArrayOfAttributesFields.toList().stream().map(eachField -> (Map<String, Object>) objectMapper.convertValue(eachField, Map.class))
                 .collect(Collectors.toList());
 
-        // Converting response schema from Solr to HashMap for quick access
+        // Converting response schema from Search Server to HashMap for quick access
         // Key contains the field name and value contains the object which has
         // schema
         // description of that key eg. multivalued etc
