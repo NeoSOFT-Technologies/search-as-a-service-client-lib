@@ -30,7 +30,6 @@ public class DocumentParserUtil {
     @Value("${base-solr-url}")
     private String baseSearchUrl;
 
-    private final Logger log = LoggerFactory.getLogger(DocumentParserUtil.class);
 	private static final String TENANT_ID_REQUEST_PARAM = "?tenantId=";
     private static boolean isNumeric(String string) {
         Logger log = LoggerFactory.getLogger(DocumentParserUtil.class);

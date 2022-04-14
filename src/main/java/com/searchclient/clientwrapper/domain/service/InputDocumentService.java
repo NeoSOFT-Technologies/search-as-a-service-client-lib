@@ -54,7 +54,7 @@ public class InputDocumentService implements InputDocumentServicePort {
         String url = baseMicroserviceUrl + inputDocumentMicroserviceAPI  + "/" +tableName
 				+TENANT_ID_REQUEST_PARAM + tenantId;
 
-        JSONObject jsonObject = uploadData(tableName, payload, tenantId,url,jwtToken);
+        JSONObject jsonObject = uploadData( payload,url,jwtToken);
 
         ingestionResponseDTO.setMessage(jsonObject.get("message").toString());
         ingestionResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
@@ -63,11 +63,10 @@ public class InputDocumentService implements InputDocumentServicePort {
 
     }
 
-    private JSONObject uploadData(String collectionName, String payload, int tenantId,String url, String jwtToken) {
+    private JSONObject uploadData(String payload,String url, String jwtToken) {
 
        
         log.debug("calling url: {} ",url);
-
         microserviceHttpGateway.setApiEndpoint(url);
         microserviceHttpGateway.setRequestBodyDTO(payload);
         String jsonString = microserviceHttpGateway.postRequestWithStringBody(jwtToken);
@@ -135,7 +134,7 @@ public class InputDocumentService implements InputDocumentServicePort {
         }
         String url = baseMicroserviceUrl + inputDocumentBatchMicroserviceAPI  + "/" +tableName
 				+TENANT_ID_REQUEST_PARAM + tenantId;
-        JSONObject jsonObject = uploadData(tableName, payload, tenantId,url, jwtToken);
+        JSONObject jsonObject = uploadData(payload,url, jwtToken);
 
         ingestionResponseDTO.setMessage(jsonObject.get("message").toString());
         ingestionResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
