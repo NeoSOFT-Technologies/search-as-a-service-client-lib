@@ -45,7 +45,7 @@ public class InputDocumentService implements InputDocumentServicePort {
              return ingestionResponseDTO;
         }
 
-        String message = verify(payload, schemaKeyValuePair);
+        String message = verifyPayloadFormat(payload, schemaKeyValuePair);
 
         if (!message.equalsIgnoreCase("")) {
             generateResponse(ingestionResponseDTO, message);
@@ -80,7 +80,7 @@ public class InputDocumentService implements InputDocumentServicePort {
         ingestionResponseDTO.setStatusCode(108);
     }
 
-    private String verify(String payload, Map<String, Map<String, Object>> schemaKeyValuePair) {
+    private String verifyPayloadFormat(String payload, Map<String, Map<String, Object>> schemaKeyValuePair) {
         JSONArray payloadJSONArray = null;
         try {
             payloadJSONArray = new JSONArray(payload);
@@ -125,7 +125,7 @@ public class InputDocumentService implements InputDocumentServicePort {
             return ingestionResponseDTO;
         }
 
-        String message = verify(payload, schemaKeyValuePair);
+        String message = verifyPayloadFormat(payload, schemaKeyValuePair);
 
         if (!message.equalsIgnoreCase("")) {
             generateResponse(ingestionResponseDTO, message);
