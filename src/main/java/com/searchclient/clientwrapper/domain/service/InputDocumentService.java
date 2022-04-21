@@ -39,13 +39,13 @@ public class InputDocumentService implements InputDocumentServicePort {
 
         Map<String, Map<String, Object>> schemaKeyValuePair = documentparserUtil.getSchemaOfCollection(baseMicroserviceUrl, tableName,tenantId, jwtToken);
 
-        if (schemaKeyValuePair == null) {
+        if (schemaKeyValuePair.containsKey("error")) {
 
-            generateResponse(ingestionResponseDTO, "Unable to get the Schema. Please check the collection name again!");
-            return ingestionResponseDTO;
+        	 generateResponse(ingestionResponseDTO, "Table "+tableName+ " Having TenantID: "+tenantId + " Not Found");
+             return ingestionResponseDTO;
         }
 
-        String message = verify(payload, schemaKeyValuePair);
+        String message = verifyPayloadFormat(payload, schemaKeyValuePair);
 
         if (!message.equalsIgnoreCase("")) {
             generateResponse(ingestionResponseDTO, message);
@@ -77,10 +77,10 @@ public class InputDocumentService implements InputDocumentServicePort {
     private void generateResponse(IngestionResponse ingestionResponseDTO, String message) {
         log.debug(message);
         ingestionResponseDTO.setMessage(message);
-        ingestionResponseDTO.setStatusCode(400);
+        ingestionResponseDTO.setStatusCode(108);
     }
 
-    private String verify(String payload, Map<String, Map<String, Object>> schemaKeyValuePair) {
+    private String verifyPayloadFormat(String payload, Map<String, Map<String, Object>> schemaKeyValuePair) {
         JSONArray payloadJSONArray = null;
         try {
             payloadJSONArray = new JSONArray(payload);
@@ -119,14 +119,13 @@ public class InputDocumentService implements InputDocumentServicePort {
         IngestionResponse ingestionResponseDTO = new IngestionResponse();
 
         Map<String, Map<String, Object>> schemaKeyValuePair = documentparserUtil.getSchemaOfCollection(baseMicroserviceUrl, tableName,tenantId, jwtToken);
+        if (schemaKeyValuePair.containsKey("error")) {
 
-        if (schemaKeyValuePair == null) {
-
-            generateResponse(ingestionResponseDTO, "Unable to get the Schema. Please check the collection name again!");
+            generateResponse(ingestionResponseDTO, "Table "+tableName+ " Having TenantID: "+tenantId + " Not Found");
             return ingestionResponseDTO;
         }
 
-        String message = verify(payload, schemaKeyValuePair);
+        String message = verifyPayloadFormat(payload, schemaKeyValuePair);
 
         if (!message.equalsIgnoreCase("")) {
             generateResponse(ingestionResponseDTO, message);

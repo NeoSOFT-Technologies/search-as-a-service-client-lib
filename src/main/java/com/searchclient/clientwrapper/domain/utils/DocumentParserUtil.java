@@ -3,6 +3,7 @@ package com.searchclient.clientwrapper.domain.utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.searchclient.clientwrapper.domain.error.JwtAuthenticationFailureException;
 import com.searchclient.clientwrapper.domain.service.InputDocumentService;
+import java.util.Collections;
 import lombok.Data;
 import org.apache.http.HttpStatus;
 import org.json.JSONArray;
@@ -243,15 +244,16 @@ public class DocumentParserUtil {
         log.debug("calling url {} ",url);
         microserviceHttpGateway.setApiEndpoint(url);
         microserviceHttpGateway.setRequestBodyDTO(null);
-
         JSONObject jsonObject = microserviceHttpGateway.getRequest(jwtToken);
+        int statusCode = jsonObject.getInt("statusCode");
+        Map<String, Map<String, Object>> schemaKeyValuePair = new HashMap<>();
+        if(statusCode == 200) {
         JSONObject data= (JSONObject) jsonObject.get("data");
 
         JSONArray jsonArrayOfAttributesFields = (JSONArray) data.get("columns");
         log.debug("jsonArrayOfAttributesFields : {}", jsonArrayOfAttributesFields);
      
         ObjectMapper objectMapper = new ObjectMapper();
-
         List<Map<String, Object>> schemaResponseFields = jsonArrayOfAttributesFields.toList().stream().map(eachField -> (Map<String, Object>) objectMapper.convertValue(eachField, Map.class))
                 .collect(Collectors.toList());
 
@@ -259,9 +261,11 @@ public class DocumentParserUtil {
         // Key contains the field name and value contains the object which has
         // schema
         // description of that key eg. multivalued etc
-        Map<String, Map<String, Object>> schemaKeyValuePair = new HashMap<>();
-        schemaResponseFields.forEach((fieldObject) -> schemaKeyValuePair.put(fieldObject.get("name").toString(), fieldObject));
-
+         schemaResponseFields.forEach((fieldObject) -> schemaKeyValuePair.put(fieldObject.get("name").toString(), fieldObject));
+        }
+        else {
+          schemaKeyValuePair.put("error",new HashMap<>());
+        }
         return schemaKeyValuePair;
     }
 

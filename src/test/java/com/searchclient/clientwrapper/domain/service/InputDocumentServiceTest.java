@@ -37,7 +37,7 @@ class InputDocumentServiceTest extends InputDocumentService {
 	String payload = "[\r\n" + "  {\r\n" + "    \"id\" : \"18\",\r\n" + "    \"color\" : \"ravi\"\r\n" + "  }\r\n"
 			+ "]";
 	Map<String, Map<String, Object>> schemaKeyValuePair = new HashMap();
-
+    int tenantId = 101;
 	Map<String, Object> map = new HashMap();
 	Map<String, Object> map2 = new HashMap();
 
@@ -78,10 +78,8 @@ class InputDocumentServiceTest extends InputDocumentService {
 		String jsonString = JsonObject.toString();
 
 		DocumentSatisfiesSchemaResponse doc = new DocumentSatisfiesSchemaResponse(true, "Success!");
-
 		Mockito.when(documentParser.isDocumentSatisfySchema(Mockito.any(), Mockito.any())).thenReturn(doc);
 		Mockito.when(microserviceHttpGateway.postRequestWithStringBody(Mockito.anyString())).thenReturn(jsonString);
-
 	}
 
 	public void setMockitoBadResponseForService() {
@@ -90,7 +88,7 @@ class InputDocumentServiceTest extends InputDocumentService {
 		documentUploadResponseDTO.setMessage("Testing");
 		JsonObject = new JSONObject(documentUploadResponseDTO);
 		String jsonString = JsonObject.toString();
-
+           
 		DocumentSatisfiesSchemaResponse doc = new DocumentSatisfiesSchemaResponse(false, "Success!");
 		Mockito.when(documentParser.isDocumentSatisfySchema(Mockito.any(), Mockito.any())).thenReturn(doc);
 		Mockito.when(microserviceHttpGateway.postRequestWithStringBody(Mockito.anyString())).thenReturn(jsonString);
@@ -100,16 +98,15 @@ class InputDocumentServiceTest extends InputDocumentService {
 	void testadDocuments() {
 
 		int statusCode = 200;
-
 		setMockitoSuccessResponseForService();
-		inputDocumentService.addDocument(collectionName, payload, statusCode, baseMicroserviceUrl);
+		inputDocumentService.addDocument(collectionName, payload, tenantId, baseMicroserviceUrl);
 		assertEquals(statusCode, inputDocumentService
-				.addDocument(collectionName, payload, statusCode, baseMicroserviceUrl).getStatusCode());
+				.addDocument(collectionName, payload, tenantId, baseMicroserviceUrl).getStatusCode());
 
 		setMockitoBadResponseForService();
-		IngestionResponse rsp = inputDocumentService.addDocument(collectionName, payload, statusCode, "");
+		IngestionResponse rsp = inputDocumentService.addDocument(collectionName, payload, tenantId, "");
 		assertNotEquals(statusCode, rsp.getStatusCode());
-
+	
 	}
 
 	@Test
@@ -120,12 +117,10 @@ class InputDocumentServiceTest extends InputDocumentService {
 		setMockitoSuccessResponseForService();
 
 		assertEquals(statusCode, inputDocumentService
-				.addNRTDocuments(collectionName, payload, statusCode, baseMicroserviceUrl).getStatusCode());
-
+				.addNRTDocuments(collectionName, payload, tenantId, baseMicroserviceUrl).getStatusCode());
+	
 		setMockitoBadResponseForService();
-
-		assertNotEquals(statusCode,
-				inputDocumentService.addNRTDocuments(collectionName, payload, statusCode, "").getStatusCode());
-
+		assertNotEquals(statusCode, inputDocumentService.addNRTDocuments(collectionName, payload, tenantId, "").getStatusCode());
+		
 	}
 }
