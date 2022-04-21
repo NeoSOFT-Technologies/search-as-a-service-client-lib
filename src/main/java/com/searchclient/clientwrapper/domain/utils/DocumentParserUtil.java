@@ -3,6 +3,7 @@ package com.searchclient.clientwrapper.domain.utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.searchclient.clientwrapper.domain.error.JwtAuthenticationFailureException;
 import com.searchclient.clientwrapper.domain.service.InputDocumentService;
+import java.util.Collections;
 import lombok.Data;
 import org.apache.http.HttpStatus;
 import org.json.JSONArray;
@@ -245,6 +246,8 @@ public class DocumentParserUtil {
         microserviceHttpGateway.setRequestBodyDTO(null);
 
         JSONObject jsonObject = microserviceHttpGateway.getRequest(jwtToken);
+        int statusCode = jsonObject.getInt("statusCode");
+        if(statusCode == 200) {
         JSONObject data= (JSONObject) jsonObject.get("data");
 
         JSONArray jsonArrayOfAttributesFields = (JSONArray) data.get("columns");
@@ -261,8 +264,11 @@ public class DocumentParserUtil {
         // description of that key eg. multivalued etc
         Map<String, Map<String, Object>> schemaKeyValuePair = new HashMap<>();
         schemaResponseFields.forEach((fieldObject) -> schemaKeyValuePair.put(fieldObject.get("name").toString(), fieldObject));
-
         return schemaKeyValuePair;
+        }
+        else {
+         return null;
+        }
     }
 
     @Data

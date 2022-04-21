@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @ExtendWith(MockitoExtension.class)
 @ExtendWith(SpringExtension.class)
-public class DocumentParserUtilTest {
+class DocumentParserUtilTest {
 	Logger logger = LoggerFactory.getLogger(DocumentParserUtilTest.class);
 	
 	@InjectMocks
@@ -34,8 +34,8 @@ public class DocumentParserUtilTest {
 	String baseMicroserviceUrl="http://localhost:8983/solr";
 	
 	 String collectionName="Demo";
-			 int clientid=10;
-			 String jwtToken="sdodsadpasdasd";
+	 int tenantId = 101;
+	 String jwtToken="sdodsadpasdasd";
 	
 	@MockBean
 	MicroserviceHttpGateway microserviceHttpgateway;
@@ -140,7 +140,7 @@ public class DocumentParserUtilTest {
 
     JSONObject payloadJSON  = new JSONObject(inputString);
     
-    String json3="{\"data\":{\"tableName\":\"Demo\",\"columns\":[{\"name\":\"filterable\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"id\",\"type\":\"string\",\"required\":true,\"multiValue\":false,\"sortable\":false,\"storable\":true,\"filterable\":true,\"partialSearch\":false},{\"name\":\"multiValue\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"name\",\"type\":\"string\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"partialSearch\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"required\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"sortable\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"storable\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"type\",\"type\":\"string\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false}]}}"; 
+    String json3="{\"statusCode\":200,\"data\":{\"tableName\":\"Demo\",\"columns\":[{\"name\":\"filterable\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"id\",\"type\":\"string\",\"required\":true,\"multiValue\":false,\"sortable\":false,\"storable\":true,\"filterable\":true,\"partialSearch\":false},{\"name\":\"multiValue\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"name\",\"type\":\"string\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"partialSearch\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"required\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"sortable\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"storable\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"type\",\"type\":\"string\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false}]}}"; 
     
     
    
@@ -189,7 +189,7 @@ public class DocumentParserUtilTest {
 
 		 try {
 
-			 documentParserUtil.getSchemaOfCollection(baseMicroserviceUrl, collectionName, clientid, jwtToken);
+			 documentParserUtil.getSchemaOfCollection(baseMicroserviceUrl, collectionName, tenantId, jwtToken);
 			
 			} catch (BadRequestOccurredException e) {
 				assertEquals(400, e.getExceptionCode());

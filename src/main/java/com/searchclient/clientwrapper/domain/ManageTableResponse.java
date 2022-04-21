@@ -26,6 +26,7 @@ public class ManageTableResponse  {
         private Map<Object, Object> tableDetails;
 
         public TableSchemav2Data() {
+        	//Empty Constructor
         }
 
        
@@ -59,11 +60,5 @@ public class ManageTableResponse  {
     private int statusCode;
 	private String message;
 	private String timestamp;
-	private TableSchemav2Data data = new TableSchemav2Data();
-
-    
-	
-	
-	
-	
+	private TableSchemav2Data data;	
 }

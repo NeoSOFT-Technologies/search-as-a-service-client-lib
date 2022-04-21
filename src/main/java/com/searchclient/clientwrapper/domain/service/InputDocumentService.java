@@ -41,8 +41,8 @@ public class InputDocumentService implements InputDocumentServicePort {
 
         if (schemaKeyValuePair == null) {
 
-            generateResponse(ingestionResponseDTO, "Unable to get the Schema. Please check the collection name again!");
-            return ingestionResponseDTO;
+        	 generateResponse(ingestionResponseDTO, "Table "+tableName+ " Having TenantID: "+tenantId + " Not Found");
+             return ingestionResponseDTO;
         }
 
         String message = verify(payload, schemaKeyValuePair);
@@ -77,7 +77,7 @@ public class InputDocumentService implements InputDocumentServicePort {
     private void generateResponse(IngestionResponse ingestionResponseDTO, String message) {
         log.debug(message);
         ingestionResponseDTO.setMessage(message);
-        ingestionResponseDTO.setStatusCode(400);
+        ingestionResponseDTO.setStatusCode(108);
     }
 
     private String verify(String payload, Map<String, Map<String, Object>> schemaKeyValuePair) {
@@ -122,7 +122,7 @@ public class InputDocumentService implements InputDocumentServicePort {
 
         if (schemaKeyValuePair == null) {
 
-            generateResponse(ingestionResponseDTO, "Unable to get the Schema. Please check the collection name again!");
+            generateResponse(ingestionResponseDTO, "Table "+tableName+ " Having TenantID: "+tenantId + " Not Found");
             return ingestionResponseDTO;
         }
 

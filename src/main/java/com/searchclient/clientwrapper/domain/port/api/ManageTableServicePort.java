@@ -1,7 +1,7 @@
 package com.searchclient.clientwrapper.domain.port.api;
 
-import org.springframework.stereotype.Service;
 
+import org.springframework.stereotype.Service;
 import com.searchclient.clientwrapper.domain.CapacityPlanProperties;
 import com.searchclient.clientwrapper.domain.ManageTableCreate;
 import com.searchclient.clientwrapper.domain.ManageTableResponse;
@@ -14,9 +14,6 @@ public interface ManageTableServicePort {
 	/*
 	 * CRUD operations for managing tables
 	 */
-	
-
-	
 
 	// DELETE requests
 
