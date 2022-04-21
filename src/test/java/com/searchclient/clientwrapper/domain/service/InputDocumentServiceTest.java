@@ -78,11 +78,8 @@ class InputDocumentServiceTest extends InputDocumentService {
 		String jsonString = JsonObject.toString();
 
 		DocumentSatisfiesSchemaResponse doc = new DocumentSatisfiesSchemaResponse(true, "Success!");
-        Mockito.when(documentParser.getSchemaOfCollection(Mockito.anyString(), Mockito.anyString(), Mockito.anyInt(), Mockito.anyString())).thenReturn(schemaKeyValuePair);
 		Mockito.when(documentParser.isDocumentSatisfySchema(Mockito.any(), Mockito.any())).thenReturn(doc);
 		Mockito.when(microserviceHttpGateway.postRequestWithStringBody(Mockito.anyString())).thenReturn(jsonString);
-
-
 	}
 
 	public void setMockitoBadResponseForService() {
@@ -101,7 +98,6 @@ class InputDocumentServiceTest extends InputDocumentService {
 	void testadDocuments() {
 
 		int statusCode = 200;
-
 		setMockitoSuccessResponseForService();
 		inputDocumentService.addDocument(collectionName, payload, tenantId, baseMicroserviceUrl);
 		assertEquals(statusCode, inputDocumentService
@@ -110,12 +106,7 @@ class InputDocumentServiceTest extends InputDocumentService {
 		setMockitoBadResponseForService();
 		IngestionResponse rsp = inputDocumentService.addDocument(collectionName, payload, tenantId, "");
 		assertNotEquals(statusCode, rsp.getStatusCode());
-		
-		//For Non Existing Table
-		Mockito.when(documentParser.getSchemaOfCollection(Mockito.anyString(), Mockito.anyString(), Mockito.anyInt(), Mockito.anyString())).thenReturn(null);
-		IngestionResponse rsp1 = inputDocumentService.addDocument(collectionName, payload, tenantId, "");
-		assertEquals(108, rsp1.getStatusCode());
-
+	
 	}
 
 	@Test
@@ -131,10 +122,5 @@ class InputDocumentServiceTest extends InputDocumentService {
 		setMockitoBadResponseForService();
 		assertNotEquals(statusCode, inputDocumentService.addNRTDocuments(collectionName, payload, tenantId, "").getStatusCode());
 		
-		//For Non Existing Table
-		Mockito.when(documentParser.getSchemaOfCollection(Mockito.anyString(), Mockito.anyString(), Mockito.anyInt(), Mockito.anyString())).thenReturn(null);
-		IngestionResponse rsp1 = inputDocumentService.addDocument(collectionName, payload, tenantId, "");
-		assertEquals(108, rsp1.getStatusCode());
-
 	}
 }

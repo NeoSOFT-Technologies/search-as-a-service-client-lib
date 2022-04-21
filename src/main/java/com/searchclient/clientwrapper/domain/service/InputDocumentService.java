@@ -39,7 +39,7 @@ public class InputDocumentService implements InputDocumentServicePort {
 
         Map<String, Map<String, Object>> schemaKeyValuePair = documentparserUtil.getSchemaOfCollection(baseMicroserviceUrl, tableName,tenantId, jwtToken);
 
-        if (schemaKeyValuePair == null) {
+        if (schemaKeyValuePair.containsKey("error")) {
 
         	 generateResponse(ingestionResponseDTO, "Table "+tableName+ " Having TenantID: "+tenantId + " Not Found");
              return ingestionResponseDTO;
@@ -119,8 +119,7 @@ public class InputDocumentService implements InputDocumentServicePort {
         IngestionResponse ingestionResponseDTO = new IngestionResponse();
 
         Map<String, Map<String, Object>> schemaKeyValuePair = documentparserUtil.getSchemaOfCollection(baseMicroserviceUrl, tableName,tenantId, jwtToken);
-
-        if (schemaKeyValuePair == null) {
+        if (schemaKeyValuePair.containsKey("error")) {
 
             generateResponse(ingestionResponseDTO, "Table "+tableName+ " Having TenantID: "+tenantId + " Not Found");
             return ingestionResponseDTO;

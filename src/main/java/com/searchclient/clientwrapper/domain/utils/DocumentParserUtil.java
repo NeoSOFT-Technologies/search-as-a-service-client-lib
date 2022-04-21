@@ -244,9 +244,9 @@ public class DocumentParserUtil {
         log.debug("calling url {} ",url);
         microserviceHttpGateway.setApiEndpoint(url);
         microserviceHttpGateway.setRequestBodyDTO(null);
-
         JSONObject jsonObject = microserviceHttpGateway.getRequest(jwtToken);
         int statusCode = jsonObject.getInt("statusCode");
+        Map<String, Map<String, Object>> schemaKeyValuePair = new HashMap<>();
         if(statusCode == 200) {
         JSONObject data= (JSONObject) jsonObject.get("data");
 
@@ -254,7 +254,6 @@ public class DocumentParserUtil {
         log.debug("jsonArrayOfAttributesFields : {}", jsonArrayOfAttributesFields);
      
         ObjectMapper objectMapper = new ObjectMapper();
-
         List<Map<String, Object>> schemaResponseFields = jsonArrayOfAttributesFields.toList().stream().map(eachField -> (Map<String, Object>) objectMapper.convertValue(eachField, Map.class))
                 .collect(Collectors.toList());
 
@@ -262,13 +261,12 @@ public class DocumentParserUtil {
         // Key contains the field name and value contains the object which has
         // schema
         // description of that key eg. multivalued etc
-        Map<String, Map<String, Object>> schemaKeyValuePair = new HashMap<>();
-        schemaResponseFields.forEach((fieldObject) -> schemaKeyValuePair.put(fieldObject.get("name").toString(), fieldObject));
-        return schemaKeyValuePair;
+         schemaResponseFields.forEach((fieldObject) -> schemaKeyValuePair.put(fieldObject.get("name").toString(), fieldObject));
         }
         else {
-         return null;
+          schemaKeyValuePair.put("error",new HashMap<>());
         }
+        return schemaKeyValuePair;
     }
 
     @Data
