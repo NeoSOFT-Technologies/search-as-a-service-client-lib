@@ -41,14 +41,14 @@ public class InputDocumentService implements InputDocumentServicePort {
 
         if (schemaKeyValuePair.containsKey("error")) {
 
-        	 generateResponse(ingestionResponseDTO, "Table "+tableName+ " Having TenantID: "+tenantId + " Not Found");
+        	 generateResponse(ingestionResponseDTO, "Table "+tableName+ " Having TenantID: "+tenantId + " Not Found", true);
              return ingestionResponseDTO;
         }
 
         String message = verifyPayloadFormat(payload, schemaKeyValuePair);
 
         if (!message.equalsIgnoreCase("")) {
-            generateResponse(ingestionResponseDTO, message);
+            generateResponse(ingestionResponseDTO, message, false);
             return ingestionResponseDTO;
         }
         String url = baseMicroserviceUrl + inputDocumentMicroserviceAPI  + "/" +tableName
@@ -74,10 +74,15 @@ public class InputDocumentService implements InputDocumentServicePort {
         return new JSONObject(jsonString);
     }
 
-    private void generateResponse(IngestionResponse ingestionResponseDTO, String message) {
+    private void generateResponse(IngestionResponse ingestionResponseDTO, String message, boolean tableNotFound) {
         log.debug(message);
         ingestionResponseDTO.setMessage(message);
-        ingestionResponseDTO.setStatusCode(108);
+        if(tableNotFound) {
+        	ingestionResponseDTO.setStatusCode(108);
+        }else {
+        	ingestionResponseDTO.setStatusCode(400);
+        }
+        
     }
 
     private String verifyPayloadFormat(String payload, Map<String, Map<String, Object>> schemaKeyValuePair) {
@@ -121,14 +126,14 @@ public class InputDocumentService implements InputDocumentServicePort {
         Map<String, Map<String, Object>> schemaKeyValuePair = documentparserUtil.getSchemaOfCollection(baseMicroserviceUrl, tableName,tenantId, jwtToken);
         if (schemaKeyValuePair.containsKey("error")) {
 
-            generateResponse(ingestionResponseDTO, "Table "+tableName+ " Having TenantID: "+tenantId + " Not Found");
+            generateResponse(ingestionResponseDTO, "Table "+tableName+ " Having TenantID: "+tenantId + " Not Found", true);
             return ingestionResponseDTO;
         }
 
         String message = verifyPayloadFormat(payload, schemaKeyValuePair);
 
         if (!message.equalsIgnoreCase("")) {
-            generateResponse(ingestionResponseDTO, message);
+            generateResponse(ingestionResponseDTO, message , false);
             return ingestionResponseDTO;
         }
         String url = baseMicroserviceUrl + inputDocumentBatchMicroserviceAPI  + "/" +tableName
