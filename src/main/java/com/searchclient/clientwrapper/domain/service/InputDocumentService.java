@@ -40,14 +40,15 @@ public class InputDocumentService implements InputDocumentServicePort {
         Map<String, Map<String, Object>> schemaKeyValuePair = documentparserUtil.getSchemaOfCollection(baseMicroserviceUrl, tableName,tenantId, jwtToken);
 
         if (schemaKeyValuePair.containsKey("error")) {
-
-        	 generateResponse(ingestionResponseDTO, "Table "+tableName+ " Having TenantID: "+tenantId + " Not Found");
+             ingestionResponseDTO.setStatusCode(108);
+             generateResponse(ingestionResponseDTO, "Table "+tableName+ " Having TenantID: "+tenantId + " Not Found");
              return ingestionResponseDTO;
         }
 
         String message = verifyPayloadFormat(payload, schemaKeyValuePair);
 
         if (!message.equalsIgnoreCase("")) {
+	    ingestionResponseDTO.setStatusCode(400);
             generateResponse(ingestionResponseDTO, message);
             return ingestionResponseDTO;
         }
@@ -120,7 +121,7 @@ public class InputDocumentService implements InputDocumentServicePort {
 
         Map<String, Map<String, Object>> schemaKeyValuePair = documentparserUtil.getSchemaOfCollection(baseMicroserviceUrl, tableName,tenantId, jwtToken);
         if (schemaKeyValuePair.containsKey("error")) {
-
+            ingestionResponseDTO.setStatusCode(108);
             generateResponse(ingestionResponseDTO, "Table "+tableName+ " Having TenantID: "+tenantId + " Not Found");
             return ingestionResponseDTO;
         }
@@ -128,6 +129,7 @@ public class InputDocumentService implements InputDocumentServicePort {
         String message = verifyPayloadFormat(payload, schemaKeyValuePair);
 
         if (!message.equalsIgnoreCase("")) {
+	    ingestionResponseDTO.setStatusCode(400);
             generateResponse(ingestionResponseDTO, message);
             return ingestionResponseDTO;
         }
