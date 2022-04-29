@@ -4,7 +4,7 @@ plugins {
 	id 'java'
 	id 'jacoco'
 	id "org.sonarqube" version '2.8'
-
+	id 'maven-publish'
 }
 
 group = 'com.searchservice.ingress.lib'
@@ -20,7 +20,7 @@ version = '0.0.1-RELEASE'
 sourceCompatibility = '11'
 
 apply from: "gradle/sonar.gradle"
-apply plugin: 'maven-publish'
+//apply plugin: 'maven-publish'
 
 publishing {
     publications {
@@ -44,10 +44,10 @@ publishing {
     repositories {
 	    maven {
 			name 'nexus'
-			url 'http://localhost:8081/repository/nexus-client-release/'
-			//url 'http://localhost:8081/repository/nexus-client-snapshot/'
-			//url 'http://localhost:8081/repository/nexus-client-proxy/'
-			//url 'http://localhost:8081/repository/nexus-client-public-group/'
+			url 'http://localhost:8081/repository/nexus-client-ingress-release/'
+			//url 'http://localhost:8081/repository/nexus-client-ingress-snapshot/'
+			//url 'http://localhost:8081/repository/nexus-client-ingress-proxy/'
+			//url 'http://localhost:8081/repository/nexus-client-ingress-group/'
 			allowInsecureProtocol = true
 			credentials {
 				username project.nexusUsername
@@ -56,6 +56,8 @@ publishing {
 		}
 	}
 }
+
+
 
 dependencyManagement {
 	imports {
