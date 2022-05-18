@@ -44,11 +44,8 @@ public class MicroserviceHttpGateway {
 		log.debug(API_ENDPOINT ,apiEndpoint);
 		log.debug("Request Body - {}",requestBodyDTO);
 		isTokenNullOrValid(jwtToken);
-		CloseableHttpClient client = HttpClients.createDefault();
-		HttpPost http = new HttpPost(apiEndpoint);
-
-		try {
-
+		try(CloseableHttpClient client = HttpClients.createDefault();){
+		    HttpPost http = new HttpPost(apiEndpoint);
 			String objJackson = requestBodyDTO.toString();
 			StringEntity entity = new StringEntity(objJackson);
 			http.setEntity(entity);
@@ -60,12 +57,8 @@ public class MicroserviceHttpGateway {
 			String result = EntityUtils.toString(entityResponse);
 			log.debug(RESPONSE ,result);
 			jsonObject = result;
-
-			client.close();
-
 		} catch (Exception e) {
 			handleException(e);
-			e.printStackTrace();
 			log.error(e.toString());
 
 		}
@@ -81,36 +74,23 @@ public class MicroserviceHttpGateway {
 		log.debug("REQUEST BODY : {}", requestBodyDTO);
 		isTokenNullOrValid(jwtToken);
 		String result = "{}";
-		CloseableHttpClient client = HttpClients.createDefault();
-		HttpPost http = new HttpPost(apiEndpoint);
-
-		ObjectMapper objectMapper = new ObjectMapper();
-		
-
-		try {
-
+		try(CloseableHttpClient client = HttpClients.createDefault();){
+		    HttpPost http = new HttpPost(apiEndpoint);
+		    ObjectMapper objectMapper = new ObjectMapper();
 			String objJackson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(requestBodyDTO);
-	
-
 			StringEntity entity = new StringEntity(objJackson);
-
 			http.setEntity(entity);
 			http.setHeader(ACCEPT, APPLICATION_JSON );
 	        http.setHeader(CONTENT_TYPE, APPLICATION_JSON );
 	        http.setHeader(AUTHORIZATION, jwtToken);
 			log.debug("Sending POST request");
-
 			CloseableHttpResponse response = client.execute(http);
 			HttpEntity entityResponse = response.getEntity();
 			 result = EntityUtils.toString(entityResponse);
 			 log.debug(RESPONSE ,result);
 
-
-			client.close();
-
 		} catch (Exception e) {
 			handleException(e);
-			e.printStackTrace();
 			log.error(e.toString());
 
 		}
@@ -125,18 +105,12 @@ public class MicroserviceHttpGateway {
 		isTokenNullOrValid(jwtToken);
 		String result = "{}";
 
-		CloseableHttpClient client = HttpClients.createDefault();
-		HttpPut http = new HttpPut(apiEndpoint);
-
-		ObjectMapper objectMapper = new ObjectMapper();
-
-		try {
-
+		try(CloseableHttpClient client = HttpClients.createDefault();){
+		    HttpPut http = new HttpPut(apiEndpoint);
+	     	ObjectMapper objectMapper = new ObjectMapper();
 			String objJackson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(requestBodyDTO);
 			StringEntity entity = new StringEntity(objJackson);
-
 			http.setEntity(entity);
-
 			http.setHeader(ACCEPT, APPLICATION_JSON );
 	        http.setHeader(CONTENT_TYPE, APPLICATION_JSON );
 	        http.setHeader(AUTHORIZATION, jwtToken);
@@ -147,12 +121,8 @@ public class MicroserviceHttpGateway {
 			result = EntityUtils.toString(entityResponse);
 			log.debug(RESPONSE ,result);
 
-
-			client.close();
-
 		} catch (Exception e) {
 			handleException(e);
-			e.printStackTrace();
 			log.error(e.toString());
 
 		}
@@ -166,11 +136,8 @@ public class MicroserviceHttpGateway {
 		log.debug(API_ENDPOINT, apiEndpoint);
 		isTokenNullOrValid(jwtToken);
 		String result = "{}";
-		CloseableHttpClient client = HttpClients.createDefault();
-		HttpDelete http = new HttpDelete(apiEndpoint);
-
-		try {
-
+		try(CloseableHttpClient client = HttpClients.createDefault();){
+		    HttpDelete http = new HttpDelete(apiEndpoint);
 			http.setHeader(ACCEPT, APPLICATION_JSON );
 	        http.setHeader(CONTENT_TYPE, APPLICATION_JSON );
 	        http.setHeader(AUTHORIZATION, jwtToken);
@@ -179,11 +146,8 @@ public class MicroserviceHttpGateway {
 			 result = EntityUtils.toString(entityResponse);
 			 log.debug(RESPONSE ,result);
 
-			client.close();
-
 		} catch (Exception e) {
 			handleException(e);
-			e.printStackTrace();
 			log.error(e.toString());
 
 		}
@@ -197,42 +161,32 @@ public class MicroserviceHttpGateway {
 
 		JSONObject jsonObject = null;
 		isTokenNullOrValid(jwtToken);
-		CloseableHttpClient client = HttpClients.createDefault();
-		HttpGet http = new HttpGet(apiEndpoint);
-
-		try {
+		try(CloseableHttpClient client = HttpClients.createDefault();){
+		    HttpGet http = new HttpGet(apiEndpoint);
 			http.setHeader(ACCEPT, APPLICATION_JSON );
             http.setHeader(CONTENT_TYPE, APPLICATION_JSON );
             http.setHeader(AUTHORIZATION, jwtToken);
 			CloseableHttpResponse response = client.execute(http);
-		
 			HttpEntity entityResponse = response.getEntity();
 			String result = EntityUtils.toString(entityResponse);
 			log.debug(RESPONSE ,result);
-
 			jsonObject = new JSONObject(result);
 
-			client.close();
 
 		} catch (Exception e) {
 			handleException(e);
-			e.printStackTrace();
 			log.error(e.toString());
-
 		}
 
 		return jsonObject;
-
 	}
 	
 	public String getRequestV2(String jwtToken) {
 
         String result = "{}";
         isTokenNullOrValid(jwtToken);
-        CloseableHttpClient client = HttpClients.createDefault();
-        HttpGet http = new HttpGet(apiEndpoint);
-   
-        try {
+        try(CloseableHttpClient client = HttpClients.createDefault();){
+            HttpGet http = new HttpGet(apiEndpoint);
             http.setHeader(ACCEPT, APPLICATION_JSON );
             http.setHeader(CONTENT_TYPE, APPLICATION_JSON );
             http.setHeader(AUTHORIZATION, jwtToken);
@@ -240,16 +194,11 @@ public class MicroserviceHttpGateway {
             HttpEntity entityResponse = response.getEntity();
             result = EntityUtils.toString(entityResponse);
             log.debug(RESPONSE ,result);
-
-            client.close();
-
         } catch (Exception e) {
         	handleException(e);
-            e.printStackTrace();
             log.error(e.toString());
 
         }
-
         return result;
 
     }

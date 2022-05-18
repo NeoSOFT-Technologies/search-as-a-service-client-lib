@@ -31,7 +31,7 @@ public class ManageTableCreate {
 	public ManageTableCreate(String tableName, String schemaName, List<SchemaField> attributes) {
 		this.tableName = tableName;
 		this.schemaName = schemaName;
-		this.columns = columns;
+		this.columns = attributes;
 	}
 
 	
