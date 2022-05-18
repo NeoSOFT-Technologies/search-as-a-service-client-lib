@@ -60,11 +60,10 @@ public class DocumentParserUtil {
         log.debug("isBoolean Check: {} , Object as String: {} ", object, objectAsString);
 
         if (object.getClass().equals(Boolean.class) || objectAsString.equals("true") || objectAsString.equals("True") || objectAsString.equals("false") || objectAsString.equals("False")) {
-            return true;
-        } else if (isNumeric(objectAsString)) {
-            if (Integer.parseInt(objectAsString) == 1 || Integer.parseInt(objectAsString) == 0) {
-                return true;
-            }
+        	log.debug("Checking for Boolean Class");
+        	return true;
+        } else if (isNumeric(objectAsString) && Integer.parseInt(objectAsString) == 1 || Integer.parseInt(objectAsString) == 0) {  
+        	return true;   
         }
 
         return false;
@@ -73,12 +72,9 @@ public class DocumentParserUtil {
 
     public DocumentSatisfiesSchemaResponse checkIfRequiredFieldsAreAvailable(Map<String, Map<String, Object>> schemaKeyValuePair, JSONObject payloadJSON) {
         for (Map.Entry<String, Map<String, Object>> entry : schemaKeyValuePair.entrySet()) {
-            if (entry.getValue().containsKey("required")) {
-                if (entry.getValue().get("required").toString().equals("true")) {
-                    if (!payloadJSON.has(entry.getKey())) {
+            if (entry.getValue().containsKey("required") && entry.getValue().get("required").toString().equals("true") && !payloadJSON.has(entry.getKey())) {
                         return new DocumentSatisfiesSchemaResponse(false, "Required field is missing in document. Field: " + entry.getKey());
-                    }
-                }
+              
             }
         }
 
@@ -123,15 +119,11 @@ public class DocumentParserUtil {
                         String fieldTypeDefinedInSchema = fieldValueForTheKey.get("type").toString();
 
                         boolean isMultivaluedField = false;
-                        if (fieldValueForTheKey.containsKey("multiValued")) {
-                            if (fieldValueForTheKey.get("multiValued").toString().equals("true")) {
+                        if (fieldValueForTheKey.containsKey("multiValued") && fieldValueForTheKey.get("multiValued").toString().equals("true")) {
                                 isMultivaluedField = true;
-                            }
                         }
-                        if (fieldValueForTheKey.containsKey("multiValue")) {
-                            if (fieldValueForTheKey.get("multiValue").toString().equals("true")) {
-                                isMultivaluedField = true;
-                            }
+                        if (fieldValueForTheKey.containsKey("multiValue") && fieldValueForTheKey.get("multiValue").toString().equals("true")) {
+                              isMultivaluedField = true;
                         }
 
                         switch (fieldTypeDefinedInSchema) {
@@ -253,15 +245,15 @@ public class DocumentParserUtil {
         JSONArray jsonArrayOfAttributesFields = (JSONArray) data.get("columns");
         log.debug("jsonArrayOfAttributesFields : {}", jsonArrayOfAttributesFields);
      
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<Map<String, Object>> schemaResponseFields = jsonArrayOfAttributesFields.toList().stream().map(eachField -> (Map<String, Object>) objectMapper.convertValue(eachField, Map.class))
+        ObjectMapper objectMapper1 = new ObjectMapper();
+        List<Map<String, Object>> schemaResponseFields = jsonArrayOfAttributesFields.toList().stream().map(eachField -> (Map<String, Object>) objectMapper1.convertValue(eachField, Map.class))
                 .collect(Collectors.toList());
 
         // Converting response schema from Search Server to HashMap for quick access
         // Key contains the field name and value contains the object which has
         // schema
         // description of that key eg. multivalued etc
-         schemaResponseFields.forEach((fieldObject) -> schemaKeyValuePair.put(fieldObject.get("name").toString(), fieldObject));
+         schemaResponseFields.forEach(fieldObject -> schemaKeyValuePair.put(fieldObject.get("name").toString(), fieldObject));
         }
         else {
           schemaKeyValuePair.put("error",new HashMap<>());

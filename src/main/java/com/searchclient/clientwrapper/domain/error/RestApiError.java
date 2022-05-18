@@ -23,7 +23,7 @@ public class RestApiError {
 
 	   RestApiError(HttpStatus status,int statusCode) {
 	       this();
-	       this.statusCode=status.value();
+	       this.statusCode=statusCode;
 	       this.status=status;
 	       this.message = "Unexpected Exception";
 	   }
