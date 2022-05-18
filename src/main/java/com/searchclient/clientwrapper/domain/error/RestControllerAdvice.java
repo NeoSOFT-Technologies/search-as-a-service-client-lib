@@ -10,10 +10,10 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
+
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
@@ -76,7 +76,7 @@ public class RestControllerAdvice {
 	
 	
 	private ResponseEntity<RestApiError> frameRestApiException(RestApiError err) {
-		return new ResponseEntity<RestApiError>(err, err.getStatus());
+		return new ResponseEntity<>(err, err.getStatus());
 	}
 	
 	@ExceptionHandler(HttpMessageNotReadableException.class)
@@ -111,12 +111,19 @@ public class RestControllerAdvice {
 		String fieldName = "";
 		String requiredType = "";
 		if(exception.getCause() instanceof NumberFormatException) {
-			fieldName = exception.getName();
-			if(null != exception.getRequiredType() && null != exception.getRequiredType().getName())
-				requiredType = exception.getRequiredType().getName();
+			try {
+				fieldName = exception.getName();
+				Class<?> exceptionRequiredType=exception.getRequiredType();
+				if(exceptionRequiredType!=null){
+					requiredType = exceptionRequiredType.getName();
+				}
+				}catch(Exception e) {
+					log.error("Something Went Wrong!" , e);
+				}
+			}
+			return frameRestApiException(
+					new RestApiError(HttpStatus.BAD_REQUEST, fieldName + " must be of type " + requiredType));
 		}
-		return frameRestApiException(new RestApiError(HttpStatus.BAD_REQUEST, fieldName+" must be of type "+requiredType));
-	}
 	
 	@ExceptionHandler(MicroserviceConnectionException.class)
 	public ResponseEntity<RestApiError> handleMicroserviceConnectionException(MicroserviceConnectionException exception){

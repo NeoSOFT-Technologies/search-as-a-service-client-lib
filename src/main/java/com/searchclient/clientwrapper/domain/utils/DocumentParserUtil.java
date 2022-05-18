@@ -35,16 +35,13 @@ public class DocumentParserUtil {
     private static boolean isNumeric(String string) {
         Logger log = LoggerFactory.getLogger(DocumentParserUtil.class);
 
-        long longValue;
-
-        log.debug(String.format("Parsing string: \"%s\"", string));
+        log.debug("Parsing string: {}", string);
 
         if (string == null || string.equals("")) {
             log.debug("String cannot be parsed, it is null or empty.");
             return false;
         }
         try {
-            longValue = Long.parseLong(string);
             return true;
         } catch (NumberFormatException e) {
             log.debug("Input String cannot be parsed to Integer.");
@@ -274,7 +271,7 @@ public class DocumentParserUtil {
     
     public void isJwtAuthenticationError(String jsonString) {
     	JSONObject obj = new JSONObject(jsonString);
-    	if((obj.has("Unauthorized"))?obj.getString("Unauthorized").contains("Invalid token"):false)
+    	if((obj.has("Unauthorized")) && obj.getString("Unauthorized").contains("Invalid token"))
     		throw new JwtAuthenticationFailureException(HttpStatus.SC_FORBIDDEN,"Invalid Token");
     }
 }
