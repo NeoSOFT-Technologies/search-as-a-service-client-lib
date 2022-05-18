@@ -40,7 +40,6 @@ public class SchemaField {
 
 
 	public void setStorable(Object value) {
-		//this.isStorable = isStorable;
 		if (value instanceof Boolean) {
             this.isStorable = (Boolean) value;
         }else {
@@ -50,7 +49,6 @@ public class SchemaField {
 
 
 	public void setMultiValue(Object value) {
-		//this.isMultiValue = isMultiValue;
 		if (value instanceof Boolean) {
             this.isMultiValue = (Boolean) value;
         }else {
@@ -60,7 +58,6 @@ public class SchemaField {
 
 
 	public void setSortable(Object value) {
-		//this.isSortable = isSortable;
 		if (value instanceof Boolean) {
             this.isSortable = (Boolean) value;
         }else {
