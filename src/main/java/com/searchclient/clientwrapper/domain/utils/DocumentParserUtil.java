@@ -24,7 +24,7 @@ public class DocumentParserUtil {
 
     @Autowired
     MicroserviceHttpGateway microserviceHttpGateway;
-
+    private static final String STATUS_CODE = "statusCode";
     @Autowired
     ObjectMapper objectMapper;
 
@@ -234,7 +234,7 @@ public class DocumentParserUtil {
         microserviceHttpGateway.setApiEndpoint(url);
         microserviceHttpGateway.setRequestBodyDTO(null);
         JSONObject jsonObject = microserviceHttpGateway.getRequest(jwtToken);
-        int statusCode = jsonObject.getInt("statusCode");
+        int statusCode = jsonObject.getInt(STATUS_CODE);
         Map<String, Map<String, Object>> schemaKeyValuePair = new HashMap<>();
         if(statusCode == 200) {
         JSONObject data= (JSONObject) jsonObject.get("data");
@@ -254,7 +254,7 @@ public class DocumentParserUtil {
         }
         else {
         	Map<String, Object> errorResponse = new HashMap<>();
-        	errorResponse.put("statusCode", jsonObject.getInt("statusCode"));
+        	errorResponse.put(STATUS_CODE, jsonObject.getInt(STATUS_CODE));
         	errorResponse.put("message", jsonObject.getString("message"));
             schemaKeyValuePair.put("error",errorResponse);
         }
