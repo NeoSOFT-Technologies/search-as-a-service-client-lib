@@ -253,7 +253,10 @@ public class DocumentParserUtil {
          schemaResponseFields.forEach(fieldObject -> schemaKeyValuePair.put(fieldObject.get("name").toString(), fieldObject));
         }
         else {
-          schemaKeyValuePair.put("error",new HashMap<>());
+        	Map<String, Object> errorResponse = new HashMap<>();
+        	errorResponse.put("statusCode", jsonObject.getInt("statusCode"));
+        	errorResponse.put("message", jsonObject.getString("message"));
+            schemaKeyValuePair.put("error",errorResponse);
         }
         return schemaKeyValuePair;
     }

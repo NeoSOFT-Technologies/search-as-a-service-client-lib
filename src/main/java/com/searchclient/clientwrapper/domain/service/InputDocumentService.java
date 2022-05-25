@@ -26,6 +26,9 @@ public class InputDocumentService implements InputDocumentServicePort {
     private String inputDocumentBatchMicroserviceAPI;
     private final Logger log = LoggerFactory.getLogger(InputDocumentService.class);
     private static final String TENANT_ID_REQUEST_PARAM = "?tenantId=";
+    private static final String ERROR = "error";
+    private static final String MESSAGE = "message";
+    private static final String STATUS_CODE = "statusCode";
     @Autowired
     MicroserviceHttpGateway microserviceHttpGateway;
 
@@ -39,16 +42,18 @@ public class InputDocumentService implements InputDocumentServicePort {
 
         Map<String, Map<String, Object>> schemaKeyValuePair = documentparserUtil.getSchemaOfCollection(baseMicroserviceUrl, tableName,tenantId, jwtToken);
 
-        if (schemaKeyValuePair.containsKey("error")) {
+        if (schemaKeyValuePair.containsKey(ERROR)) {
 
-        	 generateResponse(ingestionResponseDTO, "Table "+tableName+ " Having TenantID: "+tenantId + " Not Found", true);
+        	ingestionResponseDTO.setStatusCode((int) schemaKeyValuePair.get(ERROR).get(STATUS_CODE));
+        	String responseMessage = schemaKeyValuePair.get(ERROR).get(MESSAGE).toString();
+        	 generateResponse(ingestionResponseDTO, responseMessage);
              return ingestionResponseDTO;
         }
 
         String message = verifyPayloadFormat(payload, schemaKeyValuePair);
 
         if (!message.equalsIgnoreCase("")) {
-            generateResponse(ingestionResponseDTO, message, false);
+            generateResponse(ingestionResponseDTO, message);
             return ingestionResponseDTO;
         }
         String url = baseMicroserviceUrl + inputDocumentMicroserviceAPI  + "/" +tableName
@@ -56,8 +61,8 @@ public class InputDocumentService implements InputDocumentServicePort {
 
         JSONObject jsonObject = uploadData( payload,url,jwtToken);
 
-        ingestionResponseDTO.setMessage(jsonObject.get("message").toString());
-        ingestionResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
+        ingestionResponseDTO.setMessage(jsonObject.get(MESSAGE).toString());
+        ingestionResponseDTO.setStatusCode((int) jsonObject.get(STATUS_CODE));
 
         return ingestionResponseDTO;
 
@@ -74,15 +79,9 @@ public class InputDocumentService implements InputDocumentServicePort {
         return new JSONObject(jsonString);
     }
 
-    private void generateResponse(IngestionResponse ingestionResponseDTO, String message, boolean tableNotFound) {
+    private void generateResponse(IngestionResponse ingestionResponseDTO, String message) {
         log.debug(message);
-        ingestionResponseDTO.setMessage(message);
-        if(tableNotFound) {
-        	ingestionResponseDTO.setStatusCode(108);
-        }else {
-        	ingestionResponseDTO.setStatusCode(400);
-        }
-        
+        ingestionResponseDTO.setMessage(message); 
     }
 
     private String verifyPayloadFormat(String payload, Map<String, Map<String, Object>> schemaKeyValuePair) {
@@ -124,24 +123,26 @@ public class InputDocumentService implements InputDocumentServicePort {
         IngestionResponse ingestionResponseDTO = new IngestionResponse();
 
         Map<String, Map<String, Object>> schemaKeyValuePair = documentparserUtil.getSchemaOfCollection(baseMicroserviceUrl, tableName,tenantId, jwtToken);
-        if (schemaKeyValuePair.containsKey("error")) {
+        if (schemaKeyValuePair.containsKey(ERROR)) {
 
-            generateResponse(ingestionResponseDTO, "Table "+tableName+ " Having TenantID: "+tenantId + " Not Found", true);
+        	String responseMessage = schemaKeyValuePair.get(ERROR).get(MESSAGE).toString();
+        	ingestionResponseDTO.setStatusCode((int) schemaKeyValuePair.get(ERROR).get(STATUS_CODE));
+            generateResponse(ingestionResponseDTO, responseMessage);
             return ingestionResponseDTO;
         }
 
         String message = verifyPayloadFormat(payload, schemaKeyValuePair);
 
         if (!message.equalsIgnoreCase("")) {
-            generateResponse(ingestionResponseDTO, message , false);
+            generateResponse(ingestionResponseDTO, message);
             return ingestionResponseDTO;
         }
         String url = baseMicroserviceUrl + inputDocumentBatchMicroserviceAPI  + "/" +tableName
 				+TENANT_ID_REQUEST_PARAM + tenantId;
         JSONObject jsonObject = uploadData(payload,url, jwtToken);
 
-        ingestionResponseDTO.setMessage(jsonObject.get("message").toString());
-        ingestionResponseDTO.setStatusCode((int) jsonObject.get("statusCode"));
+        ingestionResponseDTO.setMessage(jsonObject.get(MESSAGE).toString());
+        ingestionResponseDTO.setStatusCode((int) jsonObject.get(STATUS_CODE));
 
         return ingestionResponseDTO;
 
