@@ -1,6 +1,8 @@
 package com.searchclient.clientwrapper.domain;
 
-import com.searchclient.clientwrapper.domain.error.BadRequestOccurredException;
+
+import com.searchclient.clientwrapper.domain.error.CustomException;
+import com.searchclient.clientwrapper.domain.utils.HttpStatusCode;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,7 +28,8 @@ public class SchemaField {
 		if (value instanceof Boolean) {
             this.isFilterable = (Boolean) value;
         }else {
-        	throw new BadRequestOccurredException(400, "Value for Filterable is expected as : true/false");
+        	throw new CustomException(HttpStatusCode.BAD_REQUEST_EXCEPTION.getCode(),
+        			HttpStatusCode.BAD_REQUEST_EXCEPTION, "Value for Filterable is expected as : true/false");
         }
 	}
 
@@ -34,7 +37,8 @@ public class SchemaField {
 		if (value instanceof Boolean) {
             this.isRequired = (Boolean) value;
         }else {
-        	throw new BadRequestOccurredException(400, "Value for Required is expected as : true/false");
+        	throw new CustomException(HttpStatusCode.BAD_REQUEST_EXCEPTION.getCode(),
+        			HttpStatusCode.BAD_REQUEST_EXCEPTION, "Value for Required is expected as : true/false");
         }
 	}
 
@@ -43,7 +47,8 @@ public class SchemaField {
 		if (value instanceof Boolean) {
             this.isStorable = (Boolean) value;
         }else {
-        	throw new BadRequestOccurredException(400, "Value for Storable is expected as : true/false");
+        	throw new CustomException(HttpStatusCode.BAD_REQUEST_EXCEPTION.getCode(),
+        			HttpStatusCode.BAD_REQUEST_EXCEPTION, "Value for Storable is expected as : true/false");
         }
 	}
 
@@ -52,7 +57,8 @@ public class SchemaField {
 		if (value instanceof Boolean) {
             this.isMultiValue = (Boolean) value;
         }else {
-        	throw new BadRequestOccurredException(400, "Value for MultiValue is expected as : true/false");
+        	throw new CustomException(HttpStatusCode.BAD_REQUEST_EXCEPTION.getCode(),
+        			HttpStatusCode.BAD_REQUEST_EXCEPTION, "Value for MultiValue is expected as : true/false");
         }
 	}
 
@@ -61,7 +67,8 @@ public class SchemaField {
 		if (value instanceof Boolean) {
             this.isSortable = (Boolean) value;
         }else {
-        	throw new BadRequestOccurredException(400, "Value for Sortable is expected as : true/false");
+        	throw new CustomException(HttpStatusCode.BAD_REQUEST_EXCEPTION.getCode(),
+        			HttpStatusCode.BAD_REQUEST_EXCEPTION, "Value for Sortable is expected as : true/false");
         }
 	}
 	
@@ -69,7 +76,8 @@ public class SchemaField {
 		if (value instanceof Boolean) {
             this.isPartialSearch = (Boolean) value;
         }else {
-        	throw new BadRequestOccurredException(400, "Value for Partial Search is expected as : true/false");
+        	throw new CustomException(HttpStatusCode.BAD_REQUEST_EXCEPTION.getCode(),
+        			HttpStatusCode.BAD_REQUEST_EXCEPTION, "Value for Partial Search is expected as : true/false");
         }
 	}
 }
