@@ -1,14 +1,11 @@
 package com.searchclient.clientwrapper.domain.utils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.io.IOException;
-
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.searchclient.clientwrapper.domain.error.BadRequestOccurredException;
+import com.searchclient.clientwrapper.domain.error.CustomException;
 
 @ExtendWith(MockitoExtension.class)
 @ExtendWith(SpringExtension.class)
@@ -67,8 +64,8 @@ class MicroserviceHttpGatewayTest {
 
 			microserviceHttpGateway.postRequestWithStringBody(jwtToken);
 
-		} catch (BadRequestOccurredException e) {
-			assertEquals(400, e.getExceptionCode());
+		} catch (CustomException e) {
+			assertEquals(HttpStatusCode.BAD_REQUEST_EXCEPTION.getCode() , e.getExceptionCode());
 		}
 		// assertEquals(response1, response.toString());
 	}
@@ -80,8 +77,8 @@ class MicroserviceHttpGatewayTest {
 
 			microserviceHttpGateway.postRequestWithStringBody(jwtToken);
 
-		} catch (BadRequestOccurredException e) {
-			assertEquals(400, e.getExceptionCode());
+		} catch (CustomException e) {
+			assertEquals(HttpStatusCode.BAD_REQUEST_EXCEPTION.getCode() , e.getExceptionCode());
 		}
 	}
 
@@ -92,8 +89,8 @@ class MicroserviceHttpGatewayTest {
 
 			microserviceHttpGateway.postRequest(jwtToken);
 
-		} catch (BadRequestOccurredException e) {
-			assertEquals(400, e.getExceptionCode());
+		} catch (CustomException e) {
+			assertEquals(HttpStatusCode.BAD_REQUEST_EXCEPTION.getCode() , e.getExceptionCode());
 		}
 	}
 
@@ -104,8 +101,8 @@ class MicroserviceHttpGatewayTest {
 
 			microserviceHttpGateway.putRequest(jwtToken);
 
-		} catch (BadRequestOccurredException e) {
-			assertEquals(400, e.getExceptionCode());
+		} catch (CustomException e) {
+			assertEquals(HttpStatusCode.BAD_REQUEST_EXCEPTION.getCode() , e.getExceptionCode());
 		}
 	}
 
@@ -116,8 +113,8 @@ class MicroserviceHttpGatewayTest {
 
 			microserviceHttpGateway.deleteRequest(jwtToken);
 
-		} catch (BadRequestOccurredException e) {
-			assertEquals(400, e.getExceptionCode());
+		} catch (CustomException e) {
+			assertEquals(HttpStatusCode.BAD_REQUEST_EXCEPTION.getCode() , e.getExceptionCode());
 		}
 	}
 
@@ -128,8 +125,8 @@ class MicroserviceHttpGatewayTest {
 
 			microserviceHttpGateway.getRequest(jwtToken);
 
-		} catch (BadRequestOccurredException e) {
-			assertEquals(400, e.getExceptionCode());
+		} catch (CustomException e) {
+			assertEquals(HttpStatusCode.BAD_REQUEST_EXCEPTION.getCode() , e.getExceptionCode());
 		}
 
 	}
@@ -141,7 +138,7 @@ class MicroserviceHttpGatewayTest {
 
 			microserviceHttpGateway.getRequestV2(jwtToken);
 
-		} catch (BadRequestOccurredException e) {
+		} catch (CustomException e) {
 			assertEquals(400, e.getExceptionCode());
 		}
 	}
