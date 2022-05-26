@@ -1,12 +1,8 @@
 package com.searchclient.clientwrapper.domain.service;
 
-import static org.hamcrest.CoreMatchers.any;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,8 +18,9 @@ import com.searchclient.clientwrapper.domain.CapacityPlanProperties;
 import com.searchclient.clientwrapper.domain.ManageTableCreate;
 import com.searchclient.clientwrapper.domain.ManageTableUpdate;
 import com.searchclient.clientwrapper.domain.SchemaField;
-import com.searchclient.clientwrapper.domain.error.BadRequestOccurredException;
+import com.searchclient.clientwrapper.domain.error.CustomException;
 import com.searchclient.clientwrapper.domain.utils.DocumentParserUtil;
+import com.searchclient.clientwrapper.domain.utils.HttpStatusCode;
 import com.searchclient.clientwrapper.domain.utils.MicroserviceHttpGateway;
 
 
@@ -84,8 +81,8 @@ class ManageTableServiceTest extends ManageTableService {
 		try {
 
 		 manageTableService.capacityPlans(jwtToken);
-		} catch (BadRequestOccurredException e) {
-			assertEquals(400, e.getExceptionCode());
+		} catch (CustomException e) {
+			assertEquals(HttpStatusCode.BAD_REQUEST_EXCEPTION.getCode() , e.getExceptionCode());
 		}
 	
 	}
@@ -96,8 +93,8 @@ class ManageTableServiceTest extends ManageTableService {
 		try {
          
 			manageTableService.getTables(tenantId, jwtToken);
-			} catch (BadRequestOccurredException e) {
-				assertEquals(400, e.getExceptionCode());
+			} catch (CustomException e) {
+				assertEquals(HttpStatusCode.BAD_REQUEST_EXCEPTION.getCode() , e.getExceptionCode());
 			}
 		
 
@@ -107,8 +104,8 @@ class ManageTableServiceTest extends ManageTableService {
 	void testGetTable() throws JsonMappingException, JsonProcessingException {
 		try {
 			manageTableService.getTable(tableName, tenantId, jwtToken);
-			} catch (BadRequestOccurredException e) {
-				assertEquals(400, e.getExceptionCode());
+			} catch (CustomException e) {
+				assertEquals(HttpStatusCode.BAD_REQUEST_EXCEPTION.getCode() , e.getExceptionCode());
 			}
 	
 	}
@@ -120,8 +117,8 @@ class ManageTableServiceTest extends ManageTableService {
 
 			manageTableService.delete(tenantId, tableName, jwtToken);
 			
-			} catch (BadRequestOccurredException e) {
-				assertEquals(400, e.getExceptionCode());
+			} catch (CustomException e) {
+				assertEquals(HttpStatusCode.BAD_REQUEST_EXCEPTION.getCode() , e.getExceptionCode());
 			}
 	}
 //
@@ -140,8 +137,8 @@ class ManageTableServiceTest extends ManageTableService {
 
 		 manageTableService.create(tenantId, manageTableCreate, jwtToken);
 		
-		} catch (BadRequestOccurredException e) {
-			assertEquals(400, e.getExceptionCode());
+		} catch (CustomException e) {
+			assertEquals(HttpStatusCode.BAD_REQUEST_EXCEPTION.getCode() , e.getExceptionCode());
 		}
 	}
 
@@ -159,8 +156,8 @@ class ManageTableServiceTest extends ManageTableService {
 
 		manageTableService.update(schemaName, tenantId, manageTableUpdate, jwtToken);
 		
-		} catch (BadRequestOccurredException e) {
-			assertEquals(400, e.getExceptionCode());
+		} catch (CustomException e) {
+			assertEquals(HttpStatusCode.BAD_REQUEST_EXCEPTION.getCode() , e.getExceptionCode());
 		}
 	}
 //
@@ -172,8 +169,8 @@ class ManageTableServiceTest extends ManageTableService {
 
 		manageTableService.restoreTable(tenantId, schemaName, jwtToken);
 		
-		} catch (BadRequestOccurredException e) {
-			assertEquals(400, e.getExceptionCode());
+		} catch (CustomException e) {
+			assertEquals(HttpStatusCode.BAD_REQUEST_EXCEPTION.getCode() , e.getExceptionCode());
 		}
 	}
 }
