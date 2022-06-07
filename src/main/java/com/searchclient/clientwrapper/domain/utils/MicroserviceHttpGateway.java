@@ -1,7 +1,6 @@
 package com.searchclient.clientwrapper.domain.utils;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -16,10 +15,8 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.searchclient.clientwrapper.domain.error.JwtAuthenticationFailureException;
-import com.searchclient.clientwrapper.domain.error.MicroserviceConnectionException;
+import com.searchclient.clientwrapper.domain.error.CustomException;
 
 import lombok.Data;
 
@@ -32,7 +29,6 @@ public class MicroserviceHttpGateway {
     private static final String ACCEPT = "Accept";
     private static final String AUTHORIZATION = "Authorization";
     private static final String APPLICATION_JSON = "application/json";
-    private static final String RESPONSE = "RESPONSE: {}";
     private static final String API_ENDPOINT = "API Endpoint : {}";
 	private String apiEndpoint;
 	private Object requestBodyDTO;
@@ -55,7 +51,6 @@ public class MicroserviceHttpGateway {
 			CloseableHttpResponse response = client.execute(http);
 			HttpEntity entityResponse = response.getEntity();
 			String result = EntityUtils.toString(entityResponse);
-			log.debug(RESPONSE ,result);
 			jsonObject = result;
 		} catch (Exception e) {
 			handleException(e);
@@ -87,8 +82,6 @@ public class MicroserviceHttpGateway {
 			CloseableHttpResponse response = client.execute(http);
 			HttpEntity entityResponse = response.getEntity();
 			 result = EntityUtils.toString(entityResponse);
-			 log.debug(RESPONSE ,result);
-
 		} catch (Exception e) {
 			handleException(e);
 			log.error(e.toString());
@@ -115,12 +108,9 @@ public class MicroserviceHttpGateway {
 	        http.setHeader(CONTENT_TYPE, APPLICATION_JSON );
 	        http.setHeader(AUTHORIZATION, jwtToken);
 			log.debug("Sending DELETE request");
-
 			CloseableHttpResponse response = client.execute(http);
 			HttpEntity entityResponse = response.getEntity();
 			result = EntityUtils.toString(entityResponse);
-			log.debug(RESPONSE ,result);
-
 		} catch (Exception e) {
 			handleException(e);
 			log.error(e.toString());
@@ -144,8 +134,6 @@ public class MicroserviceHttpGateway {
 			CloseableHttpResponse response = client.execute(http);
 			HttpEntity entityResponse = response.getEntity();
 			 result = EntityUtils.toString(entityResponse);
-			 log.debug(RESPONSE ,result);
-
 		} catch (Exception e) {
 			handleException(e);
 			log.error(e.toString());
@@ -169,7 +157,6 @@ public class MicroserviceHttpGateway {
 			CloseableHttpResponse response = client.execute(http);
 			HttpEntity entityResponse = response.getEntity();
 			String result = EntityUtils.toString(entityResponse);
-			log.debug(RESPONSE ,result);
 			jsonObject = new JSONObject(result);
 
 
@@ -193,7 +180,6 @@ public class MicroserviceHttpGateway {
             CloseableHttpResponse response = client.execute(http);
             HttpEntity entityResponse = response.getEntity();
             result = EntityUtils.toString(entityResponse);
-            log.debug(RESPONSE ,result);
         } catch (Exception e) {
         	handleException(e);
             log.error(e.toString());
@@ -205,12 +191,14 @@ public class MicroserviceHttpGateway {
 
 	private void handleException(Exception exception) {
 		if(exception instanceof HttpHostConnectException) {
-			throw new MicroserviceConnectionException(HttpStatus.SC_SERVICE_UNAVAILABLE,"Unable to connect Microservice");
+			throw new CustomException(HttpStatusCode.SERVER_UNAVAILABLE.getCode(),
+					HttpStatusCode.SERVER_UNAVAILABLE,"Unable to connect Microservice");
 		}
 	}
 
 	public void isTokenNullOrValid(String jwtToken) {
     	if((null == jwtToken || jwtToken.isEmpty() || jwtToken.isBlank() || !jwtToken.startsWith("Bearer ")))
-    		throw new JwtAuthenticationFailureException(HttpStatus.SC_FORBIDDEN,"Provide valid token");
+    		throw new CustomException(HttpStatusCode.REQUEST_FORBIDEN.getCode(), 
+    				HttpStatusCode.REQUEST_FORBIDEN, "Provide valid token");
     }
 }

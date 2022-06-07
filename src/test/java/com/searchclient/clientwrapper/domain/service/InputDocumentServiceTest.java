@@ -36,10 +36,9 @@ class InputDocumentServiceTest extends InputDocumentService {
 	String collectionName = "demo1";
 	String payload = "[\r\n" + "  {\r\n" + "    \"id\" : \"18\",\r\n" + "    \"color\" : \"ravi\"\r\n" + "  }\r\n"
 			+ "]";
-	Map<String, Map<String, Object>> schemaKeyValuePair = new HashMap();
     int tenantId = 101;
-	Map<String, Object> map = new HashMap();
-	Map<String, Object> map2 = new HashMap();
+	Map<String, Object> map = new HashMap<String, Object>();
+	Map<String, Object> map2 = new HashMap<String, Object>();
 
 	@InjectMocks
 	InputDocumentService inputDocumentService;
@@ -71,9 +70,6 @@ class InputDocumentServiceTest extends InputDocumentService {
 		Response documentUploadResponseDTO = new Response();
 		documentUploadResponseDTO.setStatusCode(200);
 		documentUploadResponseDTO.setMessage("Testing");
-
-		schemaKeyValuePair.put("id", map2);
-		schemaKeyValuePair.put("color", map);
 		JsonObject = new JSONObject(documentUploadResponseDTO);
 		String jsonString = JsonObject.toString();
 
@@ -96,7 +92,6 @@ class InputDocumentServiceTest extends InputDocumentService {
 
 	@Test
 	void testadDocuments() {
-
 		int statusCode = 200;
 		setMockitoSuccessResponseForService();
 		inputDocumentService.addDocument(collectionName, payload, tenantId, baseMicroserviceUrl);
@@ -105,17 +100,15 @@ class InputDocumentServiceTest extends InputDocumentService {
 
 		setMockitoBadResponseForService();
 		IngestionResponse rsp = inputDocumentService.addDocument(collectionName, payload, tenantId, "");
-		assertNotEquals(statusCode, rsp.getStatusCode());
+		assertNotEquals(statusCode, rsp.getStatusCode());	
 	
 	}
-
+	
 	@Test
 	void addNRTDocuments() {
 
 		int statusCode = 200;
-
 		setMockitoSuccessResponseForService();
-
 		assertEquals(statusCode, inputDocumentService
 				.addNRTDocuments(collectionName, payload, tenantId, baseMicroserviceUrl).getStatusCode());
 	
