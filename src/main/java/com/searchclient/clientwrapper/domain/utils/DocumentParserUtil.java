@@ -1,11 +1,8 @@
 package com.searchclient.clientwrapper.domain.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.searchclient.clientwrapper.domain.error.JwtAuthenticationFailureException;
-import com.searchclient.clientwrapper.domain.service.InputDocumentService;
-import java.util.Collections;
+import com.searchclient.clientwrapper.domain.error.CustomException;
 import lombok.Data;
-import org.apache.http.HttpStatus;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -24,7 +21,7 @@ public class DocumentParserUtil {
 
     @Autowired
     MicroserviceHttpGateway microserviceHttpGateway;
-
+    private static final String STATUS_CODE = "statusCode";
     @Autowired
     ObjectMapper objectMapper;
 
@@ -234,7 +231,7 @@ public class DocumentParserUtil {
         microserviceHttpGateway.setApiEndpoint(url);
         microserviceHttpGateway.setRequestBodyDTO(null);
         JSONObject jsonObject = microserviceHttpGateway.getRequest(jwtToken);
-        int statusCode = jsonObject.getInt("statusCode");
+        int statusCode = jsonObject.getInt(STATUS_CODE);
         Map<String, Map<String, Object>> schemaKeyValuePair = new HashMap<>();
         if(statusCode == 200) {
         JSONObject data= (JSONObject) jsonObject.get("data");
@@ -253,7 +250,10 @@ public class DocumentParserUtil {
          schemaResponseFields.forEach(fieldObject -> schemaKeyValuePair.put(fieldObject.get("name").toString(), fieldObject));
         }
         else {
-          schemaKeyValuePair.put("error",new HashMap<>());
+        	Map<String, Object> errorResponse = new HashMap<>();
+        	errorResponse.put(STATUS_CODE, jsonObject.getInt(STATUS_CODE));
+        	errorResponse.put("message", jsonObject.getString("message"));
+            schemaKeyValuePair.put("error",errorResponse);
         }
         return schemaKeyValuePair;
     }
@@ -272,6 +272,7 @@ public class DocumentParserUtil {
     public void isJwtAuthenticationError(String jsonString) {
     	JSONObject obj = new JSONObject(jsonString);
     	if((obj.has("Unauthorized")) && obj.getString("Unauthorized").contains("Invalid token"))
-    		throw new JwtAuthenticationFailureException(HttpStatus.SC_FORBIDDEN,"Invalid Token");
+    		throw new CustomException(HttpStatusCode.REQUEST_FORBIDEN.getCode(), 
+    				HttpStatusCode.REQUEST_FORBIDEN, "Invalid Token");
     }
 }

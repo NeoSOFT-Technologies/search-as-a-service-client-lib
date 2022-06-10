@@ -1,7 +1,7 @@
 package com.searchclient.clientwrapper.domain.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.searchclient.clientwrapper.domain.error.BadRequestOccurredException;
+import com.searchclient.clientwrapper.domain.error.CustomException;
 import com.searchclient.clientwrapper.domain.utils.DocumentParserUtil.DocumentSatisfiesSchemaResponse;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -191,8 +191,8 @@ class DocumentParserUtilTest {
 
 			 documentParserUtil.getSchemaOfCollection(baseMicroserviceUrl, collectionName, tenantId, jwtToken);
 			
-			} catch (BadRequestOccurredException e) {
-				assertEquals(400, e.getExceptionCode());
+			} catch (CustomException e) {
+				assertEquals(HttpStatusCode.BAD_REQUEST_EXCEPTION.getCode() , e.getExceptionCode());
 			}
 	}
 

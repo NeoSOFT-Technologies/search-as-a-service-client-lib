@@ -273,6 +273,9 @@ microservice-url:
     update: /api/v1/manage/table
     delete: /api/v1/manage/table
     restore: /api/v1/manage/table/restore
+    get-all-collections: /api/v1/manage/table/all-tables
+    get-deleted-collections: /api/v1/manage/table/deletion/all-tables
+    
 # Throttler configurations
 base-app-url: http://localhost:8080
 throttler-test-app-url: http://localhost:8082

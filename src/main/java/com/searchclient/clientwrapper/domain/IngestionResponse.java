@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class IngestionResponse {
-	private int statusCode;
-	private String message;
+
+
+public class IngestionResponse extends BaseResponse {
 	
 	// Rate Limiter member variables
 	private String maxRequestsAllowed; // maximum number of requests allowed for current limitRefreshPeriod
@@ -28,10 +28,5 @@ public class IngestionResponse {
 	private String incomingRequestSize;
 	private String apiResponseData;
 	
-	public IngestionResponse(int statusCode, String responseMessage) {
-		this.statusCode = statusCode;
-		this.message = responseMessage;
-	}
-	
-	
 }
+

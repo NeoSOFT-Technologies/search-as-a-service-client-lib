@@ -1,25 +1,19 @@
 package com.searchclient.clientwrapper.domain.service;
 
-import java.io.IOException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.searchclient.clientwrapper.domain.CapacityPlanProperties;
-import com.searchclient.clientwrapper.domain.ManageTableCreate;
+import com.searchclient.clientwrapper.domain.ManageTable;
 import com.searchclient.clientwrapper.domain.ManageTableResponse;
-import com.searchclient.clientwrapper.domain.ManageTableUpdate;
 import com.searchclient.clientwrapper.domain.Response;
 import com.searchclient.clientwrapper.domain.port.api.ManageTableServicePort;
 import com.searchclient.clientwrapper.domain.utils.DocumentParserUtil;
-import com.searchclient.clientwrapper.domain.utils.LoggerUtils;
 import com.searchclient.clientwrapper.domain.utils.MicroserviceHttpGateway;
-import com.searchclient.clientwrapper.dto.logger.LoggersDTO;
 
 @Service
 public class ManageTableService implements ManageTableServicePort {
@@ -44,11 +38,15 @@ public class ManageTableService implements ManageTableServicePort {
 	@Value("${microservice-url.manage-table.get-collections}")
 	private String getCollectionsMicroserviceAPI;
 
-	@Value("${microservice-url.manage-table.get-schema}")
-	private String getMicroserviceAPI;
-
 	@Value("${microservice-url.manage-table.get-capacityplan}")
 	private String getcapacityplansMicroserviceAPI;
+	
+	@Value("${microservice-url.manage-table.get-all-collections}")
+	private String getAllCollectionsMicroserviceAPI;
+	
+	@Value("${microservice-url.manage-table.get-deleted-collections}")
+	private String getAllDeletedCollectionsMicroserviceAPI;
+	
 
 	@Autowired
 	CapacityPlanProperties capacityPlanProperties;
@@ -61,94 +59,86 @@ public class ManageTableService implements ManageTableServicePort {
 
 	ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-	private String servicename = "Manage_Table_Service";
-	private String username = "Username";
-
-	LoggersDTO loggersDTO = new LoggersDTO();
-	
-	
-	private void intprintLogger(String timestamp ,String nameofCurrMethod) {
-		
-		loggersDTO = LoggerUtils.getRequestLoggingInfo(username, servicename, nameofCurrMethod, timestamp);
-
-		LoggerUtils.printlogger(loggersDTO, true, false);
-
-		
-		
-	}
-
 	@Override
 	public CapacityPlanProperties capacityPlans(String jwtToken) {
 
-		logger.debug("capacity Plans");
-
-		String timestamp = LoggerUtils.utcTime().toString();
-
-		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
-
-		intprintLogger(timestamp, nameofCurrMethod);
-		
+		logger.debug("capacity Plans");		
 		CapacityPlanProperties getCapacityPlans = new CapacityPlanProperties();
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + getcapacityplansMicroserviceAPI);
 		String jsonObject = microserviceHttpGateway.getRequestV2(jwtToken);
 		docParserUtil.isJwtAuthenticationError(jsonObject);
 		try {
 			getCapacityPlans = objectMapper.readValue(jsonObject, CapacityPlanProperties.class);
-			timestamp = LoggerUtils.utcTime().toString();
-			loggersDTO.setTimestamp(timestamp);
-			LoggerUtils.printlogger(loggersDTO, false, false);
 			return getCapacityPlans;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			timestamp = LoggerUtils.utcTime().toString();
-			loggersDTO.setTimestamp(timestamp);
-			LoggerUtils.printlogger(loggersDTO, false, true);
 			return getCapacityPlans;
 		}
 
 	}
 
 	@Override
-	public Response getTables(int tenantId, String jwtToken) {
+	public Response getTablesByTenantId(int tenantId, String jwtToken) {
 
-		logger.debug("get Tables");
-
-		String timestamp = LoggerUtils.utcTime().toString();
-		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
-
-		intprintLogger(timestamp, nameofCurrMethod);
-
+		logger.debug("Get Tables for TenantID: {}", tenantId);
 		Response response = new Response();
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + getCollectionsMicroserviceAPI + "/" 
 				+TENANT_ID_REQUEST_PARAM + tenantId);
 		String jsonObject = microserviceHttpGateway.getRequestV2(jwtToken);
 		docParserUtil.isJwtAuthenticationError(jsonObject);
-		timestamp = LoggerUtils.utcTime().toString();
-		loggersDTO.setTimestamp(timestamp);
 		try {
 			response = objectMapper.readValue(jsonObject, Response.class);
-			LoggerUtils.printlogger(loggersDTO, false, false);
 			return response;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			LoggerUtils.printlogger(loggersDTO, false, true);
+			return response;
+		}
+
+	}
+	
+	@Override
+	public Response getAllTables(int pageNumber, int pageSize, String jwtToken) {
+
+		logger.debug("Get All Tables");
+		Response response = new Response();
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + getAllCollectionsMicroserviceAPI
+				+ "?pageNumber=" + pageNumber + "&pageSize=" + pageSize);
+		String jsonObject = microserviceHttpGateway.getRequestV2(jwtToken);
+		docParserUtil.isJwtAuthenticationError(jsonObject);
+
+		try {
+			response = objectMapper.readValue(jsonObject, Response.class);
+			return response;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return response;
+		}
+
+	}
+	
+	@Override
+	public Response getAllDeletedTables(int pageNumber, int pageSize, String jwtToken) {
+
+		logger.debug("Get All Tables Under Deletion");
+		Response response = new Response();
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + getAllDeletedCollectionsMicroserviceAPI 
+				+ "?pageNumber=" + pageNumber + "&pageSize=" + pageSize);
+		String jsonObject = microserviceHttpGateway.getRequestV2(jwtToken);
+		docParserUtil.isJwtAuthenticationError(jsonObject);
+		try {
+			response = objectMapper.readValue(jsonObject, Response.class);
+			return response;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
 			return response;
 		}
 
 	}
 
 	@Override
-	public ManageTableResponse getTable(String tableName, int tenantId, String jwtToken) {
+	public ManageTableResponse getTableInfo(String tableName, int tenantId, String jwtToken) {
 
 		logger.debug("get Table ");
-
-		String timestamp = LoggerUtils.utcTime().toString();
-		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
-
-		intprintLogger(timestamp, nameofCurrMethod);
-		timestamp = LoggerUtils.utcTime().toString();
-		loggersDTO.setTimestamp(timestamp);
-
 		ManageTableResponse response = new ManageTableResponse();
 		microserviceHttpGateway
 				.setApiEndpoint(baseMicroserviceUrl + getCollectionsMicroserviceAPI + "/" +tableName
@@ -157,11 +147,9 @@ public class ManageTableService implements ManageTableServicePort {
 		docParserUtil.isJwtAuthenticationError(jsonObject);
 		try {
 			response = objectMapper.readValue(jsonObject, ManageTableResponse.class);
-			LoggerUtils.printlogger(loggersDTO, false, false);
 			return response;
-		} catch (IOException e) {
+		} catch (Exception e) {
 			logger.error(e.getMessage());
-			LoggerUtils.printlogger(loggersDTO, false, true);
 			return response;
 		}
 
@@ -170,14 +158,6 @@ public class ManageTableService implements ManageTableServicePort {
 	@Override
 	public Response delete(int tenantId, String tableName, String jwtToken) {
 		logger.debug("Delete Table ");
-
-		String timestamp = LoggerUtils.utcTime().toString();
-		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
-
-		intprintLogger(timestamp, nameofCurrMethod);
-		timestamp = LoggerUtils.utcTime().toString();
-		loggersDTO.setTimestamp(timestamp);
-
 		Response response = new Response();
 		microserviceHttpGateway
 				.setApiEndpoint(baseMicroserviceUrl + deleteMicroserviceAPI + "/" +tableName
@@ -186,27 +166,17 @@ public class ManageTableService implements ManageTableServicePort {
 		docParserUtil.isJwtAuthenticationError(jsonObject);
 		try {
 			response = objectMapper.readValue(jsonObject, Response.class);
-			LoggerUtils.printlogger(loggersDTO, false, false);
 			return response;
-		} catch (IOException e) {
+		} catch (Exception e) {
 			logger.error(e.getMessage());
-			LoggerUtils.printlogger(loggersDTO, false, true);
 			return response;
 		}
 
 	}
 
 	@Override
-	public Response create(int tenantId, ManageTableCreate manageTableDTO, String jwtToken) {
+	public Response create(int tenantId, ManageTable manageTableDTO, String jwtToken) {
 		logger.debug("create Table ");
-
-		String timestamp = LoggerUtils.utcTime().toString();
-		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
-
-		intprintLogger(timestamp, nameofCurrMethod);
-
-		timestamp = LoggerUtils.utcTime().toString();
-		loggersDTO.setTimestamp(timestamp);
 		Response response = new Response();
 
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + createMicroserviceAPI + "/"
@@ -217,29 +187,18 @@ public class ManageTableService implements ManageTableServicePort {
 		docParserUtil.isJwtAuthenticationError(jsonObject);
 		try {
 			response = objectMapper.readValue(jsonObject, Response.class);
-			LoggerUtils.printlogger(loggersDTO, false, false);
 			return response;
 
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			LoggerUtils.printlogger(loggersDTO, false, true);
 			return response;
 		}
 
 	}
 
 	@Override
-	public Response update(String tableName, int tenantId, ManageTableUpdate tableSchema, String jwtToken) {
+	public Response update(String tableName, int tenantId, ManageTable tableSchema, String jwtToken) {
 		logger.debug("update Table ");
-
-		String timestamp = LoggerUtils.utcTime().toString();
-		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
-
-		intprintLogger(timestamp, nameofCurrMethod);
-
-		timestamp = LoggerUtils.utcTime().toString();
-		loggersDTO.setTimestamp(timestamp);
-
 		Response response = new Response();
 
 		microserviceHttpGateway
@@ -251,11 +210,9 @@ public class ManageTableService implements ManageTableServicePort {
 		docParserUtil.isJwtAuthenticationError(jsonObject);
 		try {
 			response = objectMapper.readValue(jsonObject, Response.class);
-			LoggerUtils.printlogger(loggersDTO, false, false);
 			return response;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			LoggerUtils.printlogger(loggersDTO, false, true);
 			return response;
 		}
 
@@ -266,14 +223,6 @@ public class ManageTableService implements ManageTableServicePort {
 
 		logger.debug("restore Table ");
 
-		String timestamp = LoggerUtils.utcTime().toString();
-		String nameofCurrMethod = new Throwable().getStackTrace()[0].getMethodName();
-
-		intprintLogger(timestamp, nameofCurrMethod);
-
-		timestamp = LoggerUtils.utcTime().toString();
-		loggersDTO.setTimestamp(timestamp);
-
 		Response response = new Response();
 
 		microserviceHttpGateway
@@ -283,11 +232,9 @@ public class ManageTableService implements ManageTableServicePort {
 		docParserUtil.isJwtAuthenticationError(jsonObject);
 		try {
 			response = objectMapper.readValue(jsonObject, Response.class);
-			LoggerUtils.printlogger(loggersDTO, false, false);
 			return response;
-		} catch (IOException e) {
+		} catch (Exception e) {
 			logger.error(e.getMessage());
-			LoggerUtils.printlogger(loggersDTO, false, true);
 			return response;
 		}
 

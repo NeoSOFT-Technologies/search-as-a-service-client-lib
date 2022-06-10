@@ -13,24 +13,20 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @JsonInclude(Include.NON_NULL) 
-public class ManageTableCreate {
-    private String tableName;
-    private String sku;
-    private String schemaName;
-    private List<SchemaField> columns;
+
+public class ManageTable extends BaseManageTable{
 	
-	public ManageTableCreate(ManageTableCreate manageTableDTO) {
+    private String sku;	
+	public ManageTable(ManageTable manageTableDTO) {
 		this.tableName = manageTableDTO.getTableName();
 		this.sku = manageTableDTO.getSku();
-		this.schemaName=manageTableDTO.getSchemaName();
 		this.columns=manageTableDTO.getColumns();	
 	}
 	
-	public ManageTableCreate(String tableName, String schemaName, List<SchemaField> attributes) {
+	public ManageTable(String tableName, List<SchemaField> attributes) {
 		this.tableName = tableName;
-		this.schemaName = schemaName;
 		this.columns = attributes;
 	}
 

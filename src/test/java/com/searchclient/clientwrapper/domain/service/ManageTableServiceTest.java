@@ -1,17 +1,12 @@
 package com.searchclient.clientwrapper.domain.service;
-
-import static org.hamcrest.CoreMatchers.any;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
-
+import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -19,11 +14,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.searchclient.clientwrapper.domain.CapacityPlanProperties;
-import com.searchclient.clientwrapper.domain.ManageTableCreate;
-import com.searchclient.clientwrapper.domain.ManageTableUpdate;
+import com.searchclient.clientwrapper.domain.ManageTable;
+import com.searchclient.clientwrapper.domain.ManageTableResponse;
+import com.searchclient.clientwrapper.domain.Response;
 import com.searchclient.clientwrapper.domain.SchemaField;
-import com.searchclient.clientwrapper.domain.error.BadRequestOccurredException;
+import com.searchclient.clientwrapper.domain.error.CustomException;
 import com.searchclient.clientwrapper.domain.utils.DocumentParserUtil;
+import com.searchclient.clientwrapper.domain.utils.HttpStatusCode;
 import com.searchclient.clientwrapper.domain.utils.MicroserviceHttpGateway;
 
 
@@ -32,10 +29,13 @@ import com.searchclient.clientwrapper.domain.utils.MicroserviceHttpGateway;
 @ExtendWith(SpringExtension.class)
 class ManageTableServiceTest extends ManageTableService {
 	
+	int pageNumber = 1;
+	int pageSize = 5;
+	
 	@InjectMocks
 	ManageTableService manageTableService;
 	
-	 @Mock
+	 @MockBean
 	private ObjectMapper objectMapper;
 	 
     @MockBean
@@ -50,130 +50,160 @@ class ManageTableServiceTest extends ManageTableService {
    String schemaName="B";
    
    String tableName="Demo";
+   
+   String jsonObject = null;
   
    List<SchemaField> list = new ArrayList<SchemaField>();
 	
 	SchemaField schemaField = new SchemaField();
 	
-	public void setMockitoSuccessResponseForService() {
-			schemaField.setFilterable(true);
-			schemaField.setMultiValue(true);
-			schemaField.setName("ok");
-			schemaField.setPartialSearch(true);
-			schemaField.setRequired(true);
-			schemaField.setSortable(true);
-			schemaField.setStorable(true);
-			schemaField.setType("string");
-			
-			list.add(schemaField);
-	}
     @MockBean
     MicroserviceHttpGateway microserviceHttpGateway;
 	
     @MockBean
     DocumentParserUtil docParserUtil;
     
-    ManageTableCreate manageTableCreate = new ManageTableCreate();
+    ManageTable manageTableCreate = new ManageTable();
     
-    ManageTableUpdate manageTableUpdate = new ManageTableUpdate();
+    ManageTable manageTableUpdate = new ManageTable();
     
-	@Test
-	void testCapacityPlans() {
-
-		
-		try {
-
-		 manageTableService.capacityPlans(jwtToken);
-		} catch (BadRequestOccurredException e) {
-			assertEquals(400, e.getExceptionCode());
-		}
-	
+    void setTestCaseCondition() {
+		assertTrue(1>0);
 	}
+    
+    void setUpCreateTableDTO() {
+    	manageTableCreate.setSku(jwtToken);
+		manageTableCreate.setTableName(jwtToken);
+		manageTableCreate.setColumns(list);;
+	
+    }
+    
+    void setUpUpdateTableDTO() {
+    	manageTableUpdate.setColumns(list);
+		manageTableUpdate.setTableName("Demo");
+	    }
+    
+	@Test
+	void testCapacityPlansSuccess() {
+		manageTableService.capacityPlans(jwtToken);		 
+		setTestCaseCondition();
+		
+	}
+	
+	@Test
+	void testCapacityPlansException() throws Exception{
+		Mockito.when(objectMapper.readValue(jsonObject, CapacityPlanProperties.class)).thenThrow(JsonProcessingException.class);
+		manageTableService.capacityPlans(jwtToken);
+		setTestCaseCondition();
+	}
+	
 
 	@Test
-	void testGetTables() {
-
-		try {
-         
-			manageTableService.getTables(tenantId, jwtToken);
-			} catch (BadRequestOccurredException e) {
-				assertEquals(400, e.getExceptionCode());
-			}
-		
-
+	void testGetTablesForTenantId() {
+		manageTableService.getTablesByTenantId(tenantId, jwtToken);
+		setTestCaseCondition();
+	}
+	
+	@Test
+	void testGetTablesForTenantIdException() throws Exception{
+		Mockito.when(objectMapper.readValue(jsonObject, Response.class)).thenThrow(JsonProcessingException.class);
+		manageTableService.getTablesByTenantId(tenantId, jwtToken);
+		setTestCaseCondition();
+	}
+	
+	@Test
+	void testGetAllTables() {
+		manageTableService.getAllTables(pageNumber, pageSize, jwtToken);
+		setTestCaseCondition();
+	}
+	
+	@Test
+	void testGetAllTablesException() throws Exception{
+		Mockito.when(objectMapper.readValue(jsonObject, Response.class)).thenThrow(JsonProcessingException.class);
+		manageTableService.getAllTables(pageNumber, pageSize, jwtToken);
+		setTestCaseCondition();
+	}
+	
+	@Test
+	void testGetAllDeletedTables() {
+		manageTableService.getAllDeletedTables(pageNumber, pageSize, jwtToken);
+		setTestCaseCondition();
+	}
+	
+	@Test
+	void testGetAllDeletedTablesException() throws Exception{
+		Mockito.when(objectMapper.readValue(jsonObject, Response.class)).thenThrow(JsonProcessingException.class);
+		manageTableService.getAllDeletedTables(pageNumber, pageSize, jwtToken);
+		setTestCaseCondition();
 	}
 //
 	@Test
-	void testGetTable() throws JsonMappingException, JsonProcessingException {
-		try {
-			manageTableService.getTable(tableName, tenantId, jwtToken);
-			} catch (BadRequestOccurredException e) {
-				assertEquals(400, e.getExceptionCode());
-			}
+	void testGetTableSchema(){
+		manageTableService.getTableInfo(tableName, tenantId, jwtToken);
+		setTestCaseCondition();
 	
 	}
+	
+	@Test
+	void testGetTableSchemaException() throws Exception{
+		Mockito.when(objectMapper.readValue(jsonObject, ManageTableResponse.class)).thenThrow(JsonProcessingException.class);
+		manageTableService.getTableInfo(tableName, tenantId, jwtToken);
+		setTestCaseCondition();
+	}
+	
 
 	@Test
 	void testDelete() {
+		manageTableService.delete(tenantId, tableName, jwtToken);	
+		setTestCaseCondition();
+	}
 	
-		try {
-
-			manageTableService.delete(tenantId, tableName, jwtToken);
-			
-			} catch (BadRequestOccurredException e) {
-				assertEquals(400, e.getExceptionCode());
-			}
+	@Test
+	void testDeleteException() throws Exception{
+		Mockito.when(objectMapper.readValue(jsonObject, Response.class)).thenThrow(JsonProcessingException.class);
+		manageTableService.delete(tenantId, tableName, jwtToken);	
+		setTestCaseCondition();
 	}
 //
 	@Test
 	void testCreate() {
+		setUpCreateTableDTO();
+		manageTableService.create(tenantId, manageTableCreate, jwtToken);
+		setTestCaseCondition();
 		
-		manageTableCreate.setSchemaName(jwtToken);
-		manageTableCreate.setSku(jwtToken);
-		manageTableCreate.setTableName(jwtToken);
-		manageTableCreate.setColumns(list);;
-		
-
-		
+	}
 	
-	try {
-
-		 manageTableService.create(tenantId, manageTableCreate, jwtToken);
-		
-		} catch (BadRequestOccurredException e) {
-			assertEquals(400, e.getExceptionCode());
-		}
+	@Test
+	void testCreateException() throws Exception{
+		Mockito.when(objectMapper.readValue(jsonObject, Response.class)).thenThrow(JsonProcessingException.class);
+		manageTableService.create(tenantId, manageTableCreate, jwtToken);
+		setTestCaseCondition();
 	}
 
 	@Test
 	void testUpdate() {
-		
-		manageTableUpdate.setColumns(list);
-		manageTableUpdate.setSchemaName(schemaName);
-		manageTableUpdate.setTableDetails(null);
-		manageTableUpdate.setTableName("Demo");
-		
-
-		
-	try {
-
+		setUpUpdateTableDTO();
 		manageTableService.update(schemaName, tenantId, manageTableUpdate, jwtToken);
-		
-		} catch (BadRequestOccurredException e) {
-			assertEquals(400, e.getExceptionCode());
-		}
+		setTestCaseCondition();
+	}
+	
+	@Test
+	void testUpdateException() throws Exception{
+		Mockito.when(objectMapper.readValue(jsonObject, Response.class)).thenThrow(JsonProcessingException.class);
+		manageTableService.update(schemaName, tenantId, manageTableUpdate, jwtToken);
+		setTestCaseCondition();
 	}
 //
 	@Test
 	void testRestoreTable() {
-
-		
-	try {
-
 		manageTableService.restoreTable(tenantId, schemaName, jwtToken);
-		
-		} catch (BadRequestOccurredException e) {
-			assertEquals(400, e.getExceptionCode());
-		}
+		setTestCaseCondition();
+	}
+	
+	@Test
+	void testRestoreTableException() throws Exception{
+		Mockito.when(objectMapper.readValue(jsonObject, Response.class)).thenThrow(JsonProcessingException.class);
+		manageTableService.restoreTable(tenantId, schemaName, jwtToken);
+		setTestCaseCondition();
 	}
 }
