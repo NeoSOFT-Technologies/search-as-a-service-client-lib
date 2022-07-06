@@ -72,9 +72,6 @@ class InputDocumentServiceTest extends InputDocumentService {
 		documentUploadResponseDTO.setMessage("Testing");
 		JsonObject = new JSONObject(documentUploadResponseDTO);
 		String jsonString = JsonObject.toString();
-
-		DocumentSatisfiesSchemaResponse doc = new DocumentSatisfiesSchemaResponse(true, "Success!");
-		Mockito.when(documentParser.isDocumentSatisfySchema(Mockito.any(), Mockito.any())).thenReturn(doc);
 		Mockito.when(microserviceHttpGateway.postRequestWithStringBody(Mockito.anyString())).thenReturn(jsonString);
 	}
 
@@ -84,9 +81,6 @@ class InputDocumentServiceTest extends InputDocumentService {
 		documentUploadResponseDTO.setMessage("Testing");
 		JsonObject = new JSONObject(documentUploadResponseDTO);
 		String jsonString = JsonObject.toString();
-           
-		DocumentSatisfiesSchemaResponse doc = new DocumentSatisfiesSchemaResponse(false, "Success!");
-		Mockito.when(documentParser.isDocumentSatisfySchema(Mockito.any(), Mockito.any())).thenReturn(doc);
 		Mockito.when(microserviceHttpGateway.postRequestWithStringBody(Mockito.anyString())).thenReturn(jsonString);
 	}
 
@@ -116,4 +110,5 @@ class InputDocumentServiceTest extends InputDocumentService {
 		assertNotEquals(statusCode, inputDocumentService.addNRTDocuments(collectionName, payload, tenantId, "").getStatusCode());
 		
 	}
+	
 }

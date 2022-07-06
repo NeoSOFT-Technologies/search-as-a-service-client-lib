@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,9 +49,6 @@ class MicroserviceHttpGatewayTest {
 	}
 
 	public void setMockitoSucccessResponseForService() throws ClientProtocolException, IOException {
-
-		CloseableHttpClient mockHttpClient = Mockito.mock(CloseableHttpClient.class);
-		HttpPost mockHttpPost = Mockito.mock(HttpPost.class);
 		// Mockito.when(client.execute(mockHttpPost)).thenReturn((CloseableHttpResponse)
 		// ResponseEntity.status(HttpStatus.OK));
 	}

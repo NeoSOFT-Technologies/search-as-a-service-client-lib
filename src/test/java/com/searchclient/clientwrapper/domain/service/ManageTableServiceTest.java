@@ -11,19 +11,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.searchclient.clientwrapper.domain.CapacityPlanProperties;
 import com.searchclient.clientwrapper.domain.ManageTable;
-import com.searchclient.clientwrapper.domain.ManageTableResponse;
 import com.searchclient.clientwrapper.domain.Response;
 import com.searchclient.clientwrapper.domain.SchemaField;
-import com.searchclient.clientwrapper.domain.error.CustomException;
 import com.searchclient.clientwrapper.domain.utils.DocumentParserUtil;
-import com.searchclient.clientwrapper.domain.utils.HttpStatusCode;
 import com.searchclient.clientwrapper.domain.utils.MicroserviceHttpGateway;
-
-
 
 @ExtendWith(MockitoExtension.class)
 @ExtendWith(SpringExtension.class)
@@ -52,6 +46,7 @@ class ManageTableServiceTest extends ManageTableService {
    String tableName="Demo";
    
    String jsonObject = null;
+   
   
    List<SchemaField> list = new ArrayList<SchemaField>();
 	
@@ -113,14 +108,27 @@ class ManageTableServiceTest extends ManageTableService {
 	
 	@Test
 	void testGetAllTables() {
-		manageTableService.getAllTables(pageNumber, pageSize, jwtToken);
+		manageTableService.getAllTablesFromServer(pageNumber, pageSize, jwtToken);
 		setTestCaseCondition();
 	}
 	
 	@Test
 	void testGetAllTablesException() throws Exception{
 		Mockito.when(objectMapper.readValue(jsonObject, Response.class)).thenThrow(JsonProcessingException.class);
-		manageTableService.getAllTables(pageNumber, pageSize, jwtToken);
+		manageTableService.getAllTablesFromServer(pageNumber, pageSize, jwtToken);
+		setTestCaseCondition();
+	}
+	
+	@Test
+	void testGetAllTablesWithPagination() {
+		manageTableService.getAllTablesForTenantIdWithPagination(tenantId, pageNumber, pageSize, jwtToken);
+		setTestCaseCondition();
+	}
+	
+	@Test
+	void testGetAllTablesWithPaginationException() throws Exception{
+		Mockito.when(objectMapper.readValue(jsonObject, Response.class)).thenThrow(JsonProcessingException.class);
+		manageTableService.getAllTablesForTenantIdWithPagination(tenantId, pageNumber, pageSize, jwtToken);
 		setTestCaseCondition();
 	}
 	
@@ -136,7 +144,20 @@ class ManageTableServiceTest extends ManageTableService {
 		manageTableService.getAllDeletedTables(pageNumber, pageSize, jwtToken);
 		setTestCaseCondition();
 	}
-//
+	
+	@Test
+	void testGetAllDeletedTablesWithTenantId() {
+		manageTableService.getAllDeletedTablesWithTenantId(tenantId, pageNumber, pageSize, jwtToken);
+		setTestCaseCondition();
+	}
+	
+	@Test
+	void testGetAllDeletedTablesWithTenantIdException() throws Exception{
+		Mockito.when(objectMapper.readValue(jsonObject, Response.class)).thenThrow(JsonProcessingException.class);
+		manageTableService.getAllDeletedTablesWithTenantId(tenantId, pageNumber, pageSize, jwtToken);
+		setTestCaseCondition();
+	}
+
 	@Test
 	void testGetTableSchema(){
 		manageTableService.getTableInfo(tableName, tenantId, jwtToken);
@@ -146,7 +167,7 @@ class ManageTableServiceTest extends ManageTableService {
 	
 	@Test
 	void testGetTableSchemaException() throws Exception{
-		Mockito.when(objectMapper.readValue(jsonObject, ManageTableResponse.class)).thenThrow(JsonProcessingException.class);
+		Mockito.when(objectMapper.readValue(jsonObject, Response.class)).thenThrow(JsonProcessingException.class);
 		manageTableService.getTableInfo(tableName, tenantId, jwtToken);
 		setTestCaseCondition();
 	}

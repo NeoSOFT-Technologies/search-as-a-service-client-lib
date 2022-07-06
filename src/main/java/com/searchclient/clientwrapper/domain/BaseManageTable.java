@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
-
 public class BaseManageTable {
 	protected String tableName;
+	protected TableInfo tableInfo;
 	protected List<SchemaField> columns;
+	
 
 }
 

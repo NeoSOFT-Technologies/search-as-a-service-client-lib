@@ -47,7 +47,14 @@ public class ManageTableService implements ManageTableServicePort {
 	@Value("${microservice-url.manage-table.get-deleted-collections}")
 	private String getAllDeletedCollectionsMicroserviceAPI;
 	
+	@Value("${microservice-url.manage-table.get-deleted-collections-tenantId}")
+	private String getAllDeletedCollectionsWithTenantIdMicroserviceAPI;
+	
+	@Value("${microservice-url.manage-table.get-collections-pagination}")
+	private String getAllCollectionsWithPaginationMicroserviceAPI;
 
+	private static final String PAGE_NUMBER = "?pageNumber=";
+	private static final String PAGE_SIZE = "&pageSize=";
 	@Autowired
 	CapacityPlanProperties capacityPlanProperties;
 
@@ -97,15 +104,34 @@ public class ManageTableService implements ManageTableServicePort {
 	}
 	
 	@Override
-	public Response getAllTables(int pageNumber, int pageSize, String jwtToken) {
+	public Response getAllTablesFromServer(int pageNumber, int pageSize, String jwtToken) {
 
-		logger.debug("Get All Tables");
+		logger.debug("Get All Tables From The Server");
 		Response response = new Response();
 		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + getAllCollectionsMicroserviceAPI
-				+ "?pageNumber=" + pageNumber + "&pageSize=" + pageSize);
+				+ PAGE_NUMBER + pageNumber + PAGE_SIZE + pageSize);
 		String jsonObject = microserviceHttpGateway.getRequestV2(jwtToken);
 		docParserUtil.isJwtAuthenticationError(jsonObject);
 
+		try {
+			response = objectMapper.readValue(jsonObject, Response.class);
+			return response;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return response;
+		}
+
+	}
+	
+	@Override
+	public Response getAllTablesForTenantIdWithPagination(int tenantId, int pageNumber, int pageSize, String jwtToken) {
+
+		logger.debug("Get All Tables");
+		Response response = new Response();
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + getAllCollectionsWithPaginationMicroserviceAPI+
+				TENANT_ID_REQUEST_PARAM	+ tenantId + PAGE_NUMBER.replace("?", "&") + pageNumber + PAGE_SIZE + pageSize);
+		String jsonObject = microserviceHttpGateway.getRequestV2(jwtToken);
+		docParserUtil.isJwtAuthenticationError(jsonObject);
 		try {
 			response = objectMapper.readValue(jsonObject, Response.class);
 			return response;
@@ -121,8 +147,8 @@ public class ManageTableService implements ManageTableServicePort {
 
 		logger.debug("Get All Tables Under Deletion");
 		Response response = new Response();
-		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + getAllDeletedCollectionsMicroserviceAPI 
-				+ "?pageNumber=" + pageNumber + "&pageSize=" + pageSize);
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + getAllDeletedCollectionsMicroserviceAPI +
+				PAGE_NUMBER + pageNumber + PAGE_SIZE + pageSize);
 		String jsonObject = microserviceHttpGateway.getRequestV2(jwtToken);
 		docParserUtil.isJwtAuthenticationError(jsonObject);
 		try {
@@ -135,6 +161,25 @@ public class ManageTableService implements ManageTableServicePort {
 
 	}
 
+	@Override
+	public Response getAllDeletedTablesWithTenantId(int tenantId, int pageNumber, int pageSize, String jwtToken) {
+
+		logger.debug("Get All Tables Under Deletion With TenantId");
+		Response response = new Response();
+		microserviceHttpGateway.setApiEndpoint(baseMicroserviceUrl + getAllDeletedCollectionsWithTenantIdMicroserviceAPI 
+				+ TENANT_ID_REQUEST_PARAM	+ tenantId + PAGE_NUMBER.replace("?", "&") + PAGE_SIZE + pageSize);
+		String jsonObject = microserviceHttpGateway.getRequestV2(jwtToken);
+		docParserUtil.isJwtAuthenticationError(jsonObject);
+		try {
+			response = objectMapper.readValue(jsonObject, Response.class);
+			return response;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return response;
+		}
+
+	}
+	
 	@Override
 	public ManageTableResponse getTableInfo(String tableName, int tenantId, String jwtToken) {
 

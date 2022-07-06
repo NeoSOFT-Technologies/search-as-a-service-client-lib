@@ -275,6 +275,8 @@ microservice-url:
     restore: /api/v1/manage/table/restore
     get-all-collections: /api/v1/manage/table/all-tables
     get-deleted-collections: /api/v1/manage/table/deletion/all-tables
+    get-deleted-collections-tenantId: /api/v1/manage/table/deletion
+    get-collections-pagination: /api/v1/manage/table/tables-list
     
 # Throttler configurations
 base-app-url: http://localhost:8080

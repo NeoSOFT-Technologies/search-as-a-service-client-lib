@@ -14,12 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
 import java.util.HashMap;
 import java.util.Map;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @ExtendWith(MockitoExtension.class)
 @ExtendWith(SpringExtension.class)
@@ -43,7 +41,12 @@ class DocumentParserUtilTest {
 	Map<String, Map<String, Object>> getSchemaKeyValuePair(){
         Map<String, Map<String, Object>> schemaKeyValuePair = new HashMap<>();
 
-        Map<String, Object> id=new HashMap<String, Object>(){{
+        Map<String, Object> id=new HashMap<String, Object>(){/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+		{
             put("name" , "id");
             put("type" , "string");
             put("multiValued", "true");
@@ -54,7 +57,12 @@ class DocumentParserUtilTest {
         }};
         schemaKeyValuePair.put("id",id);
         
-        Map<String, Object> color=new HashMap<String, Object>(){{
+        Map<String, Object> color=new HashMap<String, Object>(){/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+		{
             put("name" , "color");
             put("type" , "string");
             put("uninvertible" , "true");
@@ -62,7 +70,12 @@ class DocumentParserUtilTest {
             put("stored" , "true");
         }};
         schemaKeyValuePair.put("color",color);
-        Map<String, Object> custom_field_strings=new HashMap<String, Object>(){{
+        Map<String, Object> custom_field_strings=new HashMap<String, Object>(){/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+		{
             put("name" , "custom_field_strings");
             put("type" , "strings");
             put("uninvertible" , "true");
@@ -72,7 +85,12 @@ class DocumentParserUtilTest {
         }};
         schemaKeyValuePair.put("custom_field_strings",custom_field_strings);
 
-        Map<String, Object> custom_field_boolean=new HashMap<String, Object>(){{
+        Map<String, Object> custom_field_boolean=new HashMap<String, Object>(){/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+		{
             put("name" , "custom_field_boolean");
             put("type" , "boolean");
             put("uninvertible" , "true");
@@ -81,7 +99,12 @@ class DocumentParserUtilTest {
         }};
         schemaKeyValuePair.put("custom_field_boolean",custom_field_boolean);
 
-        Map<String, Object> custom_field_booleans=new HashMap<String, Object>(){{
+        Map<String, Object> custom_field_booleans=new HashMap<String, Object>(){/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+		{
             put("name" , "custom_field_booleans");
             put("type" , "boolean");
             put("uninvertible" , "true");
@@ -91,7 +114,12 @@ class DocumentParserUtilTest {
         }};
         schemaKeyValuePair.put("custom_field_booleans",custom_field_booleans);
 
-        Map<String, Object> custom_field_plong=new HashMap<String, Object>(){{
+        Map<String, Object> custom_field_plong=new HashMap<String, Object>(){/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+		{
             put("name" , "custom_field_plong");
             put("type" , "plong");
             put("uninvertible" , "true");
@@ -100,7 +128,12 @@ class DocumentParserUtilTest {
         }};
         schemaKeyValuePair.put("custom_field_plong",custom_field_plong);
 
-        Map<String, Object> custom_field_plongs=new HashMap<String, Object>(){{
+        Map<String, Object> custom_field_plongs=new HashMap<String, Object>(){/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+		{
             put("name" , "custom_field_plongs");
             put("type" , "plong");
             put("uninvertible" , "true");
@@ -110,7 +143,12 @@ class DocumentParserUtilTest {
         }};
         schemaKeyValuePair.put("custom_field_plongs",custom_field_plongs);
 
-        Map<String, Object> custom_required_field_boolean=new HashMap<String, Object>(){{
+        Map<String, Object> custom_required_field_boolean=new HashMap<String, Object>(){/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+		{
             put("name" , "custom_required_field_boolean");
             put("type" , "boolean");
             put("uninvertible" , "true");
@@ -140,19 +178,20 @@ class DocumentParserUtilTest {
 
     JSONObject payloadJSON  = new JSONObject(inputString);
     
-    String json3="{\"statusCode\":200,\"data\":{\"tableName\":\"Demo\",\"columns\":[{\"name\":\"filterable\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"id\",\"type\":\"string\",\"required\":true,\"multiValue\":false,\"sortable\":false,\"storable\":true,\"filterable\":true,\"partialSearch\":false},{\"name\":\"multiValue\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"name\",\"type\":\"string\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"partialSearch\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"required\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"sortable\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"storable\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"type\",\"type\":\"string\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false}]}}"; 
-    
+    String successJson="{\"statusCode\":200,\"data\":{\"tableName\":\"Demo\",\"columns\":[{\"name\":\"filterable\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"id\",\"type\":\"string\",\"required\":true,\"multiValue\":false,\"sortable\":false,\"storable\":true,\"filterable\":true,\"partialSearch\":false},{\"name\":\"multiValue\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"name\",\"type\":\"string\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"partialSearch\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"required\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"sortable\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"storable\",\"type\":\"booleans\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false},{\"name\":\"type\",\"type\":\"string\",\"required\":false,\"multiValue\":false,\"sortable\":false,\"storable\":false,\"filterable\":false,\"partialSearch\":false}]}}"; 
+    String failureJson="{\"statusCode\":400,\"message\":\"Something Went Wrong\"}";
+    String invalidToken = "{\"Unauthorized\":\"Invalid token\"}";
     
    
     public void setMockitoSuccessResponseForService() {
-        JSONObject jsonobject = new JSONObject(json3);
+        JSONObject jsonobject = new JSONObject(successJson);
 		doc = new DocumentSatisfiesSchemaResponse(true, "Successful!");
 		Mockito.when(microserviceHttpgateway.getRequest(Mockito.anyString())).thenReturn(jsonobject);
 	}
     
     public void setMockitoBadResponseForService() {
-    	JSONObject jsonObject = new JSONObject(json3);
-    	doc = new DocumentSatisfiesSchemaResponse(false, "Successful!");
+    	JSONObject jsonObject = new JSONObject(failureJson);
+    	doc = new DocumentSatisfiesSchemaResponse(false, "Failure!!");
 		Mockito.when(microserviceHttpgateway.getRequest(Mockito.anyString())).thenReturn(jsonObject);
     }
 	
@@ -168,32 +207,26 @@ class DocumentParserUtilTest {
 		assertNotEquals(doc.isObjectSatisfiesSchema, documentsatisfiesschemaresponse2.isObjectSatisfiesSchema);
 	
 	}
-	
+		
 	@Test
-	void isDocumentSatisfySchemaTest() {
-		
+	void getSchemaofCollectionTestSuccess() {
 		setMockitoSuccessResponseForService();
-        DocumentSatisfiesSchemaResponse documentsatisfiesschemaresponse = documentParserUtil.isDocumentSatisfySchema(schemaKeyValuePair,payloadJSON );
-		assertEquals(doc.isObjectSatisfiesSchema, documentsatisfiesschemaresponse.isObjectSatisfiesSchema);
-		
-		setMockitoBadResponseForService();
-		DocumentSatisfiesSchemaResponse documentsatisfiesschemaresponse2 = documentParserUtil.isDocumentSatisfySchema(schemaKeyValuePair,payloadJSON );
-		assertNotEquals(doc.isObjectSatisfiesSchema, documentsatisfiesschemaresponse2.isObjectSatisfiesSchema);
-	
+		assertTrue(!documentParserUtil.getSchemaOfCollection(baseMicroserviceUrl, collectionName, tenantId, jwtToken).containsKey("error"));
 	}
 	
 	@Test
-	void getSchemaofCollectionTest() {
-		setMockitoSuccessResponseForService();
-       //  Mockito.when(microserviceHttpgateway.getRequest()).thenReturn(new JSONObject(jsonResponseForGetSchema));
-
-		 try {
-
-			 documentParserUtil.getSchemaOfCollection(baseMicroserviceUrl, collectionName, tenantId, jwtToken);
-			
-			} catch (CustomException e) {
-				assertEquals(HttpStatusCode.BAD_REQUEST_EXCEPTION.getCode() , e.getExceptionCode());
-			}
+	void getSchemaofCollectionTestFailure() {
+		setMockitoBadResponseForService();
+		assertTrue(documentParserUtil.getSchemaOfCollection(baseMicroserviceUrl, collectionName, tenantId, jwtToken).containsKey("error"));
+	}
+	
+	@Test
+	void jwtAuthentication() {
+		try {
+			documentParserUtil.isJwtAuthenticationError(invalidToken);
+		}catch(CustomException e) {
+			assertEquals(HttpStatusCode.REQUEST_FORBIDEN.getCode(), e.getExceptionCode());
+		}
 	}
 
 
