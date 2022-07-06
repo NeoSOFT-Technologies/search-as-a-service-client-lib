@@ -24,7 +24,6 @@ public class ManageTableResponse  extends BaseResponse{
         public TableSchemav2Data() {
         	//Empty Constructor
         }
-
         @Override
         public String getTableName() {
             return tableName;
@@ -33,6 +32,16 @@ public class ManageTableResponse  extends BaseResponse{
         @Override
         public void setTableName(String tableName) {
             this.tableName = tableName;
+        }     
+        
+        @Override
+        public TableInfo getTableInfo() {
+            return tableInfo;
+        }
+        
+        @Override
+        public void setTableInfo(TableInfo tableInfo) {
+            this.tableInfo = tableInfo;
         }
 
         @Override

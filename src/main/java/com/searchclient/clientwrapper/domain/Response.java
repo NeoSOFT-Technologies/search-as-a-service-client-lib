@@ -24,7 +24,9 @@ public class Response extends BaseResponse{
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class TableListResponse {
+    	private String tenantName;
 		private int tenantId;
 		private String tableName;
+		
 	}
 }

@@ -13,9 +13,6 @@ public enum HttpStatusCode {
 	
 	SERVER_UNAVAILABLE(503,"Unable to Connect To the Server");
 	
-	
-	
-	
 	private int code;
 	private String message;
 	

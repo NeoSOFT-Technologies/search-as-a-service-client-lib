@@ -33,9 +33,17 @@ public interface ManageTableServicePort {
     Response restoreTable(int tenantId, String tableName, String jwtToken);
     
     //GET ALL TABLES FROM SERVER
-    Response getAllTables(int pageNumber, int pageSize, String jwtToken);
+    Response getAllTablesFromServer(int pageNumber, int pageSize, String jwtToken);
     
     //GET ALL TABLES UNDER DELETION
     Response getAllDeletedTables(int pageNumber, int pageSize, String jwtToken);
+    
+  //GET ALL TABLES UNDER DELETION WITH TENANT ID
+    Response getAllDeletedTablesWithTenantId(int tenantId, int pageNumber, int pageSize, String jwtToken);
+    
+  //GET ALL TABLES WITH TENANT ID ALONG WITH PAGINATION
+    Response getAllTablesForTenantIdWithPagination(int tenantId, int pageNumber, int pageSize, String jwtToken);
+    
+    
 
 }
